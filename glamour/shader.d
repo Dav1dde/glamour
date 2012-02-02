@@ -1,20 +1,26 @@
 module glamour.shader;
 
 private {
-    import derelict.opengl.gl : GLenum, GLuint, GLint, GLchar,
+    import derelict.opengl.gl : GLenum, GLuint, GLint, GLchar, GLboolean,
                                 GL_VERTEX_SHADER,
 //                                 GL_TESS_CONTROL_SHADER, GL_TESS_EVALUATION_SHADER,
                                 GL_GEOMETRY_SHADER, GL_FRAGMENT_SHADER,
                                 GL_LINK_STATUS, GL_FALSE, GL_INFO_LOG_LENGTH,
-                                GL_COMPILE_STATUS,
+                                GL_COMPILE_STATUS, GL_TRUE,
                                 glCreateProgram, glCreateShader, glCompileShader,
                                 glLinkProgram, glGetShaderiv, glGetShaderInfoLog,
                                 glGetProgramInfoLog, glGetProgramiv, glShaderSource,
-                                glUseProgram, glAttachShader;
+                                glUseProgram, glAttachShader, glGetAttribLocation,
+                                glGetUniformLocation, glUniform1i, glUniform1f,
+                                glUniform2f, glUniform2fv, glUniform3fv,
+                                glUniform4fv, glUniformMatrix2fv, glUniformMatrix2x3fv,
+                                glUniformMatrix2x4fv, glUniformMatrix3fv, glUniformMatrix3x2fv,
+                                glUniformMatrix3x4fv, glUniformMatrix4fv, glUniformMatrix4x2fv,
+                                glUniformMatrix4x3fv;
 
     import std.file : readText;
     import std.path : baseName, stripExtension;
-    import std.string : format, splitLines;
+    import std.string : format, splitLines, toStringz;
     import std.algorithm : startsWith;
     import std.regex : ctRegex, regex, match;
     import std.typecons : Tuple;
@@ -64,7 +70,7 @@ class ShaderError : Exception {
 /// Params:
 /// shader = The OpenGL shader.
 /// filename = Used to identify the shader, if an error occurs.
-void compile_shader(GLuint shader, filename="<unknown>") {
+void compile_shader(GLuint shader, string filename="<unknown>") {
     glCompileShader(shader);
 
     GLint status;
@@ -85,7 +91,7 @@ void compile_shader(GLuint shader, filename="<unknown>") {
 /// Params:
 /// program = The OpenGL program.
 /// filename = Used to identify the shader, if an error occurs.
-void link_program(GLuint program, filename="<unknown>") {
+void link_program(GLuint program, string filename="<unknown>") {
     glLinkProgram(program);
 
     GLint status;
@@ -194,7 +200,7 @@ struct Shader {
     /// If the location was already queried the cache is returned.
     GLint get_attrib_location(string name) {
         if(name !in attrib_locations) {
-            attrib_locations[name] = glGetAttribLocation(program, name);
+            attrib_locations[name] = glGetAttribLocation(program, toStringz(name));
         }
         
         return attrib_locations[name];
@@ -204,7 +210,7 @@ struct Shader {
     /// If the location was already queried the cache is returned.
     GLint get_uniform_location(string name) {
         if(name !in uniform_locations) {
-            attrib_locations[name] = glGetUniformLocation(program, name);
+            attrib_locations[name] = glGetUniformLocation(program, toStringz(name));
         }
         
         return uniform_locations[name];
@@ -229,7 +235,7 @@ struct Shader {
             static if((T.rows == 2) && (T.cols == 2)) {
                 glUniformMatrix2fv(get_uniform_location(name), 1, GL_TRUE, value.value_ptr);
             } else static if((T.rows == 3) && (T.cols == 3)) {
-                glUniformMatrix3v(get_uniform_location(name), 1, GL_TRUE, value.value_ptr);
+                glUniformMatrix3fv(get_uniform_location(name), 1, GL_TRUE, value.value_ptr);
             } else static if((T.rows == 4) && (T.cols == 4)) {
                 glUniformMatrix4fv(get_uniform_location(name), 1, GL_TRUE, value.value_ptr);
             } else static if((T.rows == 2) && (T.cols == 3)) {
@@ -259,42 +265,42 @@ struct Shader {
     
     /// Sets a shader uniform. Consider the corresponding OpenGL for more information.
     void uniform1i(string name, int value) {
-        glUniform1i(get_uniform_location[name], value);
+        glUniform1i(get_uniform_location(name), value);
     }
     
     /// ditto
     void uniform1f(string name, float value) {
-        glUniform1f(get_uniform_location[name], value);
+        glUniform1f(get_uniform_location(name), value);
     }
     
     /// ditto
     void uniform2f(string name, float value1, float value2) {
-        glUniform2f(get_uniform_location[name], value1, value2);
+        glUniform2f(get_uniform_location(name), value1, value2);
     }
 
     /// ditto
     void uniform2fv(string name, const float[] value) {
-        glUniform2fv(get_uniform_location[name], value.ptr);
+        glUniform2fv(get_uniform_location(name), value.length/2, value.ptr);
     }
     
     /// ditto
     void uniform3fv(string name, const float[] value) {
-        glUniform3fv(get_uniform_location[name], value.ptr);
+        glUniform3fv(get_uniform_location(name), value.length/3, value.ptr);
     }
     
     /// ditto
     void uniform4fv(string name, const float[] value) {
-        glUniform4fv(get_uniform_location[name], value.ptr);
+        glUniform4fv(get_uniform_location(name), value.length/4, value.ptr);
     }
     
     /// ditto
-    void uniform_matrix3fv(string name, const float[] value) {
-        glUniformMatrix3fv(get_uniform_location[name], value.ptr);
+    void uniform_matrix3fv(string name, const float[] value, GLboolean transpose=GL_TRUE) {
+        glUniformMatrix3fv(get_uniform_location(name), value.length/9, transpose, value.ptr);
     }
     
     /// ditto
-    void uniform_matrix4fv(string name, const float[] value) {
-        glUniformMatrix4fv(get_uniform_location[name], value.ptr);
+    void uniform_matrix4fv(string name, const float[] value, GLboolean transpose=GL_TRUE) {
+        glUniformMatrix4fv(get_uniform_location(name), value.length/16, transpose, value.ptr);
     }
     
 }
