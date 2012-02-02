@@ -175,7 +175,7 @@ struct Shader {
             GLenum shader_type = SHADER_TYPES[type];
             GLuint shader = glCreateShader(shader_type);
             auto ssp = shader_source.ptr;
-            int ssl = shader_source.length;
+            int ssl = cast(int)shader_source.length;
             glShaderSource(shader, 1, &ssp, &ssl);
             
             compile_shader(shader);
@@ -280,27 +280,27 @@ struct Shader {
 
     /// ditto
     void uniform2fv(string name, const float[] value) {
-        glUniform2fv(get_uniform_location(name), value.length/2, value.ptr);
+        glUniform2fv(get_uniform_location(name), cast(int)(value.length)/2, value.ptr);
     }
     
     /// ditto
     void uniform3fv(string name, const float[] value) {
-        glUniform3fv(get_uniform_location(name), value.length/3, value.ptr);
+        glUniform3fv(get_uniform_location(name), cast(int)(value.length)/3, value.ptr);
     }
     
     /// ditto
     void uniform4fv(string name, const float[] value) {
-        glUniform4fv(get_uniform_location(name), value.length/4, value.ptr);
+        glUniform4fv(get_uniform_location(name), cast(int)(value.length)/4, value.ptr);
     }
     
     /// ditto
     void uniform_matrix3fv(string name, const float[] value, GLboolean transpose=GL_TRUE) {
-        glUniformMatrix3fv(get_uniform_location(name), value.length/9, transpose, value.ptr);
+        glUniformMatrix3fv(get_uniform_location(name), cast(int)(value.length)/9, transpose, value.ptr);
     }
     
     /// ditto
     void uniform_matrix4fv(string name, const float[] value, GLboolean transpose=GL_TRUE) {
-        glUniformMatrix4fv(get_uniform_location(name), value.length/16, transpose, value.ptr);
+        glUniformMatrix4fv(get_uniform_location(name), cast(int)(value.length)/16, transpose, value.ptr);
     }
     
 }
