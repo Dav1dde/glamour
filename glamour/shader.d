@@ -18,6 +18,10 @@ private {
     import std.algorithm : startsWith;
     import std.regex : ctRegex, regex, match;
     import std.typecons : Tuple;
+    
+    version(gl3n) {
+        import gl3n.util : is_vector, is_matrix, is_quaternion;
+    }
 }
 
 GLuint[string] SHADER_TYPES;
@@ -83,6 +87,9 @@ struct Shader {
     
     string filename;
     
+    GLint[string] uniform_locations;
+    GLint[string] attrib_locations;
+    
     this(string file) {
         this(stripExtension(baseName(file)), readText(file));
     }
@@ -144,4 +151,103 @@ struct Shader {
     void unbind() {
         glUseProgram(0);
     }
+    
+    GLint get_attrib_location(string name) {
+        if(name !in attrib_locations) {
+            attrib_locations[name] = glGetAttribLocation(program, name);
+        }
+        
+        return attrib_locations[name];
+    }
+    
+    GLint get_uniform_location(string name) {
+        if(name !in uniform_locations) {
+            attrib_locations[name] = glGetUniformLocation(program, name);
+        }
+        
+        return uniform_locations[name];
+    }
+    
+    void uniform(S : string, T) i {
+    }
+    
+    // gl3n integration
+    version(gl3n) {
+        /// If glamour gets compiled with version=gl3n support for
+        /// vectors, matrices and quaternions is added
+        void uniform(S : string, T)(S name, T value) if(is_vector!T) {
+            static if(T.dimension == 2) {
+                glUniform2fv(get_uniform_location(name), value.value_ptr);
+            } else static if(T.dimension == 3) {
+                glUniform3fv(get_uniform_location(name), value.value_ptr);
+            } else static if(T.dimension == 4) {
+                glUniform4fv(get_uniform_location(name), value.value_ptr);
+            } else static assert(false);
+        }
+        
+        /// ditto
+        void uniform(S : string, T)(S name, T value) if(is_matrix!T) {
+            static if((T.rows == 2) && (T.cols == 2)) {
+                glUniformMatrix2fv(get_uniform_location(name), 1, GL_TRUE, value.value_ptr);
+            } else static if((T.rows == 3) && (T.cols == 3)) {
+                glUniformMatrix3v(get_uniform_location(name), 1, GL_TRUE, value.value_ptr);
+            } else static if((T.rows == 4) && (T.cols == 4)) {
+                glUniformMatrix4fv(get_uniform_location(name), 1, GL_TRUE, value.value_ptr);
+            } else static if((T.rows == 2) && (T.cols == 3)) {
+                glUniformMatrix2x3fv(get_uniform_location(name), 1, GL_TRUE, value.value_ptr);
+            } else static if((T.rows == 3) && (T.cols == 2)) {
+                glUniformMatrix3x2fv(get_uniform_location(name), 1, GL_TRUE, value.value_ptr);
+            } else static if((T.rows == 2) && (T.cols == 4)) {
+                glUniformMatrix2x4fv(get_uniform_location(name), 1, GL_TRUE, value.value_ptr);
+            } else static if((T.rows == 4) && (T.cols == 2)) {
+                glUniformMatrix4x2fv(get_uniform_location(name), 1, GL_TRUE, value.value_ptr);
+            } else static if((T.rows == 3) && (T.cols == 4)) {
+                glUniformMatrix3x4fv(get_uniform_location(name), 1, GL_TRUE, value.value_ptr);
+            } else static if((T.rows == 4) && (T.cols == 3)) {
+                glUniformMatrix4x3fv(get_uniform_location(name), 1, GL_TRUE, value.value_ptr);
+            } else static assert(false, "Can not upload type " ~ T.stringof ~ " to GPU as uniform");
+        }
+        
+        /// ditto
+        void uniform(S : string, T)(S name, T value) if(is_quaternion!T) {
+            glUniform4fv(get_uniform_location[name], value.value_ptr);
+        } 
+    } else {
+        void uniform(S, T)(S name, T value) {
+            static assert(false, "you have to compile glamour with version=gl3n to use Shader.uniform");
+        }
+    }
+    
+    void uniform1i(string name, int value) {
+        glUniform1i(get_uniform_location[name], value);
+    }
+    
+    void uniform1f(string name, float value) {
+        glUniform1f(get_uniform_location[name], value);
+    }
+
+    void uniform2f(string name, float value1, float value2) {
+        glUniform2f(get_uniform_location[name], value1, value2);
+    }
+
+    void uniform2fv(string name, const float[] value) {
+        glUniform2fv(get_uniform_location[name], value.ptr);
+    }
+    
+    void uniform3fv(string name, const float[] value) {
+        glUniform3fv(get_uniform_location[name], value.ptr);
+    }
+    
+    void uniform4fv(string name, const float[] value) {
+        glUniform4fv(get_uniform_location[name], value.ptr);
+    }
+    
+    void uniform_matrix3fv(string name, const float[] value) {
+        glUniformMatrix3fv(get_uniform_location[name], value.ptr);
+    }
+    
+    void uniform_matrix4fv(string name, const float[] value) {
+        glUniformMatrix4fv(get_uniform_location[name], value.ptr);
+    }
+    
 }
