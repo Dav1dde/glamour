@@ -115,6 +115,8 @@ alias Tuple!(size_t, "line", string, "text") Line;
 struct Shader {
     /// The OpenGL program.
     GLuint program;
+    /// Alias this to program.
+    alias program this;
     
     /// Holds every shaders source.
     Line[][string] shaders;
@@ -175,7 +177,7 @@ struct Shader {
             GLenum shader_type = SHADER_TYPES[type];
             GLuint shader = glCreateShader(shader_type);
             auto ssp = shader_source.ptr;
-            int ssl = cast(int)shader_source.length;
+            int ssl = cast(int)(shader_source.length);
             glShaderSource(shader, 1, &ssp, &ssl);
             
             compile_shader(shader);
