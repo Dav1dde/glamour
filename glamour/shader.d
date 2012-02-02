@@ -37,14 +37,34 @@ static this() {
 
 // enum ctr_shader_type = ctRegex!(`^(\w+):`);
 
-
+/// This exception will be raised when
+/// an error occurs while compiling or linking a shader.
 class ShaderError : Exception {
-    this(string msg) {
-        super(msg);
+    /// The filename passed to the ctor.
+    string filename;
+    /// The process passed to the ctor. Will be one of "linking" or "compiling".
+    string process;
+    
+    /// Params:
+    /// infolog = Infolog returned from OpenGL.
+    /// process_ = Error occured while linking or compiling?
+    /// filename_ = Used to identify the shader.
+    this(string infolog, string process_, string filename_="<unknown>") {
+        filename = filename_;
+        process = process_;
+        
+        infolog ~= "Failed to " ~ process_ ~ " shader: " ~ filename_ ~ ". "; 
+        
+        super(infolog);
     }
 }
 
-void compile_shader(GLuint shader) {
+/// Compiles an already created OpenGL shader.
+/// Throws: ShaderError on failure.
+/// Params:
+/// shader = The OpenGL shader.
+/// filename = Used to identify the shader, if an error occurs.
+void compile_shader(GLuint shader, filename="<unknown>") {
     glCompileShader(shader);
 
     GLint status;
@@ -56,11 +76,16 @@ void compile_shader(GLuint shader) {
         GLchar[] infolog = new GLchar[infolog_length+1];
         glGetShaderInfoLog(shader, infolog_length, null, infolog.ptr);
         
-        throw new ShaderError(infolog.idup);
+        throw new ShaderError(infolog.idup, "linking", filename);
     }
 }
 
-void link_program(GLuint program) {
+/// Links an already created OpenGL program.
+/// Throws: ShaderError on failure.
+/// Params:
+/// program = The OpenGL program.
+/// filename = Used to identify the shader, if an error occurs.
+void link_program(GLuint program, filename="<unknown>") {
     glLinkProgram(program);
 
     GLint status;
@@ -72,28 +97,39 @@ void link_program(GLuint program) {
         GLchar[] infolog = new GLchar[infolog_length + 1];
         glGetProgramInfoLog(program, infolog_length, null, infolog.ptr);
         
-        throw new ShaderError(infolog.idup);
+        throw new ShaderError(infolog.idup, "compiling", filename);
     }
 }
 
 
 alias Tuple!(size_t, "line", string, "text") Line; 
 
+/// Represents an OpenGL program with it's shaders.
+/// The constructor must be used.
 struct Shader {
+    /// The OpenGL program.
     GLuint program;
     
+    /// Holds every shaders source.
     Line[][string] shaders;
+    /// Holds the directives.
     string directives;
     
+    /// The shaders filename.
     string filename;
     
+    /// Uniform locations will be cached here.
     GLint[string] uniform_locations;
+    /// Attrib locations will be cached here.
     GLint[string] attrib_locations;
     
+    /// Loads the shaders directly from a file.
     this(string file) {
         this(stripExtension(baseName(file)), readText(file));
     }
-
+    
+    /// Loads the shader from the source,
+    /// filename_ is stored in $(I filename) and will be used to identify the shader.
     this(string filename_, string source) {
         filename = filename_;
         
@@ -144,14 +180,18 @@ struct Shader {
         link_program(program);
     }
     
+    /// Binds the program.
     void bind() {
         glUseProgram(program);
     }
     
+    /// Unbinds the program.
     void unbind() {
         glUseProgram(0);
     }
     
+    /// Queries an attrib location from OpenGL and caches it in $(I attrib_locations).
+    /// If the location was already queried the cache is returned.
     GLint get_attrib_location(string name) {
         if(name !in attrib_locations) {
             attrib_locations[name] = glGetAttribLocation(program, name);
@@ -160,6 +200,8 @@ struct Shader {
         return attrib_locations[name];
     }
     
+    /// Queries an uniform location from OpenGL and caches it in $(I uniform_locations).
+    /// If the location was already queried the cache is returned.
     GLint get_uniform_location(string name) {
         if(name !in uniform_locations) {
             attrib_locations[name] = glGetUniformLocation(program, name);
@@ -167,10 +209,7 @@ struct Shader {
         
         return uniform_locations[name];
     }
-    
-    void uniform(S : string, T) i {
-    }
-    
+        
     // gl3n integration
     version(gl3n) {
         /// If glamour gets compiled with version=gl3n support for
@@ -218,34 +257,42 @@ struct Shader {
         }
     }
     
+    /// Sets a shader uniform. Consider the corresponding OpenGL for more information.
     void uniform1i(string name, int value) {
         glUniform1i(get_uniform_location[name], value);
     }
     
+    /// ditto
     void uniform1f(string name, float value) {
         glUniform1f(get_uniform_location[name], value);
     }
-
+    
+    /// ditto
     void uniform2f(string name, float value1, float value2) {
         glUniform2f(get_uniform_location[name], value1, value2);
     }
 
+    /// ditto
     void uniform2fv(string name, const float[] value) {
         glUniform2fv(get_uniform_location[name], value.ptr);
     }
     
+    /// ditto
     void uniform3fv(string name, const float[] value) {
         glUniform3fv(get_uniform_location[name], value.ptr);
     }
     
+    /// ditto
     void uniform4fv(string name, const float[] value) {
         glUniform4fv(get_uniform_location[name], value.ptr);
     }
     
+    /// ditto
     void uniform_matrix3fv(string name, const float[] value) {
         glUniformMatrix3fv(get_uniform_location[name], value.ptr);
     }
     
+    /// ditto
     void uniform_matrix4fv(string name, const float[] value) {
         glUniformMatrix4fv(get_uniform_location[name], value.ptr);
     }
