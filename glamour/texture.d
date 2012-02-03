@@ -20,6 +20,7 @@ private {
 }
 
 
+/// This exception will be raised if Texture2D.from_image fails to open the image.
 class TextureError : Exception {
     this(string msg) {
         super(msg);
@@ -27,7 +28,9 @@ class TextureError : Exception {
 }
 
 
+/// Every Texture*-Struct will mixin this template.
 mixin template CommonTextureMethods() {
+    /// Sets a texture parameter.
     void set_paramter(T)(GLenum name, T params) if(is(T : int) || is(T : float)) {
         static if(is(T : int)) {
             glTexParameteri(target, name, params);
@@ -36,6 +39,7 @@ mixin template CommonTextureMethods() {
         }
     }
     
+    /// Queries a texture parameter from OpenGL.    
     float[] get_parameter(GLenum name) {
         float[] ret;
         
@@ -49,30 +53,49 @@ mixin template CommonTextureMethods() {
         return ret;
     }
     
+    /// Binds and activates the texture.
     void bind() {
         glActiveTexture(unit);
         glBindTexture(target, texture);
     }
     
+    /// Unbinds the texture.
     void unbind() {
         glBindTexture(GL_TEXTURE_1D, 0);
     }
 }
 
 
+/// Represents an OpenGL 1D texture.
+/// The constructor must be used to avoid segmentation faults.
 struct Texture1D {
     static const GLenum target = GL_TEXTURE_1D;
     
+    /// The OpenGL texture name.
     GLuint texture;
+    /// Alias this to texture.
     alias texture this;
     
+    /// Holds the internal format passed to the constructor.
     GLint internal_format;
+    /// Holds the format of the pixel data.
     GLenum format;
+    /// Holds the OpenGL data type of the pixel data.
     GLenum type;
+    /// Holds the texture unit.
     GLenum unit;
-       
+    
+    ///
     mixin CommonTextureMethods;
-
+    
+    /// Generates the OpenGL texture and initializes the struct.
+    /// Params:
+    /// internal_format_ = Specifies the number of color components in the texture.
+    /// format_ = Specifies the format of the pixel data.
+    /// type_ = Specifies the data type of the pixel data.
+    /// unit_ = Specifies the OpenGL texture uinit.
+    /// See_Also:
+    /// OpenGL, http://www.opengl.org/sdk/docs/man4/xhtml/glTexImage1D.xml
     this()(GLint internal_format_, GLenum format_, GLenum type_, GLenum unit_=GL_TEXTURE0) {
         internal_format = internal_format_;
         format = format_;
@@ -81,13 +104,15 @@ struct Texture1D {
         
         glGenTextures(1, &texture);
     }
-       
+    
+    /// ditto
     this(T)(T data, GLint internal_format, GLenum format, GLenum type, GLenum unit=GL_TEXTURE0) {
         this(internal_format, format, type, unit);
         
         set_data(data);
     }
     
+    /// Sets the texture data.
     void set_data(T)(T data) {
         bind();
         glTexImage1D(GL_TEXTURE_1D, 0, internal_format, cast(int)(data.length), 0, format, type, data.ptr);
@@ -98,18 +123,29 @@ struct Texture1D {
 
 }
 
+/// Represents an OpenGL 2D texture.
+/// The constructor must be used to avoid segmentation faults.
 struct Texture2D {
     static const GLenum target = GL_TEXTURE_2D;
-    
+
+    /// The OpenGL texture name.
     GLuint texture;
+    /// Alias this to texture.
     alias texture this;
-    
+
+    /// Holds the internal format passed to the constructor.
     GLint internal_format;
+    /// Holds the texture width.
     GLsizei width;
+    /// Holds the texture height.
     GLsizei height;
+    /// Holds the format of the pixel data.
     GLenum format;
+    /// Holds the OpenGL data type of the pixel data.
     GLenum type;
+    /// Holds the texture unit.
     GLenum unit;
+    /// If true (default) mipmaps will be generated with glGenerateMipmap.
     bool mipmaps = true;
     
     mixin CommonTextureMethods;
@@ -127,12 +163,23 @@ struct Texture2D {
         
         glGenTextures(1, &texture);
     }
-        
+
+    /// Generates the OpenGL texture and initializes the struct.
+    /// Params:
+    /// internal_format = Specifies the number of color components in the texture.
+    /// width = Specifies the width of the texture image.
+    /// height = Specifies the height of the texture image.
+    /// format = Specifies the format of the pixel data.
+    /// type = Specifies the data type of the pixel data.
+    /// unit = Specifies the OpenGL texture uinit.
+    /// See_Also:
+    /// OpenGL, http://www.opengl.org/sdk/docs/man4/xhtml/glTexImage2D.xml
     this()(GLint internal_format, GLsizei width, GLsizei height,
            GLenum format, GLenum type, GLenum unit=GL_TEXTURE0, bool mipmaps=true) {
         ctor(internal_format, width, height, format, type, unit, mipmaps);
     }
     
+    /// ditto
     this(T)(T data, GLint internal_format, GLsizei width, GLsizei height,
             GLenum format, GLenum type, GLenum unit=GL_TEXTURE0, bool mipmaps=true) {
         ctor(internal_format, width, height, format, type, unit, mipmaps);
@@ -140,6 +187,7 @@ struct Texture2D {
         set_data(data);
     }
     
+    /// Sets the texture data.
     void set_data(T)(T data, GLint level=0) {
         bind();
         
@@ -157,6 +205,9 @@ struct Texture2D {
         unbind();
     }
     
+    /// Loads an image with DevIL and afterwards loads it into a Texture2D struct.
+    /// 
+    /// $(RED DevIL must be loaded and initialized manually!)
     static Texture2D from_image(string filename) {
         debug {
             writefln("using Texture2D.from_image, DevIL loaded and initialized?");
