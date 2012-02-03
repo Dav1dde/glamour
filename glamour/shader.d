@@ -11,6 +11,7 @@ private {
                                 glLinkProgram, glGetShaderiv, glGetShaderInfoLog,
                                 glGetProgramInfoLog, glGetProgramiv, glShaderSource,
                                 glUseProgram, glAttachShader, glGetAttribLocation,
+                                glDeleteProgram, glDeleteShader,
                                 glGetUniformLocation, glUniform1i, glUniform1f,
                                 glUniform2f, glUniform2fv, glUniform3fv,
                                 glUniform4fv, glUniformMatrix2fv, glUniformMatrix2x3fv,
@@ -118,6 +119,7 @@ struct Shader {
     /// Alias this to program.
     alias program this;
     
+    private GLuint[] _shaders; 
     /// Holds every shaders source.
     Line[][string] shaders;
     /// Holds the directives.
@@ -182,10 +184,21 @@ struct Shader {
             
             compile_shader(shader);
             
+            _shaders ~= shader;
             glAttachShader(program, shader);
         }
         
         link_program(program);
+    }
+    
+    /// Deletes all shaders and the program.
+    ~this() {
+        foreach(GLuint shader; _shaders) {
+            glDeleteShader(shader);
+        }
+        _shaders = [];
+        
+        glDeleteProgram(program);
     }
     
     /// Binds the program.

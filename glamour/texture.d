@@ -4,7 +4,7 @@ private {
     import derelict.opengl.gl : GLenum, GLuint, GLint, GLsizei,
                                 glGenTextures, glBindTexture, glActiveTexture,
                                 glTexImage1D, glTexImage2D, glTexParameteri, glTexParameterf,
-                                glGetTexParameterfv, GL_TEXTURE0,
+                                glGetTexParameterfv, glDeleteTextures, GL_TEXTURE0,
                                 GL_TEXTURE_1D, GL_TEXTURE_2D, GL_TEXTURE_BORDER_COLOR;
     import derelict.opengl.glext : glGenerateMipmap;
     import derelict.devil.il : ILuint, ilGenImages, ilBindImage, ilLoadImage, ilConvertImage,
@@ -62,6 +62,11 @@ mixin template CommonTextureMethods() {
     /// Unbinds the texture.
     void unbind() {
         glBindTexture(GL_TEXTURE_1D, 0);
+    }
+    
+    /// Deletes the texture.
+    ~this() {
+        glDeleteTextures(1, &texture);
     }
 }
 
