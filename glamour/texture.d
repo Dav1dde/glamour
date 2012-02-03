@@ -115,7 +115,14 @@ struct Texture1D {
     /// Sets the texture data.
     void set_data(T)(T data) {
         bind();
-        glTexImage1D(GL_TEXTURE_1D, 0, internal_format, cast(int)(data.length), 0, format, type, data.ptr);
+        
+        static if(isPointer!T) {
+            auto d = data;
+        } else {
+            auto d = data.ptr;
+        }
+        
+        glTexImage1D(GL_TEXTURE_1D, 0, internal_format, cast(int)(data.length), 0, format, type, d);
         unbind();
         
         Texture1D(data, 1, 1, 1);
