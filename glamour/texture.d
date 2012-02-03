@@ -192,6 +192,8 @@ struct Texture2D {
     }
     
     /// Sets the texture data.
+    ///
+    /// $(RED If mipmaps is true, the gl extensions must be loaded, otherwise bad things will happen!)
     void set_data(T)(T data, GLint level=0) {
         bind();
         
@@ -203,6 +205,9 @@ struct Texture2D {
         
         glTexImage2D(GL_TEXTURE_2D, level, internal_format, width, height, 0, format, type, d);
         if(mipmaps) {
+            debug {
+                writefln("Generating 2D mipmaps, glext loaded?");
+            }
             glGenerateMipmap(GL_TEXTURE_2D);
         }
         
