@@ -192,7 +192,7 @@ struct Shader {
     }
     
     /// Deletes all shaders and the program.
-    ~this() {
+    void remove() {
         foreach(GLuint shader; _shaders) {
             glDeleteShader(shader);
         }
