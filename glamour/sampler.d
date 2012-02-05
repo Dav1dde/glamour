@@ -18,13 +18,13 @@ struct Sampler {
     /// Alias this to sampler.
     alias sampler this;
     
-    /// Holds the index of the texture unit which the sampler is bound.
-    GLuint unit;
-    
     /// Creates the OpenGL sampler.
-    this(GLuint unit_=0) {
-        unit = unit_;
-        
+    static Sampler opCall() {
+        return Sampler(0);
+    }
+    
+    /// ditto
+    this(byte x) {
         glGenSamplers(1, &sampler);
     }
     
@@ -52,13 +52,23 @@ struct Sampler {
     }
     
     /// Binds the sampler.
-    void bind() {
+    void bind()(GLuint unit) {  
         glBindSampler(unit, sampler);
     }
     
+    /// ditto
+    void bind(T)(T tex) if(is(typeof(T.unit) : GLuint)) {
+        glBindSampler(tex.unit, sampler);
+    }
+    
     /// Unbinds the sampler.
-    void unbind() {
-        glBindSampler(unit, sampler);
+    void unbind()(GLuint uinit) {
+        glBindSampler(unit, 0);
+    }
+    
+    /// ditto
+    void unbind(T)(T tex) if(is(typeof(T.unit) : GLuint)) {
+        glBindSampler(tex.unit, 0);
     }
     
     /// Deletes the sampler.
