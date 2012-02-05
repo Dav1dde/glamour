@@ -58,15 +58,25 @@ mixin template CommonTextureMethods() {
         glBindTexture(target, texture);
     }
     
-    /// Activates the texture.
-    void activate() {
+    /// Activates the texture to $(I unit), passed to the function. 
+    void activate(GLuint unit) {
         glActiveTexture(unit);
     }
     
-    /// Binds and activates the texture.
-    void bind_and_activate() {
+    /// Activates the texture to $(B unit), the struct member.
+    void activate() {
+        activate(unit);
+    }
+    
+    /// Binds the texture and activates it to $(I unit), passed to the function. 
+    void bind_and_activate(GLuint unit) {
         glBindTexture(target, texture);
         glActiveTexture(unit);
+    }
+    
+    /// Binds the texture and activates it to $(B unit), the struct member.
+    void bind_and_activate() {
+        bind_and_activate(unit);
     }
     
     /// Unbinds the texture.
