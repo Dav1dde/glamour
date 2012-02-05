@@ -53,10 +53,20 @@ mixin template CommonTextureMethods() {
         return ret;
     }
     
-    /// Binds and activates the texture.
+    /// Binds the texture.
     void bind() {
-        glActiveTexture(unit);
         glBindTexture(target, texture);
+    }
+    
+    /// Activates the texture.
+    void activate() {
+        glActiveTexture(unit);
+    }
+    
+    /// Binds and activates the texture.
+    void bind_and_activate() {
+        glBindTexture(target, texture);
+        glActiveTexture(unit);
     }
     
     /// Unbinds the texture.
