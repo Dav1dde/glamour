@@ -61,7 +61,7 @@ mixin template CommonTextureMethods() {
     
     /// Unbinds the texture.
     void unbind() {
-        glBindTexture(GL_TEXTURE_1D, 0);
+        glBindTexture(target, 0);
     }
     
     /// Deletes the texture.
