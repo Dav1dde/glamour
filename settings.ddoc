@@ -1,0 +1,5 @@
+PROJECTNAME = glamour
+LINKPREFIX = .
+REPOSRCDIR = https://bitbucket.org/dav1d/glamour/src
+ROOT = .
+
