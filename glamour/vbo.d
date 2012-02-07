@@ -83,6 +83,8 @@ struct ElementBuffer {
 }
 
 
+/// Represents an OpenGL buffer.
+/// The constructor must be used to avoid segmentation faults.
 struct Buffer {
     mixin BufferData;
     
