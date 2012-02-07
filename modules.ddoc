@@ -1,1 +1,1 @@
-MODULES = $(MODULE shader, Wraps OpenGL shaders)$(MODULE texture, Wraps OpenGL textures)$(MODULE sampler, Wraps OpenGL samplers)$(MODULE util, useful functions)
+MODULES = $(MODULE shader, Wraps OpenGL shaders)$(MODULE texture, Wraps OpenGL textures)$(MODULE sampler, Wraps OpenGL samplers)$(MODULE vbo, Wraps OpenGL buffers)$(MODULE util, useful functions)
