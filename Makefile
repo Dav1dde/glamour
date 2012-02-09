@@ -4,7 +4,7 @@ export AUTHOR       = David Herberth
 export DESCRIPTION  = OpenGL wrapper for the D programming language (OpenGL > 3).
 export VERSION      = 
 export LICENSE      = MIT
-SOURCES             = glamour/shader.d glamour/texture.d glamour/sampler.d glamour/vbo.d glamour/util.d
+SOURCES             = glamour/gl.d glamour/shader.d glamour/texture.d glamour/sampler.d glamour/vbo.d glamour/util.d
 DDOCFILES	    = cutedoc.ddoc settings.ddoc modules.ddoc
 
 # include some command
