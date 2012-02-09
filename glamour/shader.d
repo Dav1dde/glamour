@@ -1,23 +1,23 @@
 module glamour.shader;
 
 private {
-    import derelict.opengl.gl : GLenum, GLuint, GLint, GLchar, GLboolean,
-                                GL_VERTEX_SHADER,
+    import glamour.gl : GLenum, GLuint, GLint, GLchar, GLboolean,
+                        GL_VERTEX_SHADER,
 //                                 GL_TESS_CONTROL_SHADER, GL_TESS_EVALUATION_SHADER,
-                                GL_GEOMETRY_SHADER, GL_FRAGMENT_SHADER,
-                                GL_LINK_STATUS, GL_FALSE, GL_INFO_LOG_LENGTH,
-                                GL_COMPILE_STATUS, GL_TRUE,
-                                glCreateProgram, glCreateShader, glCompileShader,
-                                glLinkProgram, glGetShaderiv, glGetShaderInfoLog,
-                                glGetProgramInfoLog, glGetProgramiv, glShaderSource,
-                                glUseProgram, glAttachShader, glGetAttribLocation,
-                                glDeleteProgram, glDeleteShader,
-                                glGetUniformLocation, glUniform1i, glUniform1f,
-                                glUniform2f, glUniform2fv, glUniform3fv,
-                                glUniform4fv, glUniformMatrix2fv, glUniformMatrix2x3fv,
-                                glUniformMatrix2x4fv, glUniformMatrix3fv, glUniformMatrix3x2fv,
-                                glUniformMatrix3x4fv, glUniformMatrix4fv, glUniformMatrix4x2fv,
-                                glUniformMatrix4x3fv;
+                        GL_GEOMETRY_SHADER, GL_FRAGMENT_SHADER,
+                        GL_LINK_STATUS, GL_FALSE, GL_INFO_LOG_LENGTH,
+                        GL_COMPILE_STATUS, GL_TRUE,
+                        glCreateProgram, glCreateShader, glCompileShader,
+                        glLinkProgram, glGetShaderiv, glGetShaderInfoLog,
+                        glGetProgramInfoLog, glGetProgramiv, glShaderSource,
+                        glUseProgram, glAttachShader, glGetAttribLocation,
+                        glDeleteProgram, glDeleteShader,
+                        glGetUniformLocation, glUniform1i, glUniform1f,
+                        glUniform2f, glUniform2fv, glUniform3fv,
+                        glUniform4fv, glUniformMatrix2fv, glUniformMatrix2x3fv,
+                        glUniformMatrix2x4fv, glUniformMatrix3fv, glUniformMatrix3x2fv,
+                        glUniformMatrix3x4fv, glUniformMatrix4fv, glUniformMatrix4x2fv,
+                        glUniformMatrix4x3fv;
 
     import std.file : readText;
     import std.path : baseName, stripExtension;

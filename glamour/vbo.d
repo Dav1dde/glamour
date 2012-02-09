@@ -1,12 +1,12 @@
 module glamour.vbo;
 
 private {
-    import derelict.opengl.gl : GLenum, GLint, GLsizei, GLuint, GLintptr, 
-                                GL_FALSE, glDisableVertexAttribArray, 
-                                glEnableVertexAttribArray, glVertexAttribPointer, 
-                                GL_STATIC_DRAW, GL_ARRAY_BUFFER, GL_ELEMENT_ARRAY_BUFFER,
-                                glBindBuffer, glBufferData, glBufferSubData,
-                                glGenBuffers, glDeleteBuffers;
+    import glamour.gl : GLenum, GLint, GLsizei, GLuint, GLintptr, 
+                        GL_FALSE, glDisableVertexAttribArray, 
+                        glEnableVertexAttribArray, glVertexAttribPointer, 
+                        GL_STATIC_DRAW, GL_ARRAY_BUFFER, GL_ELEMENT_ARRAY_BUFFER,
+                        glBindBuffer, glBufferData, glBufferSubData,
+                        glGenBuffers, glDeleteBuffers;
 }
 
 /// Every Element*-Struct will mixin this template.

@@ -1,12 +1,12 @@
 module glamour.texture;
 
 private {
-    import derelict.opengl.gl : GLenum, GLuint, GLint, GLsizei,
-                                glGenTextures, glBindTexture, glActiveTexture,
-                                glTexImage1D, glTexImage2D, glTexParameteri, glTexParameterf,
-                                glGetTexParameterfv, glDeleteTextures, GL_TEXTURE0,
-                                GL_TEXTURE_1D, GL_TEXTURE_2D, GL_TEXTURE_BORDER_COLOR;
-    import derelict.opengl.glext : glGenerateMipmap;
+    import glamour.gl : GLenum, GLuint, GLint, GLsizei,
+                        glGenTextures, glBindTexture, glActiveTexture,
+                        glTexImage1D, glTexImage2D, glTexParameteri, glTexParameterf,
+                        glGetTexParameterfv, glDeleteTextures, GL_TEXTURE0,
+                        GL_TEXTURE_1D, GL_TEXTURE_2D, GL_TEXTURE_BORDER_COLOR,
+                        glGenerateMipmap;
     import derelict.devil.il : ILuint, ilGenImages, ilBindImage, ilLoadImage, ilConvertImage,
                                ilGetData, ilGetInteger, IL_RGB, IL_UNSIGNED_BYTE,
                                 IL_IMAGE_FORMAT, IL_IMAGE_TYPE, IL_IMAGE_WIDTH, IL_IMAGE_HEIGHT;

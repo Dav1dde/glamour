@@ -1,12 +1,11 @@
 module glamour.sampler;
 
 private {
-    import derelict.opengl.gl : GLuint, GLenum,
-                                GL_TEXTURE_BORDER_COLOR;
-                                
-    import derelict.opengl.glext : glGetSamplerParameterfv, glBindSampler,
-                                   glSamplerParameteri, glSamplerParameterf,
-                                   glGenSamplers, glDeleteSamplers;
+    import glamour.gl : GLuint, GLenum,
+                        GL_TEXTURE_BORDER_COLOR,
+                        glGetSamplerParameterfv, glBindSampler,
+                        glSamplerParameteri, glSamplerParameterf,
+                        glGenSamplers, glDeleteSamplers;
 }
 
 
