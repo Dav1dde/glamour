@@ -7,12 +7,11 @@ private {
                         glGetTexParameterfv, glDeleteTextures, GL_TEXTURE0,
                         GL_TEXTURE_1D, GL_TEXTURE_2D, GL_TEXTURE_BORDER_COLOR,
                         glGenerateMipmap;
-    version(Derelict3) {
-    } else {
-        import derelict.devil.il : ILuint, ilGenImages, ilBindImage, ilLoadImage, ilConvertImage,
-                                   ilGetData, ilGetInteger, IL_RGB, IL_UNSIGNED_BYTE,
-                                    IL_IMAGE_FORMAT, IL_IMAGE_TYPE, IL_IMAGE_WIDTH, IL_IMAGE_HEIGHT;
-    }
+        
+    import derelict.devil.il : ILuint, ilGenImages, ilBindImage, ilLoadImage, ilConvertImage,
+                               ilGetData, ilGetInteger, IL_RGB, IL_UNSIGNED_BYTE,
+                               IL_IMAGE_FORMAT, IL_IMAGE_TYPE, IL_IMAGE_WIDTH, IL_IMAGE_HEIGHT;
+    
     import glamour.util : glenum2size;
     import std.traits : isPointer;
     import std.string : toStringz;
@@ -242,27 +241,23 @@ struct Texture2D {
         unbind();
     }
     
-    version(Derelict3) {
-    } else {
-        /// Loads an image with DevIL and afterwards loads it into a Texture2D struct.
-        /// This requires Derelict2.
-        /// 
-        /// $(RED DevIL must be loaded and initialized manually!)
-        static Texture2D from_image(string filename) {
-            debug {
-                writefln("using Texture2D.from_image, DevIL loaded and initialized?");
-            }
-            ILuint id;
-            ilGenImages(1, &id);
-            
-            if(!ilLoadImage(toStringz(filename))) {
-                throw new TextureError("Unable to load image: " ~ filename);
-            }
-            
-            ilConvertImage(IL_RGB, IL_UNSIGNED_BYTE);
-            
-            return Texture2D(ilGetData(), ilGetInteger(IL_IMAGE_FORMAT), ilGetInteger(IL_IMAGE_WIDTH),
-                             ilGetInteger(IL_IMAGE_HEIGHT), ilGetInteger(IL_IMAGE_FORMAT), ilGetInteger(IL_IMAGE_TYPE));        
+    /// Loads an image with DevIL and afterwards loads it into a Texture2D struct.
+    /// 
+    /// $(RED DevIL must be loaded and initialized manually!)
+    static Texture2D from_image(string filename) {
+        debug {
+            writefln("using Texture2D.from_image, DevIL loaded and initialized?");
         }
+        ILuint id;
+        ilGenImages(1, &id);
+        
+        if(!ilLoadImage(toStringz(filename))) {
+            throw new TextureError("Unable to load image: " ~ filename);
+        }
+        
+        ilConvertImage(IL_RGB, IL_UNSIGNED_BYTE);
+        
+        return Texture2D(ilGetData(), ilGetInteger(IL_IMAGE_FORMAT), ilGetInteger(IL_IMAGE_WIDTH),
+                         ilGetInteger(IL_IMAGE_HEIGHT), ilGetInteger(IL_IMAGE_FORMAT), ilGetInteger(IL_IMAGE_TYPE));        
     }
 }
