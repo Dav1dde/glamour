@@ -156,7 +156,7 @@ struct Buffer {
     /// Updates the Buffer, using glBufferSubData.
     void update(void[] data, GLintptr offset) {
         glBindBuffer(GL_ARRAY_BUFFER, buffer);
-        glBufferSubData(GL_ARRAY_BUFFER, offset, data.length, data);
+        glBufferSubData(GL_ARRAY_BUFFER, offset, data.length, data.ptr);
         glBindBuffer(GL_ARRAY_BUFFER, 0);
     }
     
