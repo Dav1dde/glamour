@@ -104,3 +104,17 @@ int glenum2size(GLenum t) {
         default: throw new Exception("Unknown GLenum");
     }
 }
+
+// http://immersedcode.org/2011/4/7/sdl-surface-to-texture/
+T next_power_of_two(T)(T value) {
+    if ((value & (value - 1)) == 0) {
+        return value;
+    }
+    
+    value -= 1;
+    for(size_t i = 1; i < T.sizeof * 8; i <<= 1) {
+        value = value | value >> i;
+    }
+    
+    return value + 1;
+}

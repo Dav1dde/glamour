@@ -16,7 +16,7 @@ private {
                                    IL_IMAGE_FORMAT, IL_IMAGE_TYPE, IL_IMAGE_WIDTH, IL_IMAGE_HEIGHT;
     }
     
-    import glamour.util : glenum2size;
+    import glamour.util : glenum2size, next_power_of_two;
     import std.traits : isPointer;
     import std.string : toStringz;
     
@@ -269,7 +269,8 @@ struct Texture2D {
                 default: throw new TextureError("Unknown/Unsupported stbi image format");
             }
             
-            return Texture2D(data, GL_RGBA8, x, y, image_format, GL_UNSIGNED_BYTE);;
+            return Texture2D(data, GL_RGBA8, next_power_of_two(x),
+                             next_power_of_two(y), image_format, GL_UNSIGNED_BYTE);;
         }
     } else {
         /// Loads an image with DevIL and afterwards loads it into a Texture2D struct.
