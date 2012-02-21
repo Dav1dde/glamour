@@ -235,6 +235,7 @@ struct Texture2D {
         }
         
         glTexImage2D(GL_TEXTURE_2D, level, internal_format, width, height, 0, format, type, d);
+        
         if(mipmaps) {
             debug {
                 writefln("Generating 2D mipmaps, glext loaded?");
@@ -257,7 +258,7 @@ struct Texture2D {
             ubyte* data = stbi_load(toStringz(filename), &x, &y, &comp, 0);
             scope(exit) stbi_image_free(data);
             scope(failure) stbi_image_free(data);
-            
+
             if(data is null) {
                 throw new TextureError("Unable to load image: " ~ filename);
             }
@@ -268,9 +269,11 @@ struct Texture2D {
                 case 4: image_format = GL_RGBA; break;
                 default: throw new TextureError("Unknown/Unsupported stbi image format");
             }
-            
-            return Texture2D(data, GL_RGBA8, next_power_of_two(x),
-                             next_power_of_two(y), image_format, GL_UNSIGNED_BYTE);;
+
+//             x = next_power_of_two(x); // TODO: reenable this, also increase the data buffer
+//             y = next_power_of_two(y); //  and check for GL_ARB_texture_non_power_of_two
+
+            return Texture2D(data, GL_RGBA8, x, y, image_format, GL_UNSIGNED_BYTE);
         }
     } else {
         /// Loads an image with DevIL and afterwards loads it into a Texture2D struct.
