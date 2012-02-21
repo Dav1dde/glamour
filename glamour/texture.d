@@ -1,16 +1,20 @@
 module glamour.texture;
 
 private {
-    import glamour.gl : GLenum, GLuint, GLint, GLsizei,
+    import glamour.gl : GLenum, GLuint, GLint, GLsizei, GL_UNSIGNED_BYTE,
                         glGenTextures, glBindTexture, glActiveTexture,
                         glTexImage1D, glTexImage2D, glTexParameteri, glTexParameterf,
                         glGetTexParameterfv, glDeleteTextures, GL_TEXTURE0,
                         GL_TEXTURE_1D, GL_TEXTURE_2D, GL_TEXTURE_BORDER_COLOR,
-                        glGenerateMipmap;
-        
-    import derelict.devil.il : ILuint, ilGenImages, ilBindImage, ilLoadImage, ilConvertImage,
-                               ilGetData, ilGetInteger, IL_RGB, IL_UNSIGNED_BYTE,
-                               IL_IMAGE_FORMAT, IL_IMAGE_TYPE, IL_IMAGE_WIDTH, IL_IMAGE_HEIGHT;
+                        GL_RGBA8, GL_RGB, GL_RGBA, glGenerateMipmap;
+    
+    version(stb) {
+        import stb_image : stbi_load, stbi_image_free;
+    } else {
+        import derelict.devil.il : ILuint, ilGenImages, ilBindImage, ilLoadImage, ilConvertImage,
+                                   ilGetData, ilGetInteger, IL_RGB, IL_UNSIGNED_BYTE,
+                                   IL_IMAGE_FORMAT, IL_IMAGE_TYPE, IL_IMAGE_WIDTH, IL_IMAGE_HEIGHT;
+    }
     
     import glamour.util : glenum2size;
     import std.traits : isPointer;
@@ -241,23 +245,51 @@ struct Texture2D {
         unbind();
     }
     
-    /// Loads an image with DevIL and afterwards loads it into a Texture2D struct.
-    /// 
-    /// $(RED DevIL must be loaded and initialized manually!)
-    static Texture2D from_image(string filename) {
-        debug {
-            writefln("using Texture2D.from_image, DevIL loaded and initialized?");
+    version(stb) {
+        /// Loads an image with stb_image and afterwards loads it into a Texture2D struct.
+        static Texture2D from_image(string filename) {
+            debug {
+                writefln("using Texture2D.from_image with stb image");
+            }
+            int x;
+            int y;
+            int comp;
+            ubyte* data = stbi_load(toStringz(filename), &x, &y, &comp, 0);
+            scope(exit) stbi_image_free(data);
+            scope(failure) stbi_image_free(data);
+            
+            if(data is null) {
+                throw new TextureError("Unable to load image: " ~ filename);
+            }
+            
+            uint image_format;
+            switch(comp) {
+                case 3: image_format = GL_RGB; break;
+                case 4: image_format = GL_RGBA; break;
+                default: throw new TextureError("Unknown/Unsupported stbi image format");
+            }
+            
+            return Texture2D(data, GL_RGBA8, x, y, image_format, GL_UNSIGNED_BYTE);;
         }
-        ILuint id;
-        ilGenImages(1, &id);
-        
-        if(!ilLoadImage(toStringz(filename))) {
-            throw new TextureError("Unable to load image: " ~ filename);
+    } else {
+        /// Loads an image with DevIL and afterwards loads it into a Texture2D struct.
+        /// 
+        /// $(RED DevIL must be loaded and initialized manually!)
+        static Texture2D from_image(string filename) {
+            debug {
+                writefln("using Texture2D.from_image, DevIL loaded and initialized?");
+            }
+            ILuint id;
+            ilGenImages(1, &id);
+            
+            if(!ilLoadImage(toStringz(filename))) {
+                throw new TextureError("Unable to load image: " ~ filename);
+            }
+            
+//             ilConvertImage(IL_RGB, IL_UNSIGNED_BYTE);
+            
+            return Texture2D(ilGetData(), ilGetInteger(IL_IMAGE_FORMAT), ilGetInteger(IL_IMAGE_WIDTH),
+                             ilGetInteger(IL_IMAGE_HEIGHT), ilGetInteger(IL_IMAGE_FORMAT), ilGetInteger(IL_IMAGE_TYPE));        
         }
-        
-        ilConvertImage(IL_RGB, IL_UNSIGNED_BYTE);
-        
-        return Texture2D(ilGetData(), ilGetInteger(IL_IMAGE_FORMAT), ilGetInteger(IL_IMAGE_WIDTH),
-                         ilGetInteger(IL_IMAGE_HEIGHT), ilGetInteger(IL_IMAGE_FORMAT), ilGetInteger(IL_IMAGE_TYPE));        
     }
 }
