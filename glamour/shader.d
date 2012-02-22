@@ -270,7 +270,7 @@ struct Shader {
         
         /// ditto
         void uniform(S : string, T)(S name, T value) if(is_quaternion!T) {
-            glUniform4fv(get_uniform_location[name], value.value_ptr);
+            glUniform4fv(get_uniform_location(name), value.value_ptr);
         } 
     } else {
         void uniform(S, T)(S name, T value) {
