@@ -237,11 +237,11 @@ class Shader {
         /// vectors, matrices and quaternions is added
         void uniform(S : string, T)(S name, T value) if(is_vector!T) {
             static if(T.dimension == 2) {
-                glUniform2fv(get_uniform_location(name), value.value_ptr);
+                glUniform2fv(get_uniform_location(name), 1, value.value_ptr);
             } else static if(T.dimension == 3) {
-                glUniform3fv(get_uniform_location(name), value.value_ptr);
+                glUniform3fv(get_uniform_location(name), 1, value.value_ptr);
             } else static if(T.dimension == 4) {
-                glUniform4fv(get_uniform_location(name), value.value_ptr);
+                glUniform4fv(get_uniform_location(name), 1, value.value_ptr);
             } else static assert(false);
         }
         
@@ -270,7 +270,7 @@ class Shader {
         
         /// ditto
         void uniform(S : string, T)(S name, T value) if(is_quaternion!T) {
-            glUniform4fv(get_uniform_location(name), value.value_ptr);
+            glUniform4fv(get_uniform_location(name), 1, value.value_ptr);
         } 
     } else {
         void uniform(S, T)(S name, T value) {
@@ -294,28 +294,28 @@ class Shader {
     }
 
     /// ditto
-    void uniform2fv(string name, const float[] value) {
-        glUniform2fv(get_uniform_location(name), cast(int)(value.length)/2, value.ptr);
+    void uniform2fv(string name, const float[] value, int count=1) {
+        glUniform2fv(get_uniform_location(name), count, value.ptr);
     }
     
     /// ditto
-    void uniform3fv(string name, const float[] value) {
-        glUniform3fv(get_uniform_location(name), cast(int)(value.length)/3, value.ptr);
+    void uniform3fv(string name, const float[] value, int count=1) {
+        glUniform3fv(get_uniform_location(name), count, value.ptr);
     }
     
     /// ditto
-    void uniform4fv(string name, const float[] value) {
-        glUniform4fv(get_uniform_location(name), cast(int)(value.length)/4, value.ptr);
+    void uniform4fv(string name, const float[] value, int count=1) {
+        glUniform4fv(get_uniform_location(name), count, value.ptr);
     }
     
     /// ditto
-    void uniform_matrix3fv(string name, const float[] value, GLboolean transpose=GL_TRUE) {
-        glUniformMatrix3fv(get_uniform_location(name), cast(int)(value.length)/9, transpose, value.ptr);
+    void uniform_matrix3fv(string name, const float[] value, GLboolean transpose=GL_TRUE, int count=1) {
+        glUniformMatrix3fv(get_uniform_location(name), count, transpose, value.ptr);
     }
     
     /// ditto
-    void uniform_matrix4fv(string name, const float[] value, GLboolean transpose=GL_TRUE) {
-        glUniformMatrix4fv(get_uniform_location(name), cast(int)(value.length)/16, transpose, value.ptr);
+    void uniform_matrix4fv(string name, const float[] value, GLboolean transpose=GL_TRUE, int count=1) {
+        glUniformMatrix4fv(get_uniform_location(name), count, transpose, value.ptr);
     }
     
 }
