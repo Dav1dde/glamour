@@ -214,21 +214,21 @@ class Shader {
     /// Queries an attrib location from OpenGL and caches it in $(I attrib_locations).
     /// If the location was already queried the cache is returned.
     GLint get_attrib_location(string name) {
-        if(name !in attrib_locations) {
-            attrib_locations[name] = glGetAttribLocation(program, toStringz(name));
+        if(auto loc = name in attrib_locations) {
+            return *loc;
         }
         
-        return attrib_locations[name];
+        return attrib_locations[name] = glGetAttribLocation(program, toStringz(name));
     }
     
     /// Queries an uniform location from OpenGL and caches it in $(I uniform_locations).
     /// If the location was already queried the cache is returned.
     GLint get_uniform_location(string name) {
-        if(name !in uniform_locations) {
-            attrib_locations[name] = glGetUniformLocation(program, toStringz(name));
+        if(auto loc = name in uniform_locations) {
+            return *loc;
         }
         
-        return uniform_locations[name];
+        return attrib_locations[name] = glGetUniformLocation(program, toStringz(name));
     }
         
     // gl3n integration
