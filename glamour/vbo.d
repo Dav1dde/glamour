@@ -92,7 +92,7 @@ class ElementBuffer : IBuffer {
 
 /// Represents an OpenGL buffer.
 /// The constructor must be used to avoid segmentation faults.
-struct Buffer : IBuffer {
+class Buffer : IBuffer {
     mixin BufferData;
     
     /// Specifies the byte offset between consecutive generic vertex attributes.
