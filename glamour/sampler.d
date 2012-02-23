@@ -11,19 +11,14 @@ private {
 
 /// Represents an OpenGL Sampler.
 /// The constructor must be used to avoid segmentation faults.
-struct Sampler {
+class Sampler {
     /// The OpenGL sampler name.
     GLuint sampler;
     /// Alias this to sampler.
     alias sampler this;
-    
+       
     /// Creates the OpenGL sampler.
-    static Sampler opCall() {
-        return Sampler(0);
-    }
-    
-    /// ditto
-    this(byte x) {
+    this() {
         glGenSamplers(1, &sampler);
     }
     
@@ -71,7 +66,7 @@ struct Sampler {
     }
     
     /// Deletes the sampler.
-    void remove() {
+    ~this() {
         glDeleteSamplers(1, &sampler);
     }
 }

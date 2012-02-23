@@ -113,7 +113,7 @@ alias Tuple!(size_t, "line", string, "text") Line;
 
 /// Represents an OpenGL program with it's shaders.
 /// The constructor must be used to avoid segmentation faults.
-struct Shader {
+class Shader {
     /// The OpenGL program.
     GLuint program;
     /// Alias this to program.
@@ -192,7 +192,7 @@ struct Shader {
     }
     
     /// Deletes all shaders and the program.
-    void remove() {
+    ~this() {
         foreach(GLuint shader; _shaders) {
             glDeleteShader(shader);
         }

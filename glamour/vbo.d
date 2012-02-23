@@ -26,9 +26,16 @@ mixin template BufferData() {
     }
 }
 
+/// Interface every buffer implements
+interface IBuffer {
+    void bind(); /// 
+    void unbind(); /// 
+    void set_data(void[] data, GLenum type, GLenum hint = GL_STATIC_DRAW); /// 
+}
+
 /// Represents an OpenGL element buffer.
 /// The constructor must be used to avoid segmentation faults.
-struct ElementBuffer {
+class ElementBuffer : IBuffer {
     mixin BufferData;
     
     /// The OpenGL buffer name.
@@ -52,7 +59,7 @@ struct ElementBuffer {
     }
     
     /// Deletes the buffer.
-    void remove() {
+    ~this() {
         glDeleteBuffers(1, &buffer);
     }
     
@@ -85,7 +92,7 @@ struct ElementBuffer {
 
 /// Represents an OpenGL buffer.
 /// The constructor must be used to avoid segmentation faults.
-struct Buffer {
+struct Buffer : IBuffer {
     mixin BufferData;
     
     /// Specifies the byte offset between consecutive generic vertex attributes.
@@ -96,12 +103,8 @@ struct Buffer {
     /// Alias this to buffer.
     alias buffer this;
     
-    /// Kind of a ctor, it will initialize the buffer.
-    static Buffer opCall() {
-        return Buffer(0);
-    }
-    
-    private this(ubyte x) {
+    // Initializes the buffer.
+    this() {
         glGenBuffers(1, &buffer);
     }
     
@@ -120,7 +123,7 @@ struct Buffer {
     }
     
     /// Deletes the buffer.
-    void remove() {
+    ~this() {
         glDeleteBuffers(1, &buffer);
     }
     

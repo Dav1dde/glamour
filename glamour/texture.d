@@ -91,15 +91,28 @@ mixin template CommonTextureMethods() {
     }
     
     /// Deletes the texture.
-    void remove() {
+    ~this() {
         glDeleteTextures(1, &texture);
     }
+}
+
+/// Interface every Texture implements.
+interface ITexture {
+    void set_paramter(T)(GLenum name, T params); /// 
+    float[] get_parameter(GLenum name); /// 
+    void set_data(T)(T data); /// 
+    void bind(); /// 
+    void activate(GLuint unit); /// 
+    void activate(); /// 
+    void bind_and_activate(GLuint unit); /// 
+    void bind_and_activate(); /// 
+    void unbind(); /// 
 }
 
 
 /// Represents an OpenGL 1D texture.
 /// The constructor must be used to avoid segmentation faults.
-struct Texture1D {
+class Texture1D : ITexture {
     static const GLenum target = GL_TEXTURE_1D;
     
     /// The OpenGL texture name.
@@ -127,7 +140,7 @@ struct Texture1D {
     /// unit_ = Specifies the OpenGL texture uinit.
     /// See_Also:
     /// OpenGL, http://www.opengl.org/sdk/docs/man4/xhtml/glTexImage1D.xml
-    this()(GLint internal_format_, GLenum format_, GLenum type_, GLenum unit_=GL_TEXTURE0) {
+    this(GLint internal_format_, GLenum format_, GLenum type_, GLenum unit_=GL_TEXTURE0) {
         internal_format = internal_format_;
         format = format_;
         type = type_;
@@ -135,14 +148,7 @@ struct Texture1D {
         
         glGenTextures(1, &texture);
     }
-    
-    /// ditto
-    this(T)(T data, GLint internal_format, GLenum format, GLenum type, GLenum unit=GL_TEXTURE0) {
-        this(internal_format, format, type, unit);
         
-        set_data(data);
-    }
-    
     /// Sets the texture data.
     void set_data(T)(T data) {
         bind();
@@ -160,7 +166,7 @@ struct Texture1D {
 
 /// Represents an OpenGL 2D texture.
 /// The constructor must be used to avoid segmentation faults.
-struct Texture2D {
+class Texture2D : ITexture {
     static const GLenum target = GL_TEXTURE_2D;
 
     /// The OpenGL texture name.
@@ -182,7 +188,7 @@ struct Texture2D {
     GLenum unit;
     /// If true (default) mipmaps will be generated with glGenerateMipmap.
     bool mipmaps = true;
-    
+        
     mixin CommonTextureMethods;
 
     // ugly workaround, "Error: constructor call must be in a constructor"?
@@ -198,7 +204,7 @@ struct Texture2D {
         
         glGenTextures(1, &texture);
     }
-
+    
     /// Generates the OpenGL texture and initializes the struct.
     /// Params:
     /// internal_format = Specifies the number of color components in the texture.
@@ -209,17 +215,9 @@ struct Texture2D {
     /// unit = Specifies the OpenGL texture uinit.
     /// See_Also:
     /// OpenGL, http://www.opengl.org/sdk/docs/man4/xhtml/glTexImage2D.xml
-    this()(GLint internal_format, GLsizei width, GLsizei height,
+    this(GLint internal_format, GLsizei width, GLsizei height, 
            GLenum format, GLenum type, GLenum unit=GL_TEXTURE0, bool mipmaps=true) {
         ctor(internal_format, width, height, format, type, unit, mipmaps);
-    }
-    
-    /// ditto
-    this(T)(T data, GLint internal_format, GLsizei width, GLsizei height,
-            GLenum format, GLenum type, GLenum unit=GL_TEXTURE0, bool mipmaps=true) {
-        ctor(internal_format, width, height, format, type, unit, mipmaps);
-
-        set_data(data);
     }
     
     /// Sets the texture data.
@@ -273,7 +271,9 @@ struct Texture2D {
 //             x = next_power_of_two(x); // TODO: reenable this, also increase the data buffer
 //             y = next_power_of_two(y); //  and check for GL_ARB_texture_non_power_of_two
 
-            return Texture2D(data, GL_RGBA8, x, y, image_format, GL_UNSIGNED_BYTE);
+            auto tex = new Texture2D(GL_RGBA8, x, y, image_format, GL_UNSIGNED_BYTE);
+            tex.set_data(data);
+            return tex;
         }
     } else {
         /// Loads an image with DevIL and afterwards loads it into a Texture2D struct.
@@ -292,8 +292,12 @@ struct Texture2D {
             
 //             ilConvertImage(IL_RGB, IL_UNSIGNED_BYTE);
             
-            return Texture2D(ilGetData(), ilGetInteger(IL_IMAGE_FORMAT), ilGetInteger(IL_IMAGE_WIDTH),
-                             ilGetInteger(IL_IMAGE_HEIGHT), ilGetInteger(IL_IMAGE_FORMAT), ilGetInteger(IL_IMAGE_TYPE));        
+            auto tex =  new Texture2D(ilGetInteger(IL_IMAGE_FORMAT),
+                                      ilGetInteger(IL_IMAGE_WIDTH), ilGetInteger(IL_IMAGE_HEIGHT),
+                                      ilGetInteger(IL_IMAGE_FORMAT), ilGetInteger(IL_IMAGE_TYPE));
+            tex.set_data(ilGetData());
+            return tex;
+            
         }
     }
 }
