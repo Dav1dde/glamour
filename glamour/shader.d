@@ -17,7 +17,7 @@ private {
                         glUniform4fv, glUniformMatrix2fv, glUniformMatrix2x3fv,
                         glUniformMatrix2x4fv, glUniformMatrix3fv, glUniformMatrix3x2fv,
                         glUniformMatrix3x4fv, glUniformMatrix4fv, glUniformMatrix4x2fv,
-                        glUniformMatrix4x3fv;
+                        glUniformMatrix4x3fv, glUniform2iv, glUniform3iv, glUniform4iv;
 
     import std.file : readText;
     import std.path : baseName, stripExtension;
@@ -236,13 +236,23 @@ class Shader {
         /// If glamour gets compiled with version=gl3n support for
         /// vectors, matrices and quaternions is added
         void uniform(S : string, T)(S name, T value) if(is_vector!T) {
-            static if(T.dimension == 2) {
-                glUniform2fv(get_uniform_location(name), 1, value.value_ptr);
-            } else static if(T.dimension == 3) {
-                glUniform3fv(get_uniform_location(name), 1, value.value_ptr);
-            } else static if(T.dimension == 4) {
-                glUniform4fv(get_uniform_location(name), 1, value.value_ptr);
-            } else static assert(false);
+            static if(is(T.vt : int)) {
+                static if(T.dimension == 2) {
+                    glUniform2iv(get_uniform_location(name), 1, value.value_ptr);
+                } else static if(T.dimension == 3) {
+                    glUniform3iv(get_uniform_location(name), 1, value.value_ptr);
+                } else static if(T.dimension == 4) {
+                    glUniform4iv(get_uniform_location(name), 1, value.value_ptr);
+                } else static assert(false);
+            } else {
+                static if(T.dimension == 2) {
+                    glUniform2fv(get_uniform_location(name), 1, value.value_ptr);
+                } else static if(T.dimension == 3) {
+                    glUniform3fv(get_uniform_location(name), 1, value.value_ptr);
+                } else static if(T.dimension == 4) {
+                    glUniform4fv(get_uniform_location(name), 1, value.value_ptr);
+                } else static assert(false);
+            }
         }
         
         /// ditto
