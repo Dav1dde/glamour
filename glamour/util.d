@@ -104,22 +104,3 @@ int glenum2size(GLenum t) {
         default: throw new Exception("Unknown GLenum");
     }
 }
-
-// http://immersedcode.org/2011/4/7/sdl-surface-to-texture/
-T next_power_of_two(T)(T value) {
-    import std.stdio;
-    writefln("yayshit: %s", value);
-    if ((value & (value - 1)) == 0) {
-        return value;
-    }
-    
-    writefln("ok");
-    value -= 1;
-    for(size_t i = 1; i < T.sizeof * 4; i <<= 1) {
-        writefln("%s", i);
-        value = value | value >> i;
-    }
-    value++;
-    writefln("ok2: %s", value);
-    return value;
-}

@@ -16,7 +16,7 @@ private {
                                    IL_IMAGE_FORMAT, IL_IMAGE_TYPE, IL_IMAGE_WIDTH, IL_IMAGE_HEIGHT;
     }
     
-    import glamour.util : glenum2size, next_power_of_two;
+    import glamour.util : glenum2size;
     import std.traits : isPointer;
     import std.string : toStringz;
     
@@ -267,9 +267,6 @@ class Texture2D : ITexture {
                 case 4: image_format = GL_RGBA; break;
                 default: throw new TextureError("Unknown/Unsupported stbi image format");
             }
-
-//             x = next_power_of_two(x); // TODO: reenable this, also increase the data buffer
-//             y = next_power_of_two(y); //  and check for GL_ARB_texture_non_power_of_two
 
             auto tex = new Texture2D(GL_RGBA8, x, y, image_format, GL_UNSIGNED_BYTE);
             tex.set_data(data);
