@@ -43,12 +43,8 @@ class ElementBuffer : IBuffer {
     /// Alias this to buffer.
     alias buffer this;
     
-    /// Kind of a ctor, it will initialize the buffer.
-    static ElementBuffer opCall() {
-        return ElementBuffer(0);
-    }
-    
-    private this(ubyte x) {
+    /// Initializes the buffer.
+    this() {
         glGenBuffers(1, &buffer);
     }
     
