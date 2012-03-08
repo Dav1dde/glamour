@@ -104,6 +104,17 @@ class Buffer : IBuffer {
         glGenBuffers(1, &buffer);
     }
     
+    /// Initualizes the buffer.
+    /// Params:
+    /// size = Specifies the number of components per generic vertex attribute.
+    /// stride = Specifies the byte offset between consecutive generic vertex attributes.
+    /// hint = Specifies the expected usage pattern of the data store.
+    this(GLint size_=4, GLsizei stride_=0, GLenum hint = GL_STATIC_DRAW) {
+        glGenBuffers(1, &buffer);
+        stride = stride_;
+        size = size_;
+    }
+    
     /// Initualizes the buffer and sets data.
     /// Params:
     /// data = any kind of data.
