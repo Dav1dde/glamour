@@ -21,7 +21,7 @@ private {
 
     import std.file : readText;
     import std.path : baseName, stripExtension;
-    import std.string : format, splitLines, toStringz;
+    import std.string : format, splitLines, toStringz, toLower;
     import std.algorithm : startsWith;
     import std.regex : ctRegex, regex, match;
     import std.typecons : Tuple;
@@ -31,14 +31,15 @@ private {
     }
 }
 
-GLuint[string] SHADER_TYPES;
 
-static this() {
-    GLuint[string] SHADER_TYPES = ["vertex" : GL_VERTEX_SHADER,
-//                                    "tesscontrol" : GL_TESS_CONTROL_SHADER,
-//                                    "tessevaluation" : GL_TESS_EVALUATION_SHADER,
-                                   "geometry" : GL_GEOMETRY_SHADER, 
-                                   "fragment" : GL_FRAGMENT_SHADER];
+GLenum to_opengl_shader(string s, string filename="<unknown>") {
+    switch(s) {
+        case "vertex": return GL_VERTEX_SHADER;
+        case "geometry": return GL_GEOMETRY_SHADER;
+        case "fragment": return GL_FRAGMENT_SHADER;
+        default: throw new ShaderError(format("Unknown shader, %s.", s), "load", filename);
+    }
+    assert(0);
 }
 
 
@@ -60,7 +61,7 @@ class ShaderError : Exception {
         filename = filename_;
         process = process_;
         
-        infolog ~= "Failed to " ~ process_ ~ " shader: " ~ filename_ ~ ". "; 
+        infolog ~= "\nFailed to " ~ process_ ~ " shader: " ~ filename_ ~ ". "; 
         
         super(infolog);
     }
@@ -155,7 +156,7 @@ class Shader {
                 auto m = text.match(ctr_shader_type);
                 
                 if(m) {
-                    string type = m.captures[1];
+                    string type = toLower(m.captures[1]);
                     shaders[type] = null;
                     current = &(shaders[type]);
                 } else {
@@ -177,7 +178,7 @@ class Shader {
                 shader_source ~= format("#line %d\n%s\n", line.line, line.text);
             }
             
-            GLenum shader_type = SHADER_TYPES[type];
+            GLenum shader_type = to_opengl_shader(type);
             GLuint shader = glCreateShader(shader_type);
             auto ssp = shader_source.ptr;
             int ssl = cast(int)(shader_source.length);
