@@ -156,6 +156,7 @@ class Shader {
                 
                 if(m) {
                     string type = m.captures[1];
+                    shaders[type] = null;
                     current = &(shaders[type]);
                 } else {
                     if(current !is null) {
