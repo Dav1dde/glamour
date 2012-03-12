@@ -230,7 +230,7 @@ class Shader {
             return *loc;
         }
         
-        return attrib_locations[name] = glGetUniformLocation(program, toStringz(name));
+        return uniform_locations[name] = glGetUniformLocation(program, toStringz(name));
     }
         
     // gl3n integration
