@@ -53,7 +53,7 @@ class ElementBuffer : IBuffer {
     }
     
     /// Deletes the buffer.
-    ~this() {
+    void remove() {
         glDeleteBuffers(1, &buffer);
     }
     
@@ -105,7 +105,7 @@ class Buffer : IBuffer {
     }
     
     /// Deletes the buffer.
-    ~this() {
+    void remove() {
         glDeleteBuffers(1, &buffer);
     }
     

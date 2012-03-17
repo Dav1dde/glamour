@@ -91,7 +91,7 @@ mixin template CommonTextureMethods() {
     }
     
     /// Deletes the texture.
-    ~this() {
+    void remove() {
         glDeleteTextures(1, &texture);
     }
 }

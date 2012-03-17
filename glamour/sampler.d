@@ -66,7 +66,7 @@ class Sampler {
     }
     
     /// Deletes the sampler.
-    ~this() {
+    void remove() {
         glDeleteSamplers(1, &sampler);
     }
 }
