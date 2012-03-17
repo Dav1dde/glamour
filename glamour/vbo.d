@@ -13,8 +13,6 @@ private {
 mixin template BufferData() {
     /// Stores the OpenGL type of the passed data (e.g. GL_FLOAT).
     GLenum type;
-    /// Specifies the number of components per generic vertex attribute.
-    GLint size;
     /// Specifies the expected usage pattern of the data store.
     GLenum hint;
     /// Length of the passed data, note it's the length of a void[] array.
@@ -86,9 +84,6 @@ class ElementBuffer : IBuffer {
 class Buffer : IBuffer {
     mixin BufferData;
     
-    /// Specifies the byte offset between consecutive generic vertex attributes.
-    GLsizei stride;
-    
     /// The OpenGL buffer name.
     GLuint buffer;
     /// Alias this to buffer.
@@ -99,28 +94,13 @@ class Buffer : IBuffer {
         glGenBuffers(1, &buffer);
     }
     
-    /// Initualizes the buffer.
-    /// Params:
-    /// size = Specifies the number of components per generic vertex attribute.
-    /// stride = Specifies the byte offset between consecutive generic vertex attributes.
-    /// hint = Specifies the expected usage pattern of the data store.
-    this(GLint size_=4, GLsizei stride_=0, GLenum hint = GL_STATIC_DRAW) {
-        glGenBuffers(1, &buffer);
-        stride = stride_;
-        size = size_;
-    }
-    
     /// Initualizes the buffer and sets data.
     /// Params:
     /// data = any kind of data.
     /// type = OpenGL type of the data (e.g. GL_FLOAT)
-    /// size = Specifies the number of components per generic vertex attribute.
-    /// stride = Specifies the byte offset between consecutive generic vertex attributes.
     /// hint = Specifies the expected usage pattern of the data store.
-    this(void[] data, GLenum type, GLint size_=4, GLsizei stride_=0, GLenum hint = GL_STATIC_DRAW) {
+    this(void[] data, GLenum type, GLenum hint = GL_STATIC_DRAW) {
         glGenBuffers(1, &buffer);
-        stride = stride_;
-        size = size_;
         set_data(data, type, hint);
     }
     
@@ -135,12 +115,12 @@ class Buffer : IBuffer {
     }
     
     /// Binds the buffer and sets the vertex attrib pointer.
-    void bind(GLuint attrib_location, GLint size_=-1, GLsizei offset=0, GLsizei stride_=-1) {
+    /// size = Specifies the number of components per generic vertex attribute.
+    /// stride = Specifies the byte offset between consecutive generic vertex attributes.
+    void bind(GLuint attrib_location, GLint size=4, GLsizei offset=0, GLsizei stride=0) {
         glBindBuffer(GL_ARRAY_BUFFER, buffer);
-        int s = stride_ >= 0 ? stride_:stride;
-        GLint si = size_ >= 1 ? size_:size;
         glEnableVertexAttribArray(attrib_location);
-        glVertexAttribPointer(attrib_location, si, type, GL_FALSE, s, cast(void *)offset);
+        glVertexAttribPointer(attrib_location, size, type, GL_FALSE, stride, cast(void *)offset);
     }
     
     /// Unbinds the buffer.
