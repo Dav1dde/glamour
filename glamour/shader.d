@@ -185,7 +185,7 @@ class Shader {
             glShaderSource(shader, 1, &ssp, &ssl);
             
             compile_shader(shader);
-            
+
             _shaders ~= shader;
             glAttachShader(program, shader);
         }
@@ -237,7 +237,7 @@ class Shader {
     version(gl3n) {
         /// If glamour gets compiled with version=gl3n support for
         /// vectors, matrices and quaternions is added
-        void uniform(S : string, T)(S name, T value) if(is_vector!T) {
+        void uniform(T)(string name, T value) if(is_vector!T) {
             static if(is(T.vt : int)) {
                 static if(T.dimension == 2) {
                     glUniform2iv(get_uniform_location(name), 1, value.value_ptr);

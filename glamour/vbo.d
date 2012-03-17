@@ -78,11 +78,6 @@ class ElementBuffer : IBuffer {
         length = data.length;
         set_buffer_data(type, hint);
     }
-
-    /// Returns true if length != 0.
-    bool opCast(T : bool)() {
-        return cast(bool)(length);
-    }
 }
 
 
@@ -168,10 +163,5 @@ class Buffer : IBuffer {
         glBindBuffer(GL_ARRAY_BUFFER, buffer);
         glBufferSubData(GL_ARRAY_BUFFER, offset, data.length, data.ptr);
         glBindBuffer(GL_ARRAY_BUFFER, 0);
-    }
-    
-    /// Returns true if length != 0.
-    bool opCast(T : bool)() {
-        return cast(bool)(length);
     }
 }
