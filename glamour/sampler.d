@@ -15,8 +15,8 @@ private {
 class Sampler {
     /// The OpenGL sampler name.
     GLuint sampler;
-//     /// Alias this to sampler.
-//     alias sampler this;
+    /// Alias this to sampler.
+    alias sampler this;
        
     /// Creates the OpenGL sampler.
     this() {
@@ -24,7 +24,7 @@ class Sampler {
     }
     
     /// Sets a sampler parameter.
-    void set_paramter(T)(GLenum name, T params) if(is(T : int) || is(T : float)) {
+    void set_parameter(T)(GLenum name, T params) if(is(T : int) || is(T : float)) {
         static if(is(T : int)) {
             glSamplerParameteri(sampler, name, params);
         } else {
