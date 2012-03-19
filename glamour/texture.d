@@ -36,8 +36,11 @@ class TextureError : Exception {
 
 /// Every Texture*-Struct will mixin this template.
 mixin template CommonTextureMethods() {
+    /// Returns the texture unit
+    GLuint get_unit() { return unit; }
+
     /// Sets a texture parameter.
-    void set_paramter(T)(GLenum name, T params) if(is(T : int) || is(T : float)) {
+    void set_paramter(T)(GLuint name, T params) if(is(T : int) || is(T : float)) {
         static if(is(T : int)) {
             glTexParameteri(target, name, params);
         } else {
@@ -46,7 +49,7 @@ mixin template CommonTextureMethods() {
     }
     
     /// Queries a texture parameter from OpenGL.    
-    float[] get_parameter(GLenum name) {
+    float[] get_parameter(GLuint name) {
         float[] ret;
         
         if(name == GL_TEXTURE_BORDER_COLOR) {
@@ -98,8 +101,9 @@ mixin template CommonTextureMethods() {
 
 /// Interface every Texture implements.
 interface ITexture {
-    void set_paramter(T)(GLenum name, T params); /// 
-    float[] get_parameter(GLenum name); /// 
+    GLuint get_unit(); ///
+    void set_paramter(T)(GLuint name, T params); /// 
+    float[] get_parameter(GLuint name); /// 
     void set_data(T)(T data); /// 
     void bind(); /// 
     void activate(GLuint unit); /// 
@@ -127,7 +131,7 @@ class Texture1D : ITexture {
     /// Holds the OpenGL data type of the pixel data.
     GLenum type;
     /// Holds the texture unit.
-    GLenum unit;
+    GLuint unit;
     
     ///
     mixin CommonTextureMethods;

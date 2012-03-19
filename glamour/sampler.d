@@ -6,6 +6,7 @@ private {
                         glGetSamplerParameterfv, glBindSampler,
                         glSamplerParameteri, glSamplerParameterf,
                         glGenSamplers, glDeleteSamplers;
+    import glamour.texture : ITexture;
 }
 
 
@@ -46,23 +47,23 @@ class Sampler {
     }
     
     /// Binds the sampler.
-    void bind()(GLuint unit) {  
+    void bind(GLuint unit) {
         glBindSampler(unit, sampler);
     }
     
     /// ditto
-    void bind(T)(T tex) if(is(typeof(T.unit) : GLuint)) {
-        glBindSampler(tex.unit, sampler);
+    void bind(ITexture tex) {
+        glBindSampler(tex.get_unit(), sampler);
     }
     
     /// Unbinds the sampler.
-    void unbind()(GLuint uinit) {
+    void unbind(GLuint unit) {
         glBindSampler(unit, 0);
     }
     
     /// ditto
-    void unbind(T)(T tex) if(is(typeof(T.unit) : GLuint)) {
-        glBindSampler(tex.unit, 0);
+    void unbind(ITexture tex) {
+        glBindSampler(tex.get_unit(), 0);
     }
     
     /// Deletes the sampler.
