@@ -15,8 +15,8 @@ private {
 class Sampler {
     /// The OpenGL sampler name.
     GLuint sampler;
-    /// Alias this to sampler.
-    alias sampler this;
+//     /// Alias this to sampler.
+//     alias sampler this;
        
     /// Creates the OpenGL sampler.
     this() {
