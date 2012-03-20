@@ -267,12 +267,14 @@ class Texture2D : ITexture {
             
             uint image_format;
             switch(comp) {
+                case 1: image_format = GL_LUMINANCE; break;
+                case 2: image_format = GL_LUMINANCE_ALPHA; break;
                 case 3: image_format = GL_RGB; break;
                 case 4: image_format = GL_RGBA; break;
                 default: throw new TextureError("Unknown/Unsupported stbi image format");
             }
 
-            auto tex = new Texture2D(GL_RGBA, x, y, image_format, GL_UNSIGNED_BYTE);
+            auto tex = new Texture2D(image_format, x, y, image_format, GL_UNSIGNED_BYTE);
             tex.set_data(data);
             return tex;
         }
