@@ -272,7 +272,7 @@ class Texture2D : ITexture {
                 default: throw new TextureError("Unknown/Unsupported stbi image format");
             }
 
-            auto tex = new Texture2D(GL_RGBA8, x, y, image_format, GL_UNSIGNED_BYTE);
+            auto tex = new Texture2D(GL_RGBA, x, y, image_format, GL_UNSIGNED_BYTE);
             tex.set_data(data);
             return tex;
         }
