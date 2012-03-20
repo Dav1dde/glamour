@@ -36,9 +36,6 @@ class TextureError : Exception {
 
 /// Every Texture*-Struct will mixin this template.
 mixin template CommonTextureMethods() {
-    /// Returns the texture unit
-    GLuint get_unit() { return unit; }
-
     /// Sets a texture parameter.
     void set_paramter(T)(GLuint name, T params) if(is(T : int) || is(T : float)) {
         static if(is(T : int)) {
@@ -132,6 +129,7 @@ class Texture1D : ITexture {
     GLenum type;
     /// Holds the texture unit.
     GLuint unit;
+    GLuint get_unit() { return unit; }
     
     ///
     mixin CommonTextureMethods;
@@ -190,6 +188,7 @@ class Texture2D : ITexture {
     GLenum type;
     /// Holds the texture unit.
     GLenum unit;
+    GLuint get_unit() { return unit; }
     /// If true (default) mipmaps will be generated with glGenerateMipmap.
     bool mipmaps = true;
         
