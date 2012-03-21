@@ -2,7 +2,7 @@ module glamour.sampler;
 
 private {
     import glamour.gl : GLuint, GLenum,
-                        GL_TEXTURE_BORDER_COLOR,
+                        GL_TEXTURE_BORDER_COLOR, GL_TEXTURE0,
                         glGetSamplerParameterfv, glBindSampler,
                         glSamplerParameteri, glSamplerParameterf,
                         glGenSamplers, glDeleteSamplers;
@@ -53,7 +53,7 @@ class Sampler {
     
     /// ditto
     void bind(ITexture tex) {
-        glBindSampler(tex.get_unit(), sampler);
+        glBindSampler(tex.get_unit()-GL_TEXTURE0, sampler);
     }
     
     /// Unbinds the sampler.
