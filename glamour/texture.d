@@ -193,20 +193,6 @@ class Texture2D : ITexture {
     bool mipmaps = true;
         
     mixin CommonTextureMethods;
-
-    // ugly workaround, "Error: constructor call must be in a constructor"?
-    private void ctor(GLint internal_format_, GLsizei width_, GLsizei height_,
-                      GLenum format_, GLenum type_, GLenum unit_=GL_TEXTURE0, bool mipmaps_=true) {
-        internal_format = internal_format_;
-        width = width_;
-        height = height_;
-        format = format_;
-        type = type_;
-        unit = unit_;
-        mipmaps = mipmaps_;
-        
-        glGenTextures(1, &texture);
-    }
     
     /// Generates the OpenGL texture and initializes the struct.
     /// Params:
@@ -219,8 +205,16 @@ class Texture2D : ITexture {
     /// See_Also:
     /// OpenGL, http://www.opengl.org/sdk/docs/man4/xhtml/glTexImage2D.xml
     this(GLint internal_format, GLsizei width, GLsizei height, 
-           GLenum format, GLenum type, GLenum unit=GL_TEXTURE0, bool mipmaps=true) {
-        ctor(internal_format, width, height, format, type, unit, mipmaps);
+         GLenum format, GLenum type, GLenum unit=GL_TEXTURE0, bool mipmaps=true) {
+        this.internal_format = internal_format;
+        this.width = width;
+        this.height = height;
+        this.format = format;
+        this.type = type;
+        this.unit = unit;
+        this.mipmaps = mipmaps;
+
+        glGenTextures(1, &texture);
     }
     
     /// Sets the texture data.
