@@ -178,19 +178,19 @@ class Shader {
                 shader_source ~= format("#line %d\n%s\n", line.line, line.text);
             }
             
-            GLenum shader_type = to_opengl_shader(type);
+            GLenum shader_type = to_opengl_shader(type, filename);
             GLuint shader = glCreateShader(shader_type);
             auto ssp = shader_source.ptr;
             int ssl = cast(int)(shader_source.length);
             glShaderSource(shader, 1, &ssp, &ssl);
             
-            compile_shader(shader);
+            compile_shader(shader, filename);
 
             _shaders ~= shader;
             glAttachShader(program, shader);
         }
         
-        link_program(program);
+        link_program(program, filename);
     }
     
     /// Deletes all shaders and the program.
