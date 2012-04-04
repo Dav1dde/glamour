@@ -22,6 +22,7 @@ private {
     import std.file : readText;
     import std.path : baseName, stripExtension;
     import std.string : format, splitLines, toStringz, toLower;
+    import std.array : join;
     import std.algorithm : startsWith;
     import std.regex : ctRegex, regex, match;
     import std.typecons : Tuple;
@@ -124,7 +125,7 @@ class Shader {
     /// Holds every shaders source.
     Line[][string] shaders;
     /// Holds the directives.
-    string directives;
+    string[] directives;
     
     /// The shaders filename.
     string filename;
@@ -168,11 +169,11 @@ class Shader {
         }
         
         if(!directives.length) {
-            directives = "#version 330\n";
+            directives ~= "#version 330\n";
         }
         
         foreach(string type, Line[] lines; shaders) {
-            string shader_source;
+            string shader_source = directives.join("\n");
             
             foreach(Line line; lines) {
                 shader_source ~= format("#line %d\n%s\n", line.line, line.text);
