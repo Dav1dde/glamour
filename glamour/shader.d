@@ -173,7 +173,7 @@ class Shader {
         }
         
         foreach(string type, Line[] lines; shaders) {
-            string shader_source = directives.join("\n");
+            string shader_source = directives.join("\n") ~ "\n\n";
             
             foreach(Line line; lines) {
                 shader_source ~= format("#line %d\n%s\n", line.line, line.text);
@@ -184,7 +184,7 @@ class Shader {
             auto ssp = shader_source.ptr;
             int ssl = cast(int)(shader_source.length);
             glShaderSource(shader, 1, &ssp, &ssl);
-            
+
             compile_shader(shader, filename);
 
             _shaders ~= shader;
