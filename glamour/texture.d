@@ -252,7 +252,6 @@ class Texture2D : ITexture {
             int comp;
             ubyte* data = stbi_load(toStringz(filename), &x, &y, &comp, 0);
             scope(exit) stbi_image_free(data);
-            scope(failure) stbi_image_free(data);
 
             if(data is null) {
                 throw new TextureError("Unable to load image: " ~ filename);
