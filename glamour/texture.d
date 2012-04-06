@@ -5,7 +5,8 @@ private {
                         glGenTextures, glBindTexture, glActiveTexture,
                         glTexImage1D, glTexImage2D, glTexParameteri, glTexParameterf,
                         glGetTexParameterfv, glDeleteTextures, GL_TEXTURE0,
-                        GL_TEXTURE_1D, GL_TEXTURE_2D, GL_TEXTURE_BORDER_COLOR,
+                        GL_TEXTURE_1D, GL_TEXTURE_2D, GL_TEXTURE_2D_ARRAY, GL_PROXY_TEXTURE_2D_ARRAY,
+                        GL_PROXY_TEXTURE_3D, GL_TEXTURE_3D, GL_TEXTURE_BORDER_COLOR,
                         GL_RGBA8, GL_RGB, GL_RGBA, glGenerateMipmap;
     
     version(stb) {
@@ -294,3 +295,63 @@ class Texture2D : ITexture {
         }
     }
 }
+
+/// Base class, which represents an OpenGL 3D or 2D array texture.
+/// The constructor must be used to avoid segmentation faults.
+class Texture3DBase(GLenum target_) : ITexture {
+    static assert(target_ == GL_TEXTURE_3D || target_ == GL_PROXY_TEXTURE_3D ||
+                  target_ == GL_TEXTURE_2D_ARRAY || target_ == GL_PROXY_TEXTURE_2D_ARRAY);
+    
+    static const GLenum target = target_;
+
+    /// The OpenGL texture name.
+    GLuint texture;
+    /// Alias this to texture.
+    alias texture this;
+
+    /// Holds the internal format passed to the constructor.
+    GLint internal_format;
+    /// Holds the format of the pixel data.
+    GLenum format;
+    /// Holds the OpenGL data type of the pixel data.
+    GLenum type;
+    /// Holds the texture unit.
+    GLuint unit;
+    GLuint get_unit() { return unit; }
+
+    ///
+    mixin CommonTextureMethods;
+
+    /// Generates the OpenGL texture and initializes the struct.
+    /// Params:
+    /// unit = Specifies the OpenGL texture uinit.
+    /// See_Also:
+    /// OpenGL, http://www.opengl.org/sdk/docs/man4/xhtml/glTexImage1D.xml
+    this(GLenum unit=GL_TEXTURE0) {
+        this.unit = unit;
+
+        glGenTextures(1, &texture);
+    }
+
+    /// Sets the texture data.
+    /// Params:
+    /// data = A pointer to the image data or an array of the image data.
+    /// internal_format = Specifies the number of color components in the texture.
+    /// format = Specifies the format of the pixel data.
+    /// type = Specifies the data type of the pixel data.
+    void set_data(T)(T data, GLint internal_format, GLsizei width, GLsizei height, GLsizei depth, GLenum format, GLenum type) {
+        bind();
+
+        static if(isPointer!T) {
+            auto d = data;
+        } else {
+            auto d = data.ptr;
+        }
+
+        glTexImage3D(target, 0, internal_format, width, height, depth, 0, format, type, d);
+        unbind();
+    }
+}
+
+alias Texture3DBase!(GL_TEXTURE_3D) Texture3D;
+alias Texture3DBase!(GL_PROXY_TEXTURE_2D_ARRAY) Texture2DArray;
