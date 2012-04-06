@@ -137,24 +137,28 @@ class Texture1D : ITexture {
     
     /// Generates the OpenGL texture and initializes the struct.
     /// Params:
-    /// internal_format_ = Specifies the number of color components in the texture.
-    /// format_ = Specifies the format of the pixel data.
-    /// type_ = Specifies the data type of the pixel data.
     /// unit_ = Specifies the OpenGL texture uinit.
-    /// See_Also:
-    /// OpenGL, http://www.opengl.org/sdk/docs/man4/xhtml/glTexImage1D.xml
-    this(GLint internal_format_, GLenum format_, GLenum type_, GLenum unit_=GL_TEXTURE0) {
-        internal_format = internal_format_;
-        format = format_;
-        type = type_;
-        unit = unit_;
+    this(GLenum unit=GL_TEXTURE0) {
+        this.unit = unit;
         
         glGenTextures(1, &texture);
     }
         
     /// Sets the texture data.
-    void set_data(T)(T data) {
+    /// Params:
+    /// data = A pointer to the image data or an array of the image data.
+    /// internal_format = Specifies the number of color components in the texture.
+    /// format = Specifies the format of the pixel data.
+    /// type = Specifies the data type of the pixel data.
+    ///
+    /// See_Also:
+    /// OpenGL, http://www.opengl.org/sdk/docs/man4/xhtml/glTexImage1D.xml
+    void set_data(T)(T data, GLint internal_format, GLenum format, GLenum type) {
         bind();
+
+        this.internal_format = internal_format;
+        this.format = format;
+        this.type = type;
         
         static if(isPointer!T) {
             auto d = data;
@@ -197,32 +201,38 @@ class Texture2D : ITexture {
     
     /// Generates the OpenGL texture and initializes the struct.
     /// Params:
-    /// internal_format = Specifies the number of color components in the texture.
-    /// width = Specifies the width of the texture image.
-    /// height = Specifies the height of the texture image.
-    /// format = Specifies the format of the pixel data.
-    /// type = Specifies the data type of the pixel data.
     /// unit = Specifies the OpenGL texture uinit.
-    /// See_Also:
-    /// OpenGL, http://www.opengl.org/sdk/docs/man4/xhtml/glTexImage2D.xml
-    this(GLint internal_format, GLsizei width, GLsizei height, 
-         GLenum format, GLenum type, GLenum unit=GL_TEXTURE0, bool mipmaps=true) {
-        this.internal_format = internal_format;
-        this.width = width;
-        this.height = height;
-        this.format = format;
-        this.type = type;
+    this(GLenum unit=GL_TEXTURE0) {
         this.unit = unit;
-        this.mipmaps = mipmaps;
 
         glGenTextures(1, &texture);
     }
     
     /// Sets the texture data.
+    /// Params:
+    /// data = A pointer to the image data or an array of the image data.
+    /// internal_format = Specifies the number of color components in the texture.
+    /// width = Specifies the width of the texture image.
+    /// height = Specifies the height of the texture image.
+    /// format = Specifies the format of the pixel data.
+    /// type = Specifies the data type of the pixel data.
+    /// mipmaps = Enables mipmap-generation.
+    /// level = Specifies the level-of-detail number. Level 0 is the base image level. Level n is the n th mipmap reduction image.
+    ///
+    /// See_Also:
+    /// OpenGL, http://www.opengl.org/sdk/docs/man4/xhtml/glTexImage2D.xml
     ///
     /// $(RED If mipmaps is true, the gl extensions must be loaded, otherwise bad things will happen!)
-    void set_data(T)(T data, GLint level=0) {
+    void set_data(T)(T data, GLint internal_format, GLsizei width, GLsizei height,
+                     GLenum format, GLenum type, bool mipmaps=true, GLint level=0) {
         bind();
+
+        this.internal_format = internal_format;
+        this.width = width;
+        this.height = height;
+        this.format = format;
+        this.type = type;
+        this.mipmaps = mipmaps;
         
         static if(isPointer!T) {
             auto d = data;
@@ -265,8 +275,8 @@ class Texture2D : ITexture {
                 default: throw new TextureError("Unknown/Unsupported stbi image format");
             }
 
-            auto tex = new Texture2D(image_format, x, y, image_format, GL_UNSIGNED_BYTE);
-            tex.set_data(data);
+            auto tex = new Texture2D();
+            tex.set_data(data, image_format, x, y, image_format, GL_UNSIGNED_BYTE);
             return tex;
         }
     } else {
@@ -284,12 +294,10 @@ class Texture2D : ITexture {
                 throw new TextureError("Unable to load image: " ~ filename);
             }
             
-//             ilConvertImage(IL_RGB, IL_UNSIGNED_BYTE);
-            
-            auto tex =  new Texture2D(ilGetInteger(IL_IMAGE_FORMAT),
+            auto tex =  new Texture2D();
+            tex.set_data(ilGetData(), ilGetInteger(IL_IMAGE_FORMAT),
                                       ilGetInteger(IL_IMAGE_WIDTH), ilGetInteger(IL_IMAGE_HEIGHT),
                                       ilGetInteger(IL_IMAGE_FORMAT), ilGetInteger(IL_IMAGE_TYPE));
-            tex.set_data(ilGetData());
             return tex;
             
         }
@@ -325,8 +333,6 @@ class Texture3DBase(GLenum target_) : ITexture {
     /// Generates the OpenGL texture and initializes the struct.
     /// Params:
     /// unit = Specifies the OpenGL texture uinit.
-    /// See_Also:
-    /// OpenGL, http://www.opengl.org/sdk/docs/man4/xhtml/glTexImage1D.xml
     this(GLenum unit=GL_TEXTURE0) {
         this.unit = unit;
 
@@ -337,8 +343,14 @@ class Texture3DBase(GLenum target_) : ITexture {
     /// Params:
     /// data = A pointer to the image data or an array of the image data.
     /// internal_format = Specifies the number of color components in the texture.
+    /// width = Specifies the width of the texture image.
+    /// height = Specifies the height of the texture image.
+    /// depth = Specifies the depth of the texture image, or the number of layers in a texture array.
     /// format = Specifies the format of the pixel data.
     /// type = Specifies the data type of the pixel data.
+    ///
+    /// See_Also:
+    /// http://www.opengl.org/sdk/docs/man4/xhtml/glTexImage3D.xml
     void set_data(T)(T data, GLint internal_format, GLsizei width, GLsizei height, GLsizei depth, GLenum format, GLenum type, GLint level=0) {
         bind();
 
