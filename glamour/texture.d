@@ -339,8 +339,15 @@ class Texture3DBase(GLenum target_) : ITexture {
     /// internal_format = Specifies the number of color components in the texture.
     /// format = Specifies the format of the pixel data.
     /// type = Specifies the data type of the pixel data.
-    void set_data(T)(T data, GLint internal_format, GLsizei width, GLsizei height, GLsizei depth, GLenum format, GLenum type) {
+    void set_data(T)(T data, GLint internal_format, GLsizei width, GLsizei height, GLsizei depth, GLenum format, GLenum type, GLint level=0) {
         bind();
+
+        this.internal_format = internal_format;
+        this.width = width;
+        this.height = height;
+        this.depth = depth;
+        this.format = format;
+        this.type = type;
 
         static if(isPointer!T) {
             auto d = data;
@@ -348,7 +355,7 @@ class Texture3DBase(GLenum target_) : ITexture {
             auto d = data.ptr;
         }
 
-        glTexImage3D(target, 0, internal_format, width, height, depth, 0, format, type, d);
+        glTexImage3D(target, level, internal_format, width, height, depth, 0, format, type, d);
         unbind();
     }
 }
