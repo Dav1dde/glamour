@@ -181,7 +181,7 @@ class Shader {
             
             GLenum shader_type = to_opengl_shader(type, filename);
             GLuint shader = glCreateShader(shader_type);
-            const(char)* ssp = shader_source.ptr;
+            auto ssp = shader_source.ptr;
             int ssl = cast(int)(shader_source.length);
             glShaderSource(shader, 1, &ssp, &ssl);
 
