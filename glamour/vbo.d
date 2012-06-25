@@ -13,7 +13,7 @@ private {
 interface IBuffer {
     void bind(); /// 
     void unbind(); /// 
-    void set_data(void[] data, GLenum type, GLenum hint = GL_STATIC_DRAW); /// 
+    void set_data(void[] data, GLenum hint = GL_STATIC_DRAW); ///
 }
 
 /// Represents an OpenGL element buffer.
@@ -35,9 +35,9 @@ class ElementBuffer : IBuffer {
     }
     
     /// Initualizes the buffer and sets data.
-    this(void[] data, GLenum type, GLenum hint = GL_STATIC_DRAW) {
+    this(void[] data, GLenum hint = GL_STATIC_DRAW) {
         glGenBuffers(1, &buffer);
-        set_data(data, type, hint);
+        set_data(data, hint);
     }
     
     /// Deletes the buffer.
@@ -56,7 +56,7 @@ class ElementBuffer : IBuffer {
     }
     
     /// Uploads data to the GPU.
-    void set_data(void[] data, GLenum type, GLenum hint = GL_STATIC_DRAW) {
+    void set_data(void[] data, GLenum hint = GL_STATIC_DRAW) {
         glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, buffer); // or bind()
         glBufferData(GL_ELEMENT_ARRAY_BUFFER, data.length, data.ptr, hint);
         glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0); //or unbind()
