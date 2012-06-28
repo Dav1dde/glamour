@@ -1,7 +1,7 @@
 module glamour.vbo;
 
 private {
-    import glamour.gl : GLenum, GLint, GLsizei, GLuint, GLintptr, 
+    import glamour.gl : GLenum, GLint, GLsizei, GLuint, GLboolean, GLintptr,
                         GL_FALSE, glDisableVertexAttribArray, 
                         glEnableVertexAttribArray, glVertexAttribPointer, 
                         GL_STATIC_DRAW, GL_ARRAY_BUFFER, GL_ELEMENT_ARRAY_BUFFER,
@@ -106,12 +106,18 @@ class Buffer : IBuffer {
     }
     
     /// Binds the buffer and sets the vertex attrib pointer.
+    /// Params:
+    /// type = Specifies the data type of each component in the array.
     /// size = Specifies the number of components per generic vertex attribute.
+    /// offset = Specifies a offset of the first component of the first generic vertex attribute in the array in the data store of the buffer.
     /// stride = Specifies the byte offset between consecutive generic vertex attributes.
-    void bind(GLuint attrib_location, GLenum type, GLint size=4, GLsizei offset=0, GLsizei stride=0) {
+    /// normalized = Specifies whether fixed-point data values should be normalized (GL_TRUE) or
+    ///                converted directly as fixed-point values (GL_FALSE = default) when they are accessed.
+    void bind(GLuint attrib_location, GLenum type, GLint size=4, GLsizei offset=0,
+              GLsizei stride=0, GLboolean normalized=GL_FALSE) {
         glBindBuffer(GL_ARRAY_BUFFER, buffer);
         glEnableVertexAttribArray(attrib_location);
-        glVertexAttribPointer(attrib_location, size, type, GL_FALSE, stride, cast(void *)offset);
+        glVertexAttribPointer(attrib_location, size, type, normalized, stride, cast(void *)offset);
     }
     
     /// Unbinds the buffer.
