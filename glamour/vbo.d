@@ -9,6 +9,7 @@ private {
                         glGenBuffers, glDeleteBuffers;
 
     import std.traits : isArray;
+    import std.range : ElementType;
 }
 
 /// Interface every buffer implements
@@ -60,10 +61,10 @@ class ElementBuffer : IBuffer {
     /// Uploads data to the GPU.
     void set_data(T)(const ref T data, GLenum hint = GL_STATIC_DRAW) if(isArray!T) {
         glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, buffer); // or bind()
-        glBufferData(GL_ELEMENT_ARRAY_BUFFER, data.length, data.ptr, hint);
+        glBufferData(GL_ELEMENT_ARRAY_BUFFER, data.length*(ElementType!T).sizeof, data.ptr, hint);
         glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0); //or unbind()
         
-        length = data.length;
+        length = data.length*(ElementType!T).sizeof;
         this.hint = hint;
     }
 }
@@ -130,17 +131,17 @@ class Buffer : IBuffer {
     /// Uploads data to the GPU.
     void set_data(T)(const ref T data, GLenum hint = GL_STATIC_DRAW) if(isArray!T) {
         glBindBuffer(GL_ARRAY_BUFFER, buffer); // or bind()
-        glBufferData(GL_ARRAY_BUFFER, data.length, data.ptr, hint);
+        glBufferData(GL_ARRAY_BUFFER, data.length*(ElementType!T).sizeof, data.ptr, hint);
         glBindBuffer(GL_ARRAY_BUFFER, 0); //or unbind()
     
-        length = data.length;
+        length = data.length*(ElementType!T).sizeof;
         this.hint = hint;
     }
     
     /// Updates the Buffer, using glBufferSubData.
     void update(T)(const ref T data, GLintptr offset) if(isArray!T) {
         glBindBuffer(GL_ARRAY_BUFFER, buffer);
-        glBufferSubData(GL_ARRAY_BUFFER, offset, data.length, data.ptr);
+        glBufferSubData(GL_ARRAY_BUFFER, offset, data.length*(ElementType!T).sizeof, data.ptr);
         glBindBuffer(GL_ARRAY_BUFFER, 0);
     }
 }
