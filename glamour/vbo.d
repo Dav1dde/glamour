@@ -8,7 +8,7 @@ private {
                         glBindBuffer, glBufferData, glBufferSubData,
                         glGenBuffers, glDeleteBuffers;
 
-    import std.traits : isArray;
+    import std.traits : isArray, isPointer;
     import std.range : ElementType;
 }
 
@@ -38,7 +38,7 @@ class ElementBuffer : IBuffer {
     }
     
     /// Initualizes the buffer and sets data.
-    this(T)(const ref T data, GLenum hint = GL_STATIC_DRAW) if(isArray!T) {
+    this(T)(const ref T data, GLenum hint = GL_STATIC_DRAW) if(isArray!T || isPointer!T) {
         glGenBuffers(1, &buffer);
         set_data(data, hint);
     }
@@ -67,6 +67,16 @@ class ElementBuffer : IBuffer {
         length = data.length*(ElementType!T).sizeof;
         this.hint = hint;
     }
+
+    /// ditto
+    void set_data(T)(const T ptr, size_t size, GLenum hint = GL_STATIC_DRAW) if(isPointer!T) {
+        glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, buffer); // or bind()
+        glBufferData(GL_ELEMENT_ARRAY_BUFFER, size, ptr, hint);
+        glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0); //or unbind()
+
+        length = size;
+        this.hint = hint;
+    }
 }
 
 
@@ -93,7 +103,7 @@ class Buffer : IBuffer {
     /// data = any kind of data.
     /// type = OpenGL type of the data (e.g. GL_FLOAT)
     /// hint = Specifies the expected usage pattern of the data store.
-    this(T)(const ref T data, GLenum hint = GL_STATIC_DRAW) if(isArray!T) {
+    this(T)(const ref T data, GLenum hint = GL_STATIC_DRAW) if(isArray!T || isPointer!T) {
         glGenBuffers(1, &buffer);
         set_data(data, hint);
     }
@@ -137,11 +147,28 @@ class Buffer : IBuffer {
         length = data.length*(ElementType!T).sizeof;
         this.hint = hint;
     }
+
+    /// ditto
+    void set_data(T)(const T ptr, size_t size, GLenum hint = GL_STATIC_DRAW) if(isPointer!T) {
+        glBindBuffer(GL_ARRAY_BUFFER, buffer); // or bind()
+        glBufferData(GL_ARRAY_BUFFER, size, ptr, hint);
+        glBindBuffer(GL_ARRAY_BUFFER, 0); //or unbind()
+
+        length = size;
+        this.hint = hint;
+    }
     
     /// Updates the Buffer, using glBufferSubData.
     void update(T)(const ref T data, GLintptr offset) if(isArray!T) {
         glBindBuffer(GL_ARRAY_BUFFER, buffer);
         glBufferSubData(GL_ARRAY_BUFFER, offset, data.length*(ElementType!T).sizeof, data.ptr);
+        glBindBuffer(GL_ARRAY_BUFFER, 0);
+    }
+
+    /// ditto
+    void update(T)(const T ptr, size_t size, GLintptr offset) if(isPointer!T) {
+        glBindBuffer(GL_ARRAY_BUFFER, buffer);
+        glBufferSubData(GL_ARRAY_BUFFER, offset, size, ptr);
         glBindBuffer(GL_ARRAY_BUFFER, 0);
     }
 }
