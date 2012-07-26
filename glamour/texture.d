@@ -11,6 +11,14 @@ private {
     
     version(stb) {
         import stb_image : stbi_load, stbi_image_free;
+    } else version(SDLImage) {
+        version (Derelict3) {
+            import derelict.sdl2.sdl;
+            import derelict.sdl2.image;
+        } else {
+            import derelict.sdl.sdl;
+            import derelict.sdl.image;
+        }
     } else {
         import derelict.devil.il : ILuint, ilGenImages, ilBindImage, ilLoadImage, ilConvertImage,
                                    ilGetData, ilGetInteger, IL_RGB, IL_UNSIGNED_BYTE,
@@ -20,6 +28,7 @@ private {
     import glamour.util : glenum2size;
     import std.traits : isPointer;
     import std.string : toStringz;
+    import std.exception : enforce;
     
     debug {
         import std.stdio : writefln;
@@ -277,6 +286,51 @@ class Texture2D : ITexture {
 
             auto tex = new Texture2D();
             tex.set_data(data, image_format, x, y, image_format, GL_UNSIGNED_BYTE);
+            return tex;
+        }
+    } else version (SDLImage) {
+        /// Loads an image with SDL2Image and afterwards loads it into a Texture2D struct.
+        static Texture2D from_image(string fileName) {
+            debug {
+                writefln("using Texture2D.from_image, SDL2Image loaded and initialized?");
+            }
+            
+            // make sure the texture has the right side up
+            //thanks to tito http://stackoverflow.com/questions/5862097/sdl-opengl-screenshot-is-black 
+            SDL_Surface* flip(SDL_Surface* surface)
+            { 
+              SDL_Surface* result = SDL_CreateRGBSurface(surface.flags, surface.w, surface.h, 
+                                                         surface.format.BytesPerPixel * 8, surface.format.Rmask, surface.format.Gmask, 
+                                                         surface.format.Bmask, surface.format.Amask); 
+              
+              ubyte* pixels = cast(ubyte*) surface.pixels; 
+              ubyte* rpixels = cast(ubyte*) result.pixels; 
+              uint pitch = surface.pitch;
+              uint pxlength = pitch * surface.h; 
+              
+              assert(result != null); 
+
+              for(uint line = 0; line < surface.h; ++line) 
+              {  
+                uint pos = line * pitch; 
+                rpixels[pos..pos+pitch] = pixels[(pxlength-pos)-pitch..pxlength-pos]; 
+              } 
+
+              return result; 
+            }
+            
+            auto surface = IMG_Load(fileName.toStringz());
+            
+            enforce(surface, new TextureError("Error loading image " ~ fileName));
+            
+            auto image_format = GL_RGB;
+            
+            if (surface.format.BytesPerPixel == 4)
+              image_format = GL_RGBA;
+            
+            auto tex = new Texture2D();
+            tex.set_data(flip(surface).pixels, image_format, surface.w, surface.h, image_format, GL_UNSIGNED_BYTE);
+            
             return tex;
         }
     } else {
