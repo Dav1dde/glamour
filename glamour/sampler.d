@@ -8,6 +8,8 @@ private {
                         glGenSamplers, glDeleteSamplers;
     import glamour.texture : ITexture;
     import glamour.util : checkgl;
+
+    debug import std.stdio : stderr;
 }
 
 
@@ -22,6 +24,10 @@ class Sampler {
     /// Creates the OpenGL sampler.
     this() {
         checkgl!glGenSamplers(1, &sampler);
+    }
+
+    ~this() {
+        debug if(sampler != 0) stderr.writefln("OpenGL: Sampler resources not released.");
     }
     
     /// Sets a sampler parameter.
@@ -70,5 +76,6 @@ class Sampler {
     /// Deletes the sampler.
     void remove() {
         checkgl!glDeleteSamplers(1, &sampler);
+        sampler = 0;
     }
 }

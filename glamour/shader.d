@@ -31,6 +31,8 @@ private {
     version(gl3n) {
         import gl3n.util : is_vector, is_matrix, is_quaternion;
     }
+
+    debug import std.stdio : stderr;
 }
 
 
@@ -194,6 +196,10 @@ class Shader {
         
         link_program(program, filename);
     }
+
+    ~this() {
+        debug if(program != 0) stderr.writefln("OpenGL: Shader resources not released.");
+    }
     
     /// Deletes all shaders and the program.
     void remove() {
@@ -203,6 +209,7 @@ class Shader {
         _shaders = [];
         
         checkgl!glDeleteProgram(program);
+        program = 0;
     }
     
     /// Binds the program.

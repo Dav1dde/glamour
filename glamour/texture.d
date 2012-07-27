@@ -29,6 +29,8 @@ private {
     import std.traits : isPointer;
     import std.string : toStringz;
     import std.exception : enforce;
+
+    debug import std.stdio : stderr;
 }
 
 
@@ -40,8 +42,18 @@ class TextureError : Exception {
 }
 
 
-/// Every Texture*-Struct will mixin this template.
+/// Every Texture-Class will mixin this template.
 mixin template CommonTextureMethods() {
+    ~this() {
+        debug if(texture != 0) stderr.writefln("OpenGL: %s resources not released.", typeof(this).stringof);
+    }
+
+    /// Deletes the texture.
+    void remove() {
+        checkgl!glDeleteTextures(1, &texture);
+        texture = 0;
+    }
+    
     /// Sets a texture parameter.
     void set_paramter(T)(GLuint name, T params) if(is(T : int) || is(T : float)) {
         static if(is(T : int)) {
@@ -94,11 +106,6 @@ mixin template CommonTextureMethods() {
     /// Unbinds the texture.
     void unbind() {
         checkgl!glBindTexture(target, 0);
-    }
-    
-    /// Deletes the texture.
-    void remove() {
-        checkgl!glDeleteTextures(1, &texture);
     }
 }
 

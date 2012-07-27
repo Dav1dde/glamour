@@ -11,6 +11,8 @@ private {
                         
     import std.traits : isArray, isPointer;
     import std.range : ElementType;
+
+    debug import std.stdio : stderr;
 }
 
 /// Interface every buffer implements
@@ -50,9 +52,14 @@ class ElementBuffer : IBuffer {
         set_data(data, size, hint);
     }
 
+    ~this() {
+        debug if(buffer != 0) stderr.writefln("OpenGL: ElementBuffer resources not released.");
+    }
+    
     /// Deletes the buffer.
     void remove() {
         checkgl!glDeleteBuffers(1, &buffer);
+        buffer = 0;
     }
 
     /// Binds the buffer.
@@ -121,9 +128,14 @@ class Buffer : IBuffer {
         set_data(ptr, size, hint);
     }
 
+    ~this() {
+        debug if(buffer != 0) stderr.writefln("OpenGL: Buffer resources not released.");
+    }
+    
     /// Deletes the buffer.
     void remove() {
         checkgl!glDeleteBuffers(1, &buffer);
+        buffer = 0;
     }
 
     /// Binds the buffer.
