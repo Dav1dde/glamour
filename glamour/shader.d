@@ -126,7 +126,7 @@ class Shader {
     
     private GLuint[] _shaders; 
     /// Holds every shaders source.
-    Line[][string] shaders;
+    Line[][string] shader_sources;
     /// Holds the directives.
     string[] directives;
     
@@ -161,8 +161,8 @@ class Shader {
                 
                 if(m) {
                     string type = toLower(m.captures[1]);
-                    shaders[type] = null;
-                    current = &(shaders[type]);
+                    shader_sources[type] = null;
+                    current = &(shader_sources[type]);
                 } else {
                     if(current !is null) {
                         *current ~= Line(line, text);
@@ -175,7 +175,7 @@ class Shader {
             directives ~= "#version 330\n";
         }
         
-        foreach(string type, Line[] lines; shaders) {
+        foreach(string type, Line[] lines; shader_sources) {
             string shader_source = directives.join("\n") ~ "\n\n";
             
             foreach(Line line; lines) {
