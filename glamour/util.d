@@ -2,8 +2,41 @@ module glamour.util;
 
 private {
     import glamour.gl : GL_BYTE, GL_UNSIGNED_BYTE, GL_SHORT, GL_UNSIGNED_SHORT,
-                        GL_INT, GL_UNSIGNED_INT, GL_FLOAT, GL_DOUBLE, GLenum;
+                        GL_INT, GL_UNSIGNED_INT, GL_FLOAT, GL_DOUBLE, GLenum,
+                        glGetError, GL_NO_ERROR, GL_INVALID_ENUM, GL_INVALID_VALUE,
+                        GL_INVALID_OPERATION, GL_INVALID_FRAMEBUFFER_OPERATION,
+                        GL_OUT_OF_MEMORY;
+
+    debug import std.stdio : writefln;
 }
+
+
+void checkgl(alias func, Args...)(Args args) {
+    func(args);
+
+    debug {
+        GLenum ret = glGetError();
+
+        if(ret != GL_NO_ERROR) {
+            writefln(`OpenGL function "%s" failed: "%s."`, func.stringof, gl_error_string(ret));
+        }
+    }
+}
+
+string gl_error_string(GLenum error) {
+    final switch(error) {
+        case GL_NO_ERROR: return "no error";
+        case GL_INVALID_ENUM: return "invalid enum";
+        case GL_INVALID_VALUE: return "invalid value";
+        case GL_INVALID_OPERATION: return "invalid operation";
+        //case GL_STACK_OVERFLOW: return "stack overflow";
+        //case GL_STACK_UNDERFLOW: return "stack underflow";
+        case GL_INVALID_FRAMEBUFFER_OPERATION: return "invalid framebuffer operation";
+        case GL_OUT_OF_MEMORY: return "out of memory";
+    }
+    assert(false, "invalid enum");
+}
+
 
 template type2glenum(T) {
     static if(is(T == byte)) {
@@ -58,7 +91,7 @@ unittest {
     assert(GL_UNSIGNED_INT == type2glenum!uint);
     assert(GL_FLOAT == type2glenum!float);
     assert(GL_DOUBLE == type2glenum!double);
-    
+
     assert(is(byte : glenum2type!GL_BYTE));
     assert(is(ubyte : glenum2type!GL_UNSIGNED_BYTE));
     assert(is(short : glenum2type!GL_SHORT));
