@@ -14,13 +14,7 @@ private {
 
 
 ReturnType!func checkgl(alias func, Args...)(Args args) {
-    static if(!is(ReturnType!func == void)) {
-        auto ret = func(args);
-    } else {
-        func(args);
-    }
-
-    debug {
+    debug scope(success) {
         GLenum error_code = glGetError();
 
         if(error_code != GL_NO_ERROR) {
@@ -28,9 +22,7 @@ ReturnType!func checkgl(alias func, Args...)(Args args) {
         }
     }
 
-    static if(!is(ReturnType!func : void)) {
-        return ret;
-    }
+    return func(args);
 }
 
 string gl_error_string(GLenum error) {
