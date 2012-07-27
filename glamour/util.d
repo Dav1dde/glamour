@@ -9,7 +9,7 @@ private {
 
     import std.traits : ReturnType;
                         
-    debug import std.stdio : writefln;
+    debug import std.stdio : stderr;
 }
 
 
@@ -24,7 +24,7 @@ ReturnType!func checkgl(alias func, Args...)(Args args) {
         GLenum error_code = glGetError();
 
         if(error_code != GL_NO_ERROR) {
-            writefln(`OpenGL function "%s" failed: "%s."`, func.stringof, gl_error_string(error_code));
+            stderr.writefln(`OpenGL function "%s" failed: "%s."`, func.stringof, gl_error_string(error_code));
         }
     }
 

@@ -29,10 +29,6 @@ private {
     import std.traits : isPointer;
     import std.string : toStringz;
     import std.exception : enforce;
-    
-    debug {
-        import std.stdio : writefln;
-    }
 }
 
 
@@ -252,9 +248,6 @@ class Texture2D : ITexture {
         checkgl!glTexImage2D(GL_TEXTURE_2D, level, internal_format, width, height, 0, format, type, d);
         
         if(mipmaps) {
-            debug {
-                writefln("Generating 2D mipmaps, glext loaded?");
-            }
             checkgl!glGenerateMipmap(GL_TEXTURE_2D);
         }
         
@@ -264,9 +257,6 @@ class Texture2D : ITexture {
     version(stb) {
         /// Loads an image with stb_image and afterwards loads it into a Texture2D struct.
         static Texture2D from_image(string filename) {
-            debug {
-                writefln("using Texture2D.from_image with stb image");
-            }
             int x;
             int y;
             int comp;
@@ -291,10 +281,6 @@ class Texture2D : ITexture {
     } else version (SDLImage) {
         /// Loads an image with SDL2Image and afterwards loads it into a Texture2D struct.
         static Texture2D from_image(string filename) {
-            debug {
-                writefln("using Texture2D.from_image, SDL2Image loaded and initialized?");
-            }
-            
             // make sure the texture has the right side up
             //thanks to tito http://stackoverflow.com/questions/5862097/sdl-opengl-screenshot-is-black 
             SDL_Surface* flip(SDL_Surface* surface) { 
@@ -337,9 +323,6 @@ class Texture2D : ITexture {
         /// 
         /// $(RED DevIL must be loaded and initialized manually!)
         static Texture2D from_image(string filename) {
-            debug {
-                writefln("using Texture2D.from_image, DevIL loaded and initialized?");
-            }
             ILuint id;
             ilGenImages(1, &id);
             
