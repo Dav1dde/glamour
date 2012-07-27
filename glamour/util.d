@@ -7,19 +7,29 @@ private {
                         GL_INVALID_OPERATION, GL_INVALID_FRAMEBUFFER_OPERATION,
                         GL_OUT_OF_MEMORY;
 
+    import std.traits : ReturnType;
+                        
     debug import std.stdio : writefln;
 }
 
 
-void checkgl(alias func, Args...)(Args args) {
-    func(args);
+ReturnType!func checkgl(alias func, Args...)(Args args) {
+    static if(!is(ReturnType!func == void)) {
+        auto ret = func(args);
+    } else {
+        func(args);
+    }
 
     debug {
-        GLenum ret = glGetError();
+        GLenum error_code = glGetError();
 
-        if(ret != GL_NO_ERROR) {
-            writefln(`OpenGL function "%s" failed: "%s."`, func.stringof, gl_error_string(ret));
+        if(error_code != GL_NO_ERROR) {
+            writefln(`OpenGL function "%s" failed: "%s."`, func.stringof, gl_error_string(error_code));
         }
+    }
+
+    static if(!is(ReturnType!func : void)) {
+        return ret;
     }
 }
 

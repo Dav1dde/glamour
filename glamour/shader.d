@@ -18,7 +18,8 @@ private {
                         glUniformMatrix2x4fv, glUniformMatrix3fv, glUniformMatrix3x2fv,
                         glUniformMatrix3x4fv, glUniformMatrix4fv, glUniformMatrix4x2fv,
                         glUniformMatrix4x3fv, glUniform2iv, glUniform3iv, glUniform4iv;
-
+    import glamour.util : checkgl;
+                        
     import std.file : readText;
     import std.path : baseName, stripExtension;
     import std.string : format, splitLines, toStringz, toLower;
@@ -74,16 +75,16 @@ class ShaderError : Exception {
 /// shader = The OpenGL shader.
 /// filename = Used to identify the shader, if an error occurs.
 void compile_shader(GLuint shader, string filename="<unknown>") {
-    glCompileShader(shader);
+    checkgl!glCompileShader(shader);
 
     GLint status;
-    glGetShaderiv(shader, GL_COMPILE_STATUS, &status);
+    checkgl!glGetShaderiv(shader, GL_COMPILE_STATUS, &status);
     if(status == GL_FALSE) {
         GLint infolog_length;
-        glGetShaderiv(shader, GL_INFO_LOG_LENGTH, &infolog_length);
+        checkgl!glGetShaderiv(shader, GL_INFO_LOG_LENGTH, &infolog_length);
         
         GLchar[] infolog = new GLchar[infolog_length+1];
-        glGetShaderInfoLog(shader, infolog_length, null, infolog.ptr);
+        checkgl!glGetShaderInfoLog(shader, infolog_length, null, infolog.ptr);
         
         throw new ShaderError(infolog.idup, "linking", filename);
     }
@@ -95,16 +96,16 @@ void compile_shader(GLuint shader, string filename="<unknown>") {
 /// program = The OpenGL program.
 /// filename = Used to identify the shader, if an error occurs.
 void link_program(GLuint program, string filename="<unknown>") {
-    glLinkProgram(program);
+    checkgl!glLinkProgram(program);
 
     GLint status;
-    glGetProgramiv(program, GL_LINK_STATUS, &status);
+    checkgl!glGetProgramiv(program, GL_LINK_STATUS, &status);
     if(status == GL_FALSE) {
         GLint infolog_length;
-        glGetProgramiv(program, GL_INFO_LOG_LENGTH, &infolog_length);
+        checkgl!glGetProgramiv(program, GL_INFO_LOG_LENGTH, &infolog_length);
 
         GLchar[] infolog = new GLchar[infolog_length + 1];
-        glGetProgramInfoLog(program, infolog_length, null, infolog.ptr);
+        checkgl!glGetProgramInfoLog(program, infolog_length, null, infolog.ptr);
         
         throw new ShaderError(infolog.idup, "compiling", filename);
     }
@@ -145,7 +146,7 @@ class Shader {
     this(string filename_, string source) {
         filename = filename_;
         
-        program = glCreateProgram();
+        program = checkgl!glCreateProgram();
         
         auto ctr_shader_type = regex(`^(\w+):`);
         
@@ -180,15 +181,15 @@ class Shader {
             }
             
             GLenum shader_type = to_opengl_shader(type, filename);
-            GLuint shader = glCreateShader(shader_type);
+            GLuint shader = checkgl!glCreateShader(shader_type);
             auto ssp = shader_source.ptr;
             int ssl = cast(int)(shader_source.length);
-            glShaderSource(shader, 1, &ssp, &ssl);
+            checkgl!glShaderSource(shader, 1, &ssp, &ssl);
 
             compile_shader(shader, filename);
 
             _shaders ~= shader;
-            glAttachShader(program, shader);
+            checkgl!glAttachShader(program, shader);
         }
         
         link_program(program, filename);
@@ -197,21 +198,21 @@ class Shader {
     /// Deletes all shaders and the program.
     void remove() {
         foreach(GLuint shader; _shaders) {
-            glDeleteShader(shader);
+            checkgl!glDeleteShader(shader);
         }
         _shaders = [];
         
-        glDeleteProgram(program);
+        checkgl!glDeleteProgram(program);
     }
     
     /// Binds the program.
     void bind() {
-        glUseProgram(program);
+        checkgl!glUseProgram(program);
     }
     
     /// Unbinds the program.
     void unbind() {
-        glUseProgram(0);
+        checkgl!glUseProgram(0);
     }
     
     /// Queries an attrib location from OpenGL and caches it in $(I attrib_locations).
@@ -221,7 +222,7 @@ class Shader {
             return *loc;
         }
         
-        return attrib_locations[name] = glGetAttribLocation(program, toStringz(name));
+        return attrib_locations[name] = checkgl!glGetAttribLocation(program, toStringz(name));
     }
     
     /// Queries an uniform location from OpenGL and caches it in $(I uniform_locations).
@@ -231,7 +232,7 @@ class Shader {
             return *loc;
         }
         
-        return uniform_locations[name] = glGetUniformLocation(program, toStringz(name));
+        return uniform_locations[name] = checkgl!glGetUniformLocation(program, toStringz(name));
     }
         
     // gl3n integration
@@ -241,19 +242,19 @@ class Shader {
         void uniform(T)(string name, T value) if(is_vector!T) {
             static if(is(T.vt : int)) {
                 static if(T.dimension == 2) {
-                    glUniform2iv(get_uniform_location(name), 1, value.value_ptr);
+                    checkgl!glUniform2iv(get_uniform_location(name), 1, value.value_ptr);
                 } else static if(T.dimension == 3) {
-                    glUniform3iv(get_uniform_location(name), 1, value.value_ptr);
+                    checkgl!glUniform3iv(get_uniform_location(name), 1, value.value_ptr);
                 } else static if(T.dimension == 4) {
-                    glUniform4iv(get_uniform_location(name), 1, value.value_ptr);
+                    checkgl!glUniform4iv(get_uniform_location(name), 1, value.value_ptr);
                 } else static assert(false);
             } else {
                 static if(T.dimension == 2) {
-                    glUniform2fv(get_uniform_location(name), 1, value.value_ptr);
+                    checkgl!glUniform2fv(get_uniform_location(name), 1, value.value_ptr);
                 } else static if(T.dimension == 3) {
-                    glUniform3fv(get_uniform_location(name), 1, value.value_ptr);
+                    checkgl!glUniform3fv(get_uniform_location(name), 1, value.value_ptr);
                 } else static if(T.dimension == 4) {
-                    glUniform4fv(get_uniform_location(name), 1, value.value_ptr);
+                    checkgl!glUniform4fv(get_uniform_location(name), 1, value.value_ptr);
                 } else static assert(false);
             }
         }
@@ -261,29 +262,29 @@ class Shader {
         /// ditto
         void uniform(S : string, T)(S name, T value) if(is_matrix!T) {
             static if((T.rows == 2) && (T.cols == 2)) {
-                glUniformMatrix2fv(get_uniform_location(name), 1, GL_TRUE, value.value_ptr);
+                checkgl!glUniformMatrix2fv(get_uniform_location(name), 1, GL_TRUE, value.value_ptr);
             } else static if((T.rows == 3) && (T.cols == 3)) {
-                glUniformMatrix3fv(get_uniform_location(name), 1, GL_TRUE, value.value_ptr);
+                checkgl!glUniformMatrix3fv(get_uniform_location(name), 1, GL_TRUE, value.value_ptr);
             } else static if((T.rows == 4) && (T.cols == 4)) {
-                glUniformMatrix4fv(get_uniform_location(name), 1, GL_TRUE, value.value_ptr);
+                checkgl!glUniformMatrix4fv(get_uniform_location(name), 1, GL_TRUE, value.value_ptr);
             } else static if((T.rows == 2) && (T.cols == 3)) {
-                glUniformMatrix2x3fv(get_uniform_location(name), 1, GL_TRUE, value.value_ptr);
+                checkgl!glUniformMatrix2x3fv(get_uniform_location(name), 1, GL_TRUE, value.value_ptr);
             } else static if((T.rows == 3) && (T.cols == 2)) {
-                glUniformMatrix3x2fv(get_uniform_location(name), 1, GL_TRUE, value.value_ptr);
+                checkgl!glUniformMatrix3x2fv(get_uniform_location(name), 1, GL_TRUE, value.value_ptr);
             } else static if((T.rows == 2) && (T.cols == 4)) {
-                glUniformMatrix2x4fv(get_uniform_location(name), 1, GL_TRUE, value.value_ptr);
+                checkgl!glUniformMatrix2x4fv(get_uniform_location(name), 1, GL_TRUE, value.value_ptr);
             } else static if((T.rows == 4) && (T.cols == 2)) {
-                glUniformMatrix4x2fv(get_uniform_location(name), 1, GL_TRUE, value.value_ptr);
+                checkgl!glUniformMatrix4x2fv(get_uniform_location(name), 1, GL_TRUE, value.value_ptr);
             } else static if((T.rows == 3) && (T.cols == 4)) {
-                glUniformMatrix3x4fv(get_uniform_location(name), 1, GL_TRUE, value.value_ptr);
+                checkgl!glUniformMatrix3x4fv(get_uniform_location(name), 1, GL_TRUE, value.value_ptr);
             } else static if((T.rows == 4) && (T.cols == 3)) {
-                glUniformMatrix4x3fv(get_uniform_location(name), 1, GL_TRUE, value.value_ptr);
+                checkgl!glUniformMatrix4x3fv(get_uniform_location(name), 1, GL_TRUE, value.value_ptr);
             } else static assert(false, "Can not upload type " ~ T.stringof ~ " to GPU as uniform");
         }
         
         /// ditto
         void uniform(S : string, T)(S name, T value) if(is_quaternion!T) {
-            glUniform4fv(get_uniform_location(name), 1, value.value_ptr);
+            checkgl!glUniform4fv(get_uniform_location(name), 1, value.value_ptr);
         } 
     } else {
         void uniform(S, T)(S name, T value) {
@@ -293,42 +294,42 @@ class Shader {
     
     /// Sets a shader uniform. Consider the corresponding OpenGL for more information.
     void uniform1i(string name, int value) {
-        glUniform1i(get_uniform_location(name), value);
+        checkgl!glUniform1i(get_uniform_location(name), value);
     }
     
     /// ditto
     void uniform1f(string name, float value) {
-        glUniform1f(get_uniform_location(name), value);
+        checkgl!glUniform1f(get_uniform_location(name), value);
     }
     
     /// ditto
     void uniform2f(string name, float value1, float value2) {
-        glUniform2f(get_uniform_location(name), value1, value2);
+        checkgl!glUniform2f(get_uniform_location(name), value1, value2);
     }
 
     /// ditto
     void uniform2fv(string name, const float[] value, int count=1) {
-        glUniform2fv(get_uniform_location(name), count, value.ptr);
+        checkgl!glUniform2fv(get_uniform_location(name), count, value.ptr);
     }
     
     /// ditto
     void uniform3fv(string name, const float[] value, int count=1) {
-        glUniform3fv(get_uniform_location(name), count, value.ptr);
+        checkgl!glUniform3fv(get_uniform_location(name), count, value.ptr);
     }
     
     /// ditto
     void uniform4fv(string name, const float[] value, int count=1) {
-        glUniform4fv(get_uniform_location(name), count, value.ptr);
+        checkgl!glUniform4fv(get_uniform_location(name), count, value.ptr);
     }
     
     /// ditto
     void uniform_matrix3fv(string name, const float[] value, GLboolean transpose=GL_TRUE, int count=1) {
-        glUniformMatrix3fv(get_uniform_location(name), count, transpose, value.ptr);
+        checkgl!glUniformMatrix3fv(get_uniform_location(name), count, transpose, value.ptr);
     }
     
     /// ditto
     void uniform_matrix4fv(string name, const float[] value, GLboolean transpose=GL_TRUE, int count=1) {
-        glUniformMatrix4fv(get_uniform_location(name), count, transpose, value.ptr);
+        checkgl!glUniformMatrix4fv(get_uniform_location(name), count, transpose, value.ptr);
     }
     
 }

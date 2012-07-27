@@ -7,6 +7,7 @@ private {
                         glSamplerParameteri, glSamplerParameterf,
                         glGenSamplers, glDeleteSamplers;
     import glamour.texture : ITexture;
+    import glamour.util : checkgl;
 }
 
 
@@ -20,15 +21,15 @@ class Sampler {
        
     /// Creates the OpenGL sampler.
     this() {
-        glGenSamplers(1, &sampler);
+        checkgl!glGenSamplers(1, &sampler);
     }
     
     /// Sets a sampler parameter.
     void set_parameter(T)(GLenum name, T params) if(is(T : int) || is(T : float)) {
         static if(is(T : int)) {
-            glSamplerParameteri(sampler, name, params);
+            checkgl!glSamplerParameteri(sampler, name, params);
         } else {
-            glSamplerParameterf(sampler, name, params);
+            checkgl!glSamplerParameterf(sampler, name, params);
         }
     }
     
@@ -42,32 +43,32 @@ class Sampler {
             ret.length = 1;
         }
         
-        glGetSamplerParameterfv(sampler, name, ret.ptr);
+        checkgl!glGetSamplerParameterfv(sampler, name, ret.ptr);
         return ret;
     }
     
     /// Binds the sampler.
     void bind(GLuint unit) {
-        glBindSampler(unit, sampler);
+        checkgl!glBindSampler(unit, sampler);
     }
     
     /// ditto
     void bind(ITexture tex) {
-        glBindSampler(tex.get_unit()-GL_TEXTURE0, sampler);
+        checkgl!glBindSampler(tex.get_unit()-GL_TEXTURE0, sampler);
     }
     
     /// Unbinds the sampler.
     void unbind(GLuint unit) {
-        glBindSampler(unit, 0);
+        checkgl!glBindSampler(unit, 0);
     }
     
     /// ditto
     void unbind(ITexture tex) {
-        glBindSampler(tex.get_unit(), 0);
+        checkgl!glBindSampler(tex.get_unit(), 0);
     }
     
     /// Deletes the sampler.
     void remove() {
-        glDeleteSamplers(1, &sampler);
+        checkgl!glDeleteSamplers(1, &sampler);
     }
 }

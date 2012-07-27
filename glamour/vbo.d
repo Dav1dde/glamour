@@ -7,7 +7,8 @@ private {
                         GL_STATIC_DRAW, GL_ARRAY_BUFFER, GL_ELEMENT_ARRAY_BUFFER,
                         glBindBuffer, glBufferData, glBufferSubData,
                         glGenBuffers, glDeleteBuffers;
-
+    import glamour.util : checkgl;
+                        
     import std.traits : isArray, isPointer;
     import std.range : ElementType;
 }
@@ -34,41 +35,41 @@ class ElementBuffer : IBuffer {
 
     /// Initializes the buffer.
     this()() {
-        glGenBuffers(1, &buffer);
+        checkgl!glGenBuffers(1, &buffer);
     }
 
     /// Initualizes the buffer and sets data.
     this(T)(const ref T data, GLenum hint = GL_STATIC_DRAW) if(isArray!T) {
-        glGenBuffers(1, &buffer);
+        checkgl!glGenBuffers(1, &buffer);
         set_data(data, hint);
     }
 
     /// ditto
     this(T)(const T ptr, size_t size, GLenum hint = GL_STATIC_DRAW) if(isPointer!T) {
-        glGenBuffers(1, &buffer);
+        checkgl!glGenBuffers(1, &buffer);
         set_data(data, size, hint);
     }
 
     /// Deletes the buffer.
     void remove() {
-        glDeleteBuffers(1, &buffer);
+        checkgl!glDeleteBuffers(1, &buffer);
     }
 
     /// Binds the buffer.
     void bind() {
-        glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, buffer);
+        checkgl!glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, buffer);
     }
 
     /// Unbinds the buffer.
     void unbind() {
-        glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
+        checkgl!glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
     }
 
     /// Uploads data to the GPU.
     void set_data(T)(const ref T data, GLenum hint = GL_STATIC_DRAW) if(isArray!T) {
-        glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, buffer); // or bind()
-        glBufferData(GL_ELEMENT_ARRAY_BUFFER, data.length*(ElementType!T).sizeof, data.ptr, hint);
-        glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0); //or unbind()
+        checkgl!glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, buffer); // or bind()
+        checkgl!glBufferData(GL_ELEMENT_ARRAY_BUFFER, data.length*(ElementType!T).sizeof, data.ptr, hint);
+        checkgl!glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0); //or unbind()
 
         length = data.length*(ElementType!T).sizeof;
         this.hint = hint;
@@ -76,9 +77,9 @@ class ElementBuffer : IBuffer {
 
     /// ditto
     void set_data(T)(const T ptr, size_t size, GLenum hint = GL_STATIC_DRAW) if(isPointer!T) {
-        glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, buffer); // or bind()
-        glBufferData(GL_ELEMENT_ARRAY_BUFFER, size, ptr, hint);
-        glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0); //or unbind()
+        checkgl!glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, buffer); // or bind()
+        checkgl!glBufferData(GL_ELEMENT_ARRAY_BUFFER, size, ptr, hint);
+        checkgl!glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0); //or unbind()
 
         length = size;
         this.hint = hint;
@@ -101,7 +102,7 @@ class Buffer : IBuffer {
 
     // Initializes the buffer.
     this()() {
-        glGenBuffers(1, &buffer);
+        checkgl!glGenBuffers(1, &buffer);
     }
 
     /// Initualizes the buffer and sets data.
@@ -110,24 +111,24 @@ class Buffer : IBuffer {
     /// type = OpenGL type of the data (e.g. GL_FLOAT)
     /// hint = Specifies the expected usage pattern of the data store.
     this(T)(const ref T data, GLenum hint = GL_STATIC_DRAW) if(isArray!T) {
-        glGenBuffers(1, &buffer);
+        checkgl!glGenBuffers(1, &buffer);
         set_data(data, hint);
     }
 
     /// ditto
     this(T)(const T ptr, size_t size, GLenum hint = GL_STATIC_DRAW) if(isPointer!T) {
-        glGenBuffers(1, &buffer);
+        checkgl!glGenBuffers(1, &buffer);
         set_data(ptr, size, hint);
     }
 
     /// Deletes the buffer.
     void remove() {
-        glDeleteBuffers(1, &buffer);
+        checkgl!glDeleteBuffers(1, &buffer);
     }
 
     /// Binds the buffer.
     void bind() {
-        glBindBuffer(GL_ARRAY_BUFFER, buffer);
+        checkgl!glBindBuffer(GL_ARRAY_BUFFER, buffer);
     }
 
     /// Binds the buffer and sets the vertex attrib pointer.
@@ -140,21 +141,21 @@ class Buffer : IBuffer {
     ///                converted directly as fixed-point values (GL_FALSE = default) when they are accessed.
     void bind(GLuint attrib_location, GLenum type, GLint size=4, GLsizei offset=0,
               GLsizei stride=0, GLboolean normalized=GL_FALSE) {
-        glBindBuffer(GL_ARRAY_BUFFER, buffer);
-        glEnableVertexAttribArray(attrib_location);
-        glVertexAttribPointer(attrib_location, size, type, normalized, stride, cast(void *)offset);
+        checkgl!glBindBuffer(GL_ARRAY_BUFFER, buffer);
+        checkgl!glEnableVertexAttribArray(attrib_location);
+        checkgl!glVertexAttribPointer(attrib_location, size, type, normalized, stride, cast(void *)offset);
     }
 
     /// Unbinds the buffer.
     void unbind() {
-        glBindBuffer(GL_ARRAY_BUFFER, 0);
+        checkgl!glBindBuffer(GL_ARRAY_BUFFER, 0);
     }
 
     /// Uploads data to the GPU.
     void set_data(T)(const ref T data, GLenum hint = GL_STATIC_DRAW) if(isArray!T) {
-        glBindBuffer(GL_ARRAY_BUFFER, buffer); // or bind()
-        glBufferData(GL_ARRAY_BUFFER, data.length*(ElementType!T).sizeof, data.ptr, hint);
-        glBindBuffer(GL_ARRAY_BUFFER, 0); //or unbind()
+        checkgl!glBindBuffer(GL_ARRAY_BUFFER, buffer); // or bind()
+        checkgl!glBufferData(GL_ARRAY_BUFFER, data.length*(ElementType!T).sizeof, data.ptr, hint);
+        checkgl!glBindBuffer(GL_ARRAY_BUFFER, 0); //or unbind()
 
         length = data.length*(ElementType!T).sizeof;
         this.hint = hint;
@@ -162,9 +163,9 @@ class Buffer : IBuffer {
 
     /// ditto
     void set_data(T)(const T ptr, size_t size, GLenum hint = GL_STATIC_DRAW) if(isPointer!T) {
-        glBindBuffer(GL_ARRAY_BUFFER, buffer); // or bind()
-        glBufferData(GL_ARRAY_BUFFER, size, ptr, hint);
-        glBindBuffer(GL_ARRAY_BUFFER, 0); //or unbind()
+        checkgl!glBindBuffer(GL_ARRAY_BUFFER, buffer); // or bind()
+        checkgl!glBufferData(GL_ARRAY_BUFFER, size, ptr, hint);
+        checkgl!glBindBuffer(GL_ARRAY_BUFFER, 0); //or unbind()
 
         length = size;
         this.hint = hint;
@@ -172,15 +173,15 @@ class Buffer : IBuffer {
 
     /// Updates the Buffer, using glBufferSubData.
     void update(T)(const ref T data, GLintptr offset) if(isArray!T) {
-        glBindBuffer(GL_ARRAY_BUFFER, buffer);
-        glBufferSubData(GL_ARRAY_BUFFER, offset, data.length*(ElementType!T).sizeof, data.ptr);
-        glBindBuffer(GL_ARRAY_BUFFER, 0);
+        checkgl!glBindBuffer(GL_ARRAY_BUFFER, buffer);
+        checkgl!glBufferSubData(GL_ARRAY_BUFFER, offset, data.length*(ElementType!T).sizeof, data.ptr);
+        checkgl!glBindBuffer(GL_ARRAY_BUFFER, 0);
     }
 
     /// ditto
     void update(T)(const T ptr, size_t size, GLintptr offset) if(isPointer!T) {
-        glBindBuffer(GL_ARRAY_BUFFER, buffer);
-        glBufferSubData(GL_ARRAY_BUFFER, offset, size, ptr);
-        glBindBuffer(GL_ARRAY_BUFFER, 0);
+        checkgl!glBindBuffer(GL_ARRAY_BUFFER, buffer);
+        checkgl!glBufferSubData(GL_ARRAY_BUFFER, offset, size, ptr);
+        checkgl!glBindBuffer(GL_ARRAY_BUFFER, 0);
     }
 }

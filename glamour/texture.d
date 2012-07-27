@@ -25,7 +25,7 @@ private {
                                    IL_IMAGE_FORMAT, IL_IMAGE_TYPE, IL_IMAGE_WIDTH, IL_IMAGE_HEIGHT;
     }
     
-    import glamour.util : glenum2size;
+    import glamour.util : glenum2size, checkgl;
     import std.traits : isPointer;
     import std.string : toStringz;
     import std.exception : enforce;
@@ -49,9 +49,9 @@ mixin template CommonTextureMethods() {
     /// Sets a texture parameter.
     void set_paramter(T)(GLuint name, T params) if(is(T : int) || is(T : float)) {
         static if(is(T : int)) {
-            glTexParameteri(target, name, params);
+            checkgl!glTexParameteri(target, name, params);
         } else {
-            glTexParameterf(target, name, params);
+            checkgl!glTexParameterf(target, name, params);
         }
     }
     
@@ -65,18 +65,18 @@ mixin template CommonTextureMethods() {
             ret.length = 1;
         }
         
-        glGetTexParameterfv(target, name, ret.ptr);
+        checkgl!glGetTexParameterfv(target, name, ret.ptr);
         return ret;
     }
     
     /// Binds the texture.
     void bind() {
-        glBindTexture(target, texture);
+        checkgl!glBindTexture(target, texture);
     }
     
     /// Activates the texture to $(I unit), passed to the function. 
     void activate(GLuint unit) {
-        glActiveTexture(unit);
+        checkgl!glActiveTexture(unit);
     }
     
     /// Activates the texture to $(B unit), the struct member.
@@ -86,8 +86,8 @@ mixin template CommonTextureMethods() {
     
     /// Binds the texture and activates it to $(I unit), passed to the function. 
     void bind_and_activate(GLuint unit) {
-        glBindTexture(target, texture);
-        glActiveTexture(unit);
+        checkgl!glBindTexture(target, texture);
+        checkgl!glActiveTexture(unit);
     }
     
     /// Binds the texture and activates it to $(B unit), the struct member.
@@ -97,12 +97,12 @@ mixin template CommonTextureMethods() {
     
     /// Unbinds the texture.
     void unbind() {
-        glBindTexture(target, 0);
+        checkgl!glBindTexture(target, 0);
     }
     
     /// Deletes the texture.
     void remove() {
-        glDeleteTextures(1, &texture);
+        checkgl!glDeleteTextures(1, &texture);
     }
 }
 
@@ -150,7 +150,7 @@ class Texture1D : ITexture {
     this(GLenum unit=GL_TEXTURE0) {
         this.unit = unit;
         
-        glGenTextures(1, &texture);
+        checkgl!glGenTextures(1, &texture);
     }
         
     /// Sets the texture data.
@@ -175,7 +175,7 @@ class Texture1D : ITexture {
             auto d = data.ptr;
         }
         
-        glTexImage1D(GL_TEXTURE_1D, 0, internal_format, cast(int)(data.length), 0, format, type, d);
+        checkgl!glTexImage1D(GL_TEXTURE_1D, 0, internal_format, cast(int)(data.length), 0, format, type, d);
         unbind();
     }
 }
@@ -214,7 +214,7 @@ class Texture2D : ITexture {
     this(GLenum unit=GL_TEXTURE0) {
         this.unit = unit;
 
-        glGenTextures(1, &texture);
+        checkgl!glGenTextures(1, &texture);
     }
     
     /// Sets the texture data.
@@ -249,13 +249,13 @@ class Texture2D : ITexture {
             auto d = data.ptr;
         }
         
-        glTexImage2D(GL_TEXTURE_2D, level, internal_format, width, height, 0, format, type, d);
+        checkgl!glTexImage2D(GL_TEXTURE_2D, level, internal_format, width, height, 0, format, type, d);
         
         if(mipmaps) {
             debug {
                 writefln("Generating 2D mipmaps, glext loaded?");
             }
-            glGenerateMipmap(GL_TEXTURE_2D);
+            checkgl!glGenerateMipmap(GL_TEXTURE_2D);
         }
         
         unbind();
@@ -389,7 +389,7 @@ class Texture3DBase(GLenum target_) : ITexture {
     this(GLenum unit=GL_TEXTURE0) {
         this.unit = unit;
 
-        glGenTextures(1, &texture);
+        checkgl!glGenTextures(1, &texture);
     }
 
     /// Sets the texture data.
@@ -420,7 +420,7 @@ class Texture3DBase(GLenum target_) : ITexture {
             auto d = data.ptr;
         }
 
-        glTexImage3D(target, level, internal_format, width, height, depth, 0, format, type, d);
+        checkgl!glTexImage3D(target, level, internal_format, width, height, depth, 0, format, type, d);
         unbind();
     }
 }
