@@ -2,8 +2,8 @@ module glamour.vbo;
 
 private {
     import glamour.gl : GLenum, GLint, GLsizei, GLuint, GLboolean, GLintptr,
-                        GL_FALSE, glDisableVertexAttribArray, 
-                        glEnableVertexAttribArray, glVertexAttribPointer, 
+                        GL_FALSE, glDisableVertexAttribArray,
+                        glEnableVertexAttribArray, glVertexAttribPointer,
                         GL_STATIC_DRAW, GL_ARRAY_BUFFER, GL_ELEMENT_ARRAY_BUFFER,
                         glBindBuffer, glBufferData, glBufferSubData,
                         glGenBuffers, glDeleteBuffers;
@@ -14,8 +14,8 @@ private {
 
 /// Interface every buffer implements
 interface IBuffer {
-    void bind(); /// 
-    void unbind(); /// 
+    void bind(); ///
+    void unbind(); ///
     void set_data(T)(const ref T data, GLenum hint = GL_STATIC_DRAW); ///
 }
 
@@ -31,39 +31,45 @@ class ElementBuffer : IBuffer {
     GLenum hint;
     /// Length of the passed data, note it's the length of a void[] array.
     size_t length = 0;
-    
+
     /// Initializes the buffer.
     this()() {
         glGenBuffers(1, &buffer);
     }
-    
+
     /// Initualizes the buffer and sets data.
-    this(T)(const ref T data, GLenum hint = GL_STATIC_DRAW) if(isArray!T || isPointer!T) {
+    this(T)(const ref T data, GLenum hint = GL_STATIC_DRAW) if(isArray!T) {
         glGenBuffers(1, &buffer);
         set_data(data, hint);
     }
-    
+
+    /// ditto
+    this(T)(const T ptr, size_t size, GLenum hint = GL_STATIC_DRAW) if(isPointer!T) {
+        glGenBuffers(1, &buffer);
+        set_data(data, size, hint);
+    }
+
     /// Deletes the buffer.
     void remove() {
         glDeleteBuffers(1, &buffer);
     }
-    
+
     /// Binds the buffer.
     void bind() {
         glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, buffer);
     }
-    
+
     /// Unbinds the buffer.
     void unbind() {
         glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
     }
-    
+
     /// Uploads data to the GPU.
     void set_data(T)(const ref T data, GLenum hint = GL_STATIC_DRAW) if(isArray!T) {
         glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, buffer); // or bind()
         glBufferData(GL_ELEMENT_ARRAY_BUFFER, data.length*(ElementType!T).sizeof, data.ptr, hint);
         glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0); //or unbind()
-        
+
         length = data.length*(ElementType!T).sizeof;
         this.hint = hint;
     }
@@ -92,32 +98,38 @@ class Buffer : IBuffer {
     GLenum hint;
     /// Length of the passed data, note it's the length of a void[] array.
     size_t length = 0;
-    
+
     // Initializes the buffer.
     this()() {
         glGenBuffers(1, &buffer);
     }
-    
+
     /// Initualizes the buffer and sets data.
     /// Params:
     /// data = any kind of data.
     /// type = OpenGL type of the data (e.g. GL_FLOAT)
     /// hint = Specifies the expected usage pattern of the data store.
-    this(T)(const ref T data, GLenum hint = GL_STATIC_DRAW) if(isArray!T || isPointer!T) {
+    this(T)(const ref T data, GLenum hint = GL_STATIC_DRAW) if(isArray!T) {
         glGenBuffers(1, &buffer);
         set_data(data, hint);
     }
-    
+
+    /// ditto
+    this(T)(const T ptr, size_t size, GLenum hint = GL_STATIC_DRAW) if(isPointer!T) {
+        glGenBuffers(1, &buffer);
+        set_data(ptr, size, hint);
+    }
+
     /// Deletes the buffer.
     void remove() {
         glDeleteBuffers(1, &buffer);
     }
-    
+
     /// Binds the buffer.
     void bind() {
         glBindBuffer(GL_ARRAY_BUFFER, buffer);
     }
-    
+
     /// Binds the buffer and sets the vertex attrib pointer.
     /// Params:
     /// type = Specifies the data type of each component in the array.
@@ -132,18 +144,18 @@ class Buffer : IBuffer {
         glEnableVertexAttribArray(attrib_location);
         glVertexAttribPointer(attrib_location, size, type, normalized, stride, cast(void *)offset);
     }
-    
+
     /// Unbinds the buffer.
     void unbind() {
         glBindBuffer(GL_ARRAY_BUFFER, 0);
     }
-    
+
     /// Uploads data to the GPU.
     void set_data(T)(const ref T data, GLenum hint = GL_STATIC_DRAW) if(isArray!T) {
         glBindBuffer(GL_ARRAY_BUFFER, buffer); // or bind()
         glBufferData(GL_ARRAY_BUFFER, data.length*(ElementType!T).sizeof, data.ptr, hint);
         glBindBuffer(GL_ARRAY_BUFFER, 0); //or unbind()
-    
+
         length = data.length*(ElementType!T).sizeof;
         this.hint = hint;
     }
@@ -157,7 +169,7 @@ class Buffer : IBuffer {
         length = size;
         this.hint = hint;
     }
-    
+
     /// Updates the Buffer, using glBufferSubData.
     void update(T)(const ref T data, GLintptr offset) if(isArray!T) {
         glBindBuffer(GL_ARRAY_BUFFER, buffer);
