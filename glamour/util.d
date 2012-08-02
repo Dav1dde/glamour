@@ -9,16 +9,28 @@ private {
 
     import std.traits : ReturnType;
                         
-    debug import std.stdio : stderr;
+    import std.stdio : stderr;
 }
 
+
+static this() {
+    _error_callback = function void(GLenum error_code, string function_name) {
+        stderr.writefln(`OpenGL function "%s" failed: "%s."`, function_name, gl_error_string(error_code));
+    };
+}
+
+private void function(GLenum, string) _error_callback;
+
+void set_error_callback(void function(GLenum, string) cb) {
+    _error_callback = cb;
+}
 
 ReturnType!func checkgl(alias func, Args...)(Args args) {
     debug scope(success) {
         GLenum error_code = glGetError();
 
         if(error_code != GL_NO_ERROR) {
-            stderr.writefln(`OpenGL function "%s" failed: "%s."`, func.stringof, gl_error_string(error_code));
+            _error_callback(error_code, func.stringof);
         }
     }
 
