@@ -10,6 +10,7 @@ glamour
 * `-version=gl3n` – Adds gl3n support to glamour (you can pass gl3n vectors and matrices directly as uniform).
 * `-version=Derelict3` – Uses Derelict3 instead of Derelict2 for `glamour.gl`.
 * `-version=stb` – Uses `stb_image` to load textures from images.
+* `-version=SDLImage` - Uses the `SDL` to load textures from images, this requires `Derelict2` or `Derelict3`.
 
 To build glamour I recommend you to use the `Makefile`:
 
