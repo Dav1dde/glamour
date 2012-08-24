@@ -19,7 +19,8 @@ private {
                         glUniformMatrix3x4fv, glUniformMatrix4fv, glUniformMatrix4x2fv,
                         glUniformMatrix4x3fv, glUniform2iv, glUniform3iv, glUniform4iv;
     import glamour.util : checkgl;
-                        
+
+    import std.conv : to;
     import std.file : readText;
     import std.path : baseName, stripExtension;
     import std.string : format, splitLines, toStringz, toLower;
@@ -88,7 +89,7 @@ void compile_shader(GLuint shader, string filename="<unknown>") {
         GLchar[] infolog = new GLchar[infolog_length+1];
         checkgl!glGetShaderInfoLog(shader, infolog_length, null, infolog.ptr);
         
-        throw new ShaderError(infolog.idup, "linking", filename);
+        throw new ShaderError(infolog.to!string(), "link", filename);
     }
 }
 
@@ -109,7 +110,7 @@ void link_program(GLuint program, string filename="<unknown>") {
         GLchar[] infolog = new GLchar[infolog_length + 1];
         checkgl!glGetProgramInfoLog(program, infolog_length, null, infolog.ptr);
         
-        throw new ShaderError(infolog.idup, "compiling", filename);
+        throw new ShaderError(infolog.to!string(), "compile", filename);
     }
 }
 
