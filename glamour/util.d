@@ -8,21 +8,30 @@ private {
                         GL_OUT_OF_MEMORY;
 
     import std.traits : ReturnType;
-                        
-    import std.stdio : stderr;
+
+    debug {
+        import std.stdio : stderr;
+        import std.array : join;
+        import std.range : repeat;
+        import std.string : format;
+    }
 }
 
 
-static this() {
-    _error_callback = function void(GLenum error_code, string function_name) {
-        stderr.writefln(`OpenGL function "%s" failed: "%s."`, function_name, gl_error_string(error_code));
-    };
-}
+debug { 
+    static this() {
+        _error_callback = function void(GLenum error_code, string function_name, string args) {
+            stderr.writefln(`OpenGL function "%s(%s)" failed: "%s."`, function_name, args, gl_error_string(error_code));
+        };
+    }
 
-private void function(GLenum, string) _error_callback;
+    private void function(GLenum, string, string) _error_callback;
 
-void set_error_callback(void function(GLenum, string) cb) {
-    _error_callback = cb;
+    void set_error_callback(void function(GLenum, string, string) cb) {
+        _error_callback = cb;
+    }
+} else {
+    void set_error_callback(void function(GLenum, string, string) cb) {}
 }
 
 ReturnType!func checkgl(alias func, Args...)(Args args) {
@@ -30,7 +39,7 @@ ReturnType!func checkgl(alias func, Args...)(Args args) {
         GLenum error_code = glGetError();
 
         if(error_code != GL_NO_ERROR) {
-            _error_callback(error_code, func.stringof);
+            _error_callback(error_code, func.stringof, format("%s".repeat(Args.length).join(", "), args));
         }
     }
 
