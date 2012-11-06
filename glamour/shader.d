@@ -173,7 +173,7 @@ class Shader {
         }
         
         if(!directives.length) {
-            directives ~= "#version 330\n";
+            directives ~= "#version 130\n";
         }
         
         foreach(string type, Line[] lines; shader_sources) {
