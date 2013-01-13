@@ -8,12 +8,12 @@ private {
                         GL_OUT_OF_MEMORY;
 
     import std.traits : ReturnType;
-    import std.string : format;
 
     debug {
         import std.stdio : stderr;
         import std.array : join;
         import std.range : repeat;
+        import std.string : format;
     }
 }
 
