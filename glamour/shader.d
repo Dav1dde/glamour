@@ -42,7 +42,7 @@ GLenum to_opengl_shader(string s, string filename="<unknown>") {
         case "vertex": return GL_VERTEX_SHADER;
         case "geometry": return GL_GEOMETRY_SHADER;
         case "fragment": return GL_FRAGMENT_SHADER;
-        default: throw new ShaderError(format("Unknown shader, %s.", s), "load", filename);
+        default: throw new ShaderException(format("Unknown shader, %s.", s), "load", filename);
     }
     assert(0);
 }
@@ -52,7 +52,7 @@ GLenum to_opengl_shader(string s, string filename="<unknown>") {
 
 /// This exception will be raised when
 /// an error occurs while compiling or linking a shader.
-class ShaderError : Exception {
+class ShaderException : Exception {
     /// The filename passed to the ctor.
     string filename;
     /// The process passed to the ctor. Will be one of "linking" or "compiling".
@@ -71,9 +71,10 @@ class ShaderError : Exception {
         super(infolog);
     }
 }
+deprecated alias ShaderException ShaderError;
 
 /// Compiles an already created OpenGL shader.
-/// Throws: ShaderError on failure.
+/// Throws: ShaderException on failure.
 /// Params:
 /// shader = The OpenGL shader.
 /// filename = Used to identify the shader, if an error occurs.
@@ -89,12 +90,12 @@ void compile_shader(GLuint shader, string filename="<unknown>") {
         GLchar[] infolog = new GLchar[infolog_length+1];
         checkgl!glGetShaderInfoLog(shader, infolog_length, null, infolog.ptr);
         
-        throw new ShaderError(infolog.to!string(), "link", filename);
+        throw new ShaderException(infolog.to!string(), "link", filename);
     }
 }
 
 /// Links an already created OpenGL program.
-/// Throws: ShaderError on failure.
+/// Throws: ShaderException on failure.
 /// Params:
 /// program = The OpenGL program.
 /// filename = Used to identify the shader, if an error occurs.
@@ -110,7 +111,7 @@ void link_program(GLuint program, string filename="<unknown>") {
         GLchar[] infolog = new GLchar[infolog_length + 1];
         checkgl!glGetProgramInfoLog(program, infolog_length, null, infolog.ptr);
         
-        throw new ShaderError(infolog.to!string(), "compile", filename);
+        throw new ShaderException(infolog.to!string(), "compile", filename);
     }
 }
 

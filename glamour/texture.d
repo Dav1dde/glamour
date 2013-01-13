@@ -34,13 +34,13 @@ private {
 }
 
 
-/// This exception will be raised if Texture2D.from_image fails to open the image.
-class TextureError : Exception {
+/// This exception will be thrown if Texture2D.from_image fails to open the image.
+class TextureException : Exception {
     this(string msg) {
         super(msg);
     }
 }
-
+deprecated alias TextureException TextureError;
 
 /// Every Texture-Class will mixin this template.
 mixin template CommonTextureMethods() {
@@ -271,14 +271,14 @@ class Texture2D : ITexture {
             scope(exit) stbi_image_free(data);
 
             if(data is null) {
-                throw new TextureError("Unable to load image: " ~ filename);
+                throw new TextureException("Unable to load image: " ~ filename);
             }
             
             uint image_format;
             switch(comp) {
                 case 3: image_format = GL_RGB; break;
                 case 4: image_format = GL_RGBA; break;
-                default: throw new TextureError("Unknown/Unsupported stbi image format");
+                default: throw new TextureException("Unknown/Unsupported stbi image format");
             }
 
             auto tex = new Texture2D();
@@ -312,7 +312,7 @@ class Texture2D : ITexture {
             
             auto surface = IMG_Load(filename.toStringz());
             
-            enforce(surface, new TextureError("Error loading image " ~ filename));
+            enforce(surface, new TextureException("Error loading image " ~ filename));
             
             auto image_format = GL_RGB;
             
@@ -334,7 +334,7 @@ class Texture2D : ITexture {
             ilGenImages(1, &id);
             
             if(!ilLoadImage(toStringz(filename))) {
-                throw new TextureError("Unable to load image: " ~ filename);
+                throw new TextureException("Unable to load image: " ~ filename);
             }
             
             auto tex =  new Texture2D();

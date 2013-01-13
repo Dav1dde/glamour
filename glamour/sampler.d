@@ -14,9 +14,19 @@ private {
     debug import std.stdio : stderr;
 }
 
+
+/// 
+class ShaderException : Exception {
+    this(string msg) {
+        super(msg);
+    }
+}
+
 version(OSX) {
+    ///
     alias EmulatedSampler Sampler;
 } else {
+    ///
     alias RealSampler Sampler;
 }
 
@@ -96,6 +106,7 @@ class RealSampler : ISampler {
 }
 
 /// This emulates an OpenGL Sampler on platforms where no glGenSamplers is available (like OSX).
+/// This only works with Texture1D, Texture2D and Texture3D so far.
 class EmulatedSampler : ISampler {
     protected {
         Parameter[GLenum] parameters;
@@ -118,24 +129,32 @@ class EmulatedSampler : ISampler {
         }
     }
     
-    /// Sets a sampler parameter.
+    /// Sets a sampler parameter (and stores it internally).
     void set_parameter(T)(GLenum name, T params) if(is(T : int) || is(T : float)) {
       parameters[name] = Parameter(params);
     }
 
-    /// Queries a texture parameter from OpenGL.
-    float[] get_parameter(GLenum name) {
-        assert(name != GL_TEXTURE_BORDER_COLOR);
-        assert(parameters[name].isFloat);
-        return [parameters[name].f];
-    }
+    /// Returns the stored parameter or [float.nan] if not internally stored.
+    float[] get_parameter(GLenum name)
+        in {
+            assert(name != GL_TEXTURE_BORDER_COLOR);
+            assert(parameters[name].isFloat);
+        }
+        body {
+            if(auto param = name in parameters) {
+                return [param.f];
+            } else {
+                return [float.nan];
+            }
+        }
 
-    /// Binds the sampler.
+    /// Stub, throws always ShaderException.
     void bind(GLuint unit) {
-      throw new Exception("Unsupported bind operation for emulated sampler");
+      throw new ShaderException("Unsupported bind operation for emulated sampler");
     }
 
-    /// ditto
+    /// Applies the parameters to the passed texture, must be one of Texture1D, Texture2D or Texture3D,
+    /// or throws ShaderException
     void bind(ITexture tex) {
         GLenum unit;
         tex.bind();
@@ -147,7 +166,7 @@ class EmulatedSampler : ISampler {
         else if(cast(Texture3D)tex)
           unit = GL_TEXTURE_3D;
         else
-          throw new Exception("Unsupported texture type");
+          throw new ShaderException("Unsupported texture type");
 
         foreach(name, parameter; parameters) {
             if(parameter.isFloat) {
@@ -158,15 +177,12 @@ class EmulatedSampler : ISampler {
         }
     }
 
-    /// Unbinds the sampler.
-    void unbind(GLuint unit) {
-    }
+    /// Stub.
+    void unbind(GLuint unit) {}
 
-    /// ditto
-    void unbind(ITexture tex) {
-    }
+    /// Stub.
+    void unbind(ITexture tex) {}
 
-    /// Deletes the sampler.
-    void remove() {
-    }
+    /// Stub.
+    void remove() {}
 }
