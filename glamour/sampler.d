@@ -20,9 +20,17 @@ version(OSX) {
     alias RealSampler Sampler;
 }
 
+interface ISampler {
+    void set_parameter(T)(GLenum name, T params) if(is(T : int) || is(T : float));
+    float[] get_parameter(GLenum name);
+    void bind(ITexture tex);
+    void unbind(GLuint unit);
+    void unbind(ITexture tex);
+    void remove();
+}
+
 /// Represents an OpenGL Sampler.
-/// The constructor must be used to avoid segmentation faults.
-class RealSampler {
+class RealSampler : ISampler {
     /// The OpenGL sampler name.
     GLuint sampler;
     /// Alias this to sampler.
@@ -87,7 +95,29 @@ class RealSampler {
     }
 }
 
-class EmulatedSampler {
+/// This emulates an OpenGL Sampler on platforms where no glGenSamplers is available (like OSX).
+class EmulatedSampler : ISampler {
+    protected {
+        Parameter[GLenum] parameters;
+        struct Parameter {
+            union {
+                int i;
+                float f;
+            }
+            bool isFloat;
+
+            this(float f) {
+            this.isFloat = true;
+            this.f = f;
+            }
+
+            this(int i) {
+            this.isFloat = false;
+            this.i = i;
+            }
+        }
+    }
+    
     /// Sets a sampler parameter.
     void set_parameter(T)(GLenum name, T params) if(is(T : int) || is(T : float)) {
       parameters[name] = Parameter(params);
@@ -102,7 +132,7 @@ class EmulatedSampler {
 
     /// Binds the sampler.
     void bind(GLuint unit) {
-      throw new Error("Unsupported bind operation for emulated sampler");
+      throw new Exception("Unsupported bind operation for emulated sampler");
     }
 
     /// ditto
@@ -117,7 +147,7 @@ class EmulatedSampler {
         else if(cast(Texture3D)tex)
           unit = GL_TEXTURE_3D;
         else
-          throw new Error("Unsupported texture type");
+          throw new Exception("Unsupported texture type");
 
         foreach(name, parameter; parameters) {
             if(parameter.isFloat) {
@@ -138,25 +168,5 @@ class EmulatedSampler {
 
     /// Deletes the sampler.
     void remove() {
-    }
-
-private:
-    Parameter[GLenum] parameters;
-    struct Parameter {
-        this(float f) {
-          this.isFloat = true;
-          this.f = f;
-        }
-
-        this(int i) {
-          this.isFloat = false;
-          this.i = i;
-        }
-
-        bool isFloat;
-        union {
-            int i;
-            float f;
-        }
     }
 }
