@@ -173,7 +173,12 @@ class Shader {
         }
         
         if(!directives.length) {
-            directives ~= "#version 130\n";
+            // OSX only supports 3.2 forward contexts
+            version(OSX) {
+                directives ~= "#version 150\n";
+            } else {
+                directives ~= "#version 130\n";
+            }
         }
         
         foreach(string type, Line[] lines; shader_sources) {
