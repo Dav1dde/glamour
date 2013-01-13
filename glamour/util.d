@@ -8,12 +8,12 @@ private {
                         GL_OUT_OF_MEMORY;
 
     import std.traits : ReturnType;
+    import std.string : format;
 
     debug {
         import std.stdio : stderr;
         import std.array : join;
         import std.range : repeat;
-        import std.string : format;
     }
 }
 
@@ -21,7 +21,8 @@ private {
 debug { 
     static this() {
         _error_callback = function void(GLenum error_code, string function_name, string args) {
-            stderr.writefln(`OpenGL function "%s(%s)" failed: "%s."`, function_name, args, gl_error_string(error_code));
+            stderr.writefln(`OpenGL function "%s(%s)" at %s:%s failed: "%s."`,
+                             function_name, args, gl_error_string(error_code));
         };
     }
 
@@ -41,6 +42,10 @@ ReturnType!func checkgl(alias func, Args...)(Args args) {
         if(error_code != GL_NO_ERROR) {
             _error_callback(error_code, func.stringof, format("%s".repeat(Args.length).join(", "), args));
         }
+    }
+
+    debug if(func is null) {
+        throw new Error("%s is null! OpenGL loaded? Required OpenGL version not supported?".format(func.stringof));
     }
 
     return func(args);
