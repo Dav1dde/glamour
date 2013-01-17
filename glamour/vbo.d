@@ -41,7 +41,7 @@ class ElementBuffer : IBuffer {
     }
 
     /// Initualizes the buffer and sets data.
-    this(T)(const ref T data, GLenum hint = GL_STATIC_DRAW) if(isArray!T) {
+    this(T)(const auto ref T data, GLenum hint = GL_STATIC_DRAW) if(isArray!T) {
         checkgl!glGenBuffers(1, &buffer);
         set_data(data, hint);
     }
@@ -73,7 +73,7 @@ class ElementBuffer : IBuffer {
     }
 
     /// Uploads data to the GPU.
-    void set_data(T)(const ref T data, GLenum hint = GL_STATIC_DRAW) if(isArray!T) {
+    void set_data(T)(const auto ref T data, GLenum hint = GL_STATIC_DRAW) if(isArray!T) {
         checkgl!glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, buffer); // or bind()
         checkgl!glBufferData(GL_ELEMENT_ARRAY_BUFFER, data.length*(ElementType!T).sizeof, data.ptr, hint);
         checkgl!glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0); //or unbind()
@@ -117,7 +117,7 @@ class Buffer : IBuffer {
     /// data = any kind of data.
     /// type = OpenGL type of the data (e.g. GL_FLOAT)
     /// hint = Specifies the expected usage pattern of the data store.
-    this(T)(const ref T data, GLenum hint = GL_STATIC_DRAW) if(isArray!T) {
+    this(T)(const auto ref T data, GLenum hint = GL_STATIC_DRAW) if(isArray!T) {
         checkgl!glGenBuffers(1, &buffer);
         set_data(data, hint);
     }
@@ -164,7 +164,7 @@ class Buffer : IBuffer {
     }
 
     /// Uploads data to the GPU.
-    void set_data(T)(const ref T data, GLenum hint = GL_STATIC_DRAW) if(isArray!T) {
+    void set_data(T)(const auto ref T data, GLenum hint = GL_STATIC_DRAW) if(isArray!T) {
         checkgl!glBindBuffer(GL_ARRAY_BUFFER, buffer); // or bind()
         checkgl!glBufferData(GL_ARRAY_BUFFER, data.length*(ElementType!T).sizeof, data.ptr, hint);
         checkgl!glBindBuffer(GL_ARRAY_BUFFER, 0); //or unbind()
