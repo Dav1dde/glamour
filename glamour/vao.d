@@ -16,8 +16,6 @@ interface IVAO {
     void bind();
     void unbind();
     void remove();
-    void set_attrib(GLuint attrib_location, GLenum type, GLint size=4, GLsizei offset=0,
-                    GLsizei stride=0, GLboolean normalized=GL_FALSE);
 }
 
 class VAO : IVAO {
@@ -50,19 +48,4 @@ class VAO : IVAO {
         checkgl!glDeleteVertexArrays(1, &vao);
         vao = 0;
     }
-
-    /// Binds the VAO and sets the vertex attrib pointer.
-    /// Params:
-    /// type = Specifies the data type of each component in the array.
-    /// size = Specifies the number of components per generic vertex attribute.
-    /// offset = Specifies a offset of the first component of the first generic vertex attribute in the array in the data store of the buffer.
-    /// stride = Specifies the byte offset between consecutive generic vertex attributes.
-    /// normalized = Specifies whether fixed-point data values should be normalized (GL_TRUE) or
-    ///                converted directly as fixed-point values (GL_FALSE = default) when they are accessed.
-    void set_attrib(GLuint attrib_location, GLenum type, GLint size=4, GLsizei offset=0,
-                    GLsizei stride=0, GLboolean normalized=GL_FALSE) {
-        checkgl!glBindVertexArray(vao);
-        checkgl!glEnableVertexAttribArray(attrib_location);
-        checkgl!glVertexAttribPointer(attrib_location, size, type, normalized, stride, cast(void*)offset);
-    }    
 }
