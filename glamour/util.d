@@ -21,7 +21,7 @@ private {
 debug { 
     static this() {
         _error_callback = function void(GLenum error_code, string function_name, string args) {
-            stderr.writefln(`OpenGL function "%s(%s)" at %s:%s failed: "%s."`,
+            stderr.writefln(`OpenGL function "%s(%s)" failed: "%s."`,
                              function_name, args, gl_error_string(error_code));
         };
     }
