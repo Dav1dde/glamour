@@ -23,10 +23,9 @@ private {
     import std.conv : to;
     import std.file : readText;
     import std.path : baseName, stripExtension;
-    import std.string : format, splitLines, toStringz, toLower;
-    import std.array : join;
-    import std.algorithm : startsWith;
-    import std.regex : ctRegex, regex, match;
+    import std.string : format, splitLines, toStringz, toLower, strip;
+    import std.array : join, split;
+    import std.algorithm : startsWith, endsWith;
     import std.typecons : Tuple;
     
     version(gl3n) {
@@ -151,18 +150,16 @@ class Shader {
         filename = filename_;
         
         program = checkgl!glCreateProgram();
-        
-        auto ctr_shader_type = regex(`^(\w+):`);
-        
+               
         Line[]* current;
         foreach(size_t line, string text; source.splitLines()) {
             if(text.startsWith("#")) {
                 directives ~= text;
             } else {
-                auto m = text.match(ctr_shader_type);
-                
-                if(m) {
-                    string type = toLower(m.captures[1]);
+                auto m = text.strip().split();
+
+                if(m.length >= 1 && m[0].endsWith(":")) {
+                    string type = toLower(m[0][0..$-1]);
                     shader_sources[type] = null;
                     current = &(shader_sources[type]);
                 } else {
