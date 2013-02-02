@@ -112,6 +112,7 @@ mixin template CommonTextureMethods() {
 /// Interface every Texture implements.
 interface ITexture {
     GLuint get_unit(); ///
+    void remove(); ///
     void set_paramter(T)(GLuint name, T params); /// 
     float[] get_parameter(GLuint name); /// 
     void set_data(T)(T data); /// 
