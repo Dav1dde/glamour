@@ -180,7 +180,6 @@ class Texture1D : ITexture {
         }
         
         checkgl!glTexImage1D(GL_TEXTURE_1D, 0, internal_format, cast(int)(data.length), 0, format, type, d);
-        unbind();
     }
 }
 
@@ -258,8 +257,6 @@ class Texture2D : ITexture {
         if(mipmaps) {
             checkgl!glGenerateMipmap(GL_TEXTURE_2D);
         }
-        
-        unbind();
     }
     
     version(stb) {
@@ -412,7 +409,6 @@ class Texture3DBase(GLenum target_) : ITexture {
         }
 
         checkgl!glTexImage3D(target, level, internal_format, width, height, depth, 0, format, type, d);
-        unbind();
     }
 }
 
