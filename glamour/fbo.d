@@ -1,7 +1,7 @@
 module glamour.fbo;
 
 private {
-    import glamour.gl : GLenum, GLint, GLuint, GLsizei,
+    import glamour.gl : GLenum, GLint, GLuint, GLsizei, glDeleteBuffers,
                         glGenFramebuffers, glBindFramebuffer, glRenderbufferStorage,
                         glFramebufferRenderbuffer, glFramebufferTexture1D,
                         glFramebufferTexture2D, glGenRenderbuffers, glGetRenderbufferParameteriv,
@@ -39,6 +39,12 @@ class FrameBuffer {
 
     ~this() {
         debug if(fbo != 0) stderr.writefln("OpenGL: FBO resource not released.");
+    }
+
+    /// Deletes the FrameBuffer
+    void remove() {
+        checkgl!glDeleteBuffers(1, &fbo);
+        fbo = 0;
     }
 
     /// Binds the FrameBuffer
@@ -103,6 +109,12 @@ class RenderBuffer {
 
     ~this() {
         debug if(renderbuffer != 0) stderr.writefln("OpenGL: RenderBuffer not released.");
+    }
+
+    /// Deletes the FrameBuffer
+    void remove() {
+        checkgl!glDeleteBuffers(1, &renderbuffer);
+        renderbuffer = 0;
     }
 
     /// Binds the RenderBuffer
