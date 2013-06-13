@@ -108,27 +108,25 @@ class RealSampler : ISampler {
 /// This emulates an OpenGL Sampler on platforms where no glGenSamplers is available (like OSX).
 /// This only works with Texture1D, Texture2D and Texture3D so far.
 class EmulatedSampler : ISampler {
-    protected {
-        Parameter[GLenum] parameters;
-        struct Parameter {
-            union {
-                int i;
-                float f;
-            }
-            bool isFloat;
+    protected Parameter[GLenum] parameters;
+    protected struct Parameter {
+        union {
+            int i;
+            float f;
+        }
+        bool is_float;
 
-            this(float f) {
-            this.isFloat = true;
+        this(float f) {
+            this.is_float = true;
             this.f = f;
-            }
+        }
 
-            this(int i) {
-            this.isFloat = false;
+        this(int i) {
+            this.is_float = false;
             this.i = i;
-            }
         }
     }
-    
+
     /// Sets a sampler parameter (and stores it internally).
     void set_parameter(T)(GLenum name, T params) if(is(T : int) || is(T : float)) {
       parameters[name] = Parameter(params);
@@ -136,10 +134,8 @@ class EmulatedSampler : ISampler {
 
     /// Returns the stored parameter or [float.nan] if not internally stored.
     float[] get_parameter(GLenum name)
-        in {
-            assert(name != GL_TEXTURE_BORDER_COLOR);
-            assert(parameters[name].isFloat);
-        }
+        in { assert(name != GL_TEXTURE_BORDER_COLOR);
+             assert(parameters[name].is_float); }
         body {
             if(auto param = name in parameters) {
                 return [param.f];
@@ -169,7 +165,7 @@ class EmulatedSampler : ISampler {
           throw new ShaderException("Unsupported texture type");
 
         foreach(name, parameter; parameters) {
-            if(parameter.isFloat) {
+            if(parameter.is_float) {
                 checkgl!glTexParameterf(unit, name, parameter.f);
             } else {
                 checkgl!glTexParameteri(unit, name, parameter.i);

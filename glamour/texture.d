@@ -55,7 +55,7 @@ mixin template CommonTextureMethods() {
     }
     
     /// Sets a texture parameter.
-    void set_paramter(T)(GLuint name, T params) if(is(T : int) || is(T : float)) {
+    void set_parameter(T)(GLuint name, T params) if(is(T : int) || is(T : float)) {
         static if(is(T : int)) {
             checkgl!glTexParameteri(target, name, params);
         } else {
@@ -113,7 +113,7 @@ mixin template CommonTextureMethods() {
 interface ITexture {
     GLuint get_unit(); ///
     void remove(); ///
-    void set_paramter(T)(GLuint name, T params); /// 
+    void set_parameter(T)(GLuint name, T params); ///
     float[] get_parameter(GLuint name); /// 
     void set_data(T)(T data); /// 
     void bind(); /// 
