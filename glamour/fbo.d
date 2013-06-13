@@ -60,6 +60,7 @@ class FrameBuffer {
     /// Attaches a 1D-texture to the FrameBuffer
     /// Calls validate
     void attach(Texture1D texture, GLenum attachment_point, GLint mipmap=0) {
+        bind();
         checkgl!glFramebufferTexture1D(target, attachment_point, GL_TEXTURE_1D, texture, mipmap);
         validate();
     }
@@ -67,6 +68,7 @@ class FrameBuffer {
     /// Attaches a 2D-texture to the FrameBuffer
     /// Calls validate
     void attach(Texture2D texture, GLenum attachment_point, GLint mipmap=0) {
+        bind();
         checkgl!glFramebufferTexture2D(target, attachment_point, GL_TEXTURE_2D, texture, mipmap);
         validate();
     }
@@ -74,13 +76,14 @@ class FrameBuffer {
     /// Attaches a RenderBuffer to the FrameBuffer
     /// Calls validate
     void attach(RenderBuffer rbuffer, GLenum attachment_point) {
+        bind();
         checkgl!glFramebufferRenderbuffer(target, attachment_point, rbuffer.target, rbuffer);
         validate();
     }
 
     /// Calls glCheckFramebufferStatus and throws a FrameBufferException if the return value
     /// is not GL_FRAMEBUFFER_COMPLETE
-    void validate() {
+    static void validate() {
         auto ret = glCheckFramebufferStatus(target);
         if(ret != GL_FRAMEBUFFER_COMPLETE) {
             throw new FrameBufferException(ret);
@@ -129,6 +132,7 @@ class RenderBuffer {
 
     /// Allocates storage for the RenderBuffer
     void set_storage(GLenum internal_format, GLsizei width, GLsizei height) {
+        bind();
         checkgl!glRenderbufferStorage(target, internal_format, width, height);
     }
 
