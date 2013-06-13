@@ -11,7 +11,7 @@ private {
                         glLinkProgram, glGetShaderiv, glGetShaderInfoLog,
                         glGetProgramInfoLog, glGetProgramiv, glShaderSource,
                         glUseProgram, glAttachShader, glGetAttribLocation,
-                        glDeleteProgram, glDeleteShader,
+                        glDeleteProgram, glDeleteShader, glGetFragDataLocation,
                         glGetUniformLocation, glUniform1i, glUniform1f,
                         glUniform2f, glUniform2fv, glUniform3fv,
                         glUniform4fv, glUniformMatrix2fv, glUniformMatrix2x3fv,
@@ -138,7 +138,9 @@ class Shader {
     GLint[string] uniform_locations;
     /// Attrib locations will be cached here.
     GLint[string] attrib_locations;
-    
+    /// Frag-data locations will be cached here.
+    GLint[string] frag_locations;
+
     /// Loads the shaders directly from a file.
     this(string file) {
         this(stripExtension(baseName(file)), readText(file));
@@ -235,6 +237,16 @@ class Shader {
         
         return attrib_locations[name] = checkgl!glGetAttribLocation(program, toStringz(name));
     }
+
+    /// Queries an fragment-data location from OpenGL and caches it in $(I frag_locations).
+    /// If the location was already queried the cache is returned.
+    GLint get_frag_location(string name) {
+        if(auto loc = name in frag_locations) {
+            return *loc;
+        }
+
+        return frag_locations[name] = checkgl!glGetFragDataLocation(program, toStringz(name));
+    }
     
     /// Queries an uniform location from OpenGL and caches it in $(I uniform_locations).
     /// If the location was already queried the cache is returned.
@@ -245,7 +257,7 @@ class Shader {
         
         return uniform_locations[name] = checkgl!glGetUniformLocation(program, toStringz(name));
     }
-        
+
     // gl3n integration
     version(gl3n) {
         /// If glamour gets compiled with version=gl3n support for
