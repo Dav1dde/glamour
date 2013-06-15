@@ -7,6 +7,7 @@ private {
                         GL_STATIC_DRAW, GL_ARRAY_BUFFER, GL_ELEMENT_ARRAY_BUFFER,
                         glBindBuffer, glBufferData, glBufferSubData,
                         glGenBuffers, glDeleteBuffers;
+    import glamour.shader : Shader;
     import glamour.util : checkgl;
                         
     import std.traits : isArray, isPointer;
@@ -151,11 +152,17 @@ class Buffer : IBuffer {
     /// stride = Specifies the byte offset between consecutive generic vertex attributes.
     /// normalized = Specifies whether fixed-point data values should be normalized (GL_TRUE) or
     ///                converted directly as fixed-point values (GL_FALSE = default) when they are accessed.
-    void bind(GLuint attrib_location, GLenum type, GLint size=4, GLsizei offset=0,
-              GLsizei stride=0, GLboolean normalized=GL_FALSE) {
+    void bind(GLuint attrib_location, GLenum type, GLint size, GLsizei offset,
+              GLsizei stride, GLboolean normalized=GL_FALSE) {
         checkgl!glBindBuffer(GL_ARRAY_BUFFER, buffer);
         checkgl!glEnableVertexAttribArray(attrib_location);
         checkgl!glVertexAttribPointer(attrib_location, size, type, normalized, stride, cast(void *)offset);
+    }
+
+    /// ditto
+    void bind(Shader shader, string location, GLenum type, GLint size, GLsizei offset,
+              GLsizei stride, GLboolean normalized=GL_FALSE) {
+        bind(shader.get_attrib_location(location), type, size, offset, stride, normalized);
     }
 
     /// Unbinds the buffer.
