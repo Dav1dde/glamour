@@ -1,0 +1,488 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+	<meta charset="utf-8">
+	<title>glamour.texture - glamour documentation</title>
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<meta name="description" content="">
+	<meta name="author" content="">
+
+	<!-- styles -->
+	<link href="bootDoc/assets/css/bootstrap.css" rel="stylesheet">
+	<style type="text/css">
+		body {
+		padding-top: 60px;
+		padding-bottom: 40px;
+		}
+		.sidebar-nav {
+		padding: 9px 0;
+		}
+	</style>
+	<link href="bootDoc/assets/css/bootstrap-responsive.css" rel="stylesheet">
+	<link href="bootDoc/bootdoc.css" rel="stylesheet">
+
+	<!-- HTML5 shim, for IE6-8 support of HTML5 elements -->
+	<!--[if lt IE 9]>
+		<script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
+	<![endif]-->
+
+	<!-- fav and touch icons -->
+	<link rel="shortcut icon" href="bootDoc/assets/ico/favicon.ico">
+	<link rel="apple-touch-icon-precomposed" sizes="114x114" href="bootDoc/assets/ico/apple-touch-icon-114-precomposed.png">
+	<link rel="apple-touch-icon-precomposed" sizes="72x72" href="bootDoc/assets/ico/apple-touch-icon-72-precomposed.png">
+	<link rel="apple-touch-icon-precomposed" href="bootDoc/assets/ico/apple-touch-icon-57-precomposed.png">
+	
+	<!-- Introduce DDoc settings required by JavaScript -->
+	<script type="text/javascript">
+		var Title = 'glamour.texture';
+		var SourceRepository = 'https://github.com/Dav1dde/glamour/tree/master/';
+		var PackageSeparator = '.';
+	</script>
+	
+	<style type="text/css">
+		.ddoc-icon-variable { background-image: url('bootDoc/ddoc-icons/var.png'); }
+		.ddoc-icon-function { background-image: url('bootDoc/ddoc-icons/func.png'); }
+		.ddoc-icon-property { background-image: url('bootDoc/ddoc-icons/property.png'); }
+		.ddoc-icon-struct { background-image: url('bootDoc/ddoc-icons/struct.png'); }
+		.ddoc-icon-class { background-image: url('bootDoc/ddoc-icons/class.png'); }
+		.ddoc-icon-enum { background-image: url('bootDoc/ddoc-icons/enum.png'); }
+		.ddoc-icon-template { background-image: url('bootDoc/ddoc-icons/template.png'); }
+	</style>
+	</head>
+
+	<body>
+	<!--
+	JavaScript reaps the module list from this element.
+	This is required for the MODULES macro to be reusable
+	in a noscript element later.
+	-->
+	<ul id="module-list-source" class="hidden">
+		
+    <li class="sidebar-list-entry tree-leaf"><a href="index.html" title="index"><i class="icon-th"></i>index</a></li>
+    <li class="sidebar-list-entry tree-leaf"><a href="glamour.shader.html" title="glamour.shader"><i class="icon-th"></i>glamour.shader</a></li>
+    <li class="sidebar-list-entry tree-leaf"><a href="glamour.texture.html" title="glamour.texture"><i class="icon-th"></i>glamour.texture</a></li>
+    <li class="sidebar-list-entry tree-leaf"><a href="glamour.sampler.html" title="glamour.sampler"><i class="icon-th"></i>glamour.sampler</a></li>
+    <li class="sidebar-list-entry tree-leaf"><a href="glamour.vbo.html" title="glamour.vbo"><i class="icon-th"></i>glamour.vbo</a></li>
+    <li class="sidebar-list-entry tree-leaf"><a href="glamour.vao.html" title="glamour.vao"><i class="icon-th"></i>glamour.vao</a></li>
+    <li class="sidebar-list-entry tree-leaf"><a href="glamour.fbo.html" title="glamour.fbo"><i class="icon-th"></i>glamour.fbo</a></li>
+    <li class="sidebar-list-entry tree-leaf"><a href="glamour.util.html" title="glamour.util"><i class="icon-th"></i>glamour.util</a></li>
+	</ul>
+	
+	<div class="navbar navbar-fixed-top">
+		<div class="navbar-inner">
+			<div class="container-fluid">
+				<a class="btn btn-navbar" data-toggle="collapse" data-target=".nav-collapse">
+					<span class="icon-bar"></span>
+					<span class="icon-bar"></span>
+					<span class="icon-bar"></span>
+				</a>
+				<a class="brand" href="index.html">glamour</a>
+				<div class="nav-collapse">
+					<ul class="nav">
+						<li class="active"><a href="index.html">Reference</a></li>
+					</ul>
+					
+					<form id="gotosymbol" class="navbar-search pull-left hidden">
+						<input type="text" class="search-query" placeholder="Go to symbol in glamour.texture" data-provide="typeahead" data-items="4">
+					</form>
+					
+					<p class="navbar-text pull-right"><a href="https://github.com/Dav1dde/glamour">Github Page</a></p>
+				</div><!--/.nav-collapse -->
+			</div>
+		</div>
+	</div>
+
+	<div class="container-fluid">
+		<div class="row-fluid">
+			<div class="span2">
+				<div class="well sidebar-nav">
+				<ul class="nav nav-list">
+					<li id="module-list" class="nav-header sidebar-list-entry">Modules<li>
+					<noscript>
+						
+    <li class="sidebar-list-entry tree-leaf"><a href="index.html" title="index"><i class="icon-th"></i>index</a></li>
+    <li class="sidebar-list-entry tree-leaf"><a href="glamour.shader.html" title="glamour.shader"><i class="icon-th"></i>glamour.shader</a></li>
+    <li class="sidebar-list-entry tree-leaf"><a href="glamour.texture.html" title="glamour.texture"><i class="icon-th"></i>glamour.texture</a></li>
+    <li class="sidebar-list-entry tree-leaf"><a href="glamour.sampler.html" title="glamour.sampler"><i class="icon-th"></i>glamour.sampler</a></li>
+    <li class="sidebar-list-entry tree-leaf"><a href="glamour.vbo.html" title="glamour.vbo"><i class="icon-th"></i>glamour.vbo</a></li>
+    <li class="sidebar-list-entry tree-leaf"><a href="glamour.vao.html" title="glamour.vao"><i class="icon-th"></i>glamour.vao</a></li>
+    <li class="sidebar-list-entry tree-leaf"><a href="glamour.fbo.html" title="glamour.fbo"><i class="icon-th"></i>glamour.fbo</a></li>
+    <li class="sidebar-list-entry tree-leaf"><a href="glamour.util.html" title="glamour.util"><i class="icon-th"></i>glamour.util</a></li>
+					</noscript>
+					<li id="symbol-list" class="nav-header sidebar-list-entry hidden">glamour.texture</li>
+				</ul>
+				</div><!--/.well -->
+			</div><!--/span-->
+			
+			<div class="span10">
+				<div class="row-fluid">
+					<div class="span11">
+						<ul id="module-breadcrumb" class="breadcrumb">
+							<noscript><h1>glamour.texture</h1></noscript>
+						</ul>
+						
+					</div>
+					<div class="span1 offset11">
+						<a href="index.html"><img src="bootDoc/assets/img/icon-github.png" alt="glamour"/></a>
+					</div>
+				</div>
+				<div id="declaration-list">
+					<!-- Generated by Ddoc from ./glamour/texture.d -->
+<br><br>
+<hr><div class="row-fluid declaration"><h3>class <span class="symbol-target" id="TextureException">&nbsp;</span><a class="symbol-link" href="#TextureException">TextureException</a>: object.Exception;
+</h3></div>
+<div class="declaration-content"><dl><p>This exception will be thrown if Texture2D.from_image fails to open the image.</p>
+</dl>
+</div>
+<hr><div class="row-fluid declaration"><h3>template <span class="symbol-target" id="CommonTextureMethods">&nbsp;</span><a class="symbol-link" href="#CommonTextureMethods">CommonTextureMethods</a>()</h3></div>
+<div class="declaration-content"><dl><p>Every Texture-Class will mixin this template.</p>
+</dl>
+<div class="offset1 member-list"><hr><div class="row-fluid declaration"><h3>void <span class="symbol-target" id="remove">&nbsp;</span><a class="symbol-link" href="#remove">remove</a>();
+</h3></div>
+<div class="declaration-content"><dl><p>Deletes the texture.</p>
+</dl>
+</div>
+<hr><div class="row-fluid declaration"><h3>void <span class="symbol-target" id="set_parameter">&nbsp;</span><a class="symbol-link" href="#set_parameter">set_parameter</a>(T)(GLuint <i>name</i>, T <i>params</i>);
+</h3></div>
+<div class="declaration-content"><dl><p>Sets a texture parameter.</p>
+</dl>
+</div>
+<hr><div class="row-fluid declaration"><h3>float[] <span class="symbol-target" id="get_parameter">&nbsp;</span><a class="symbol-link" href="#get_parameter">get_parameter</a>(GLuint <i>name</i>);
+</h3></div>
+<div class="declaration-content"><dl><p>Queries a texture parameter from OpenGL.    </p>
+</dl>
+</div>
+<hr><div class="row-fluid declaration"><h3>void <span class="symbol-target" id="generate_mipmaps">&nbsp;</span><a class="symbol-link" href="#generate_mipmaps">generate_mipmaps</a>();
+</h3></div>
+<div class="declaration-content"><dl><p>Generates mipmaps for the textre (also binds it)</p>
+</dl>
+</div>
+<hr><div class="row-fluid declaration"><h3>void <span class="symbol-target" id="bind">&nbsp;</span><a class="symbol-link" href="#bind">bind</a>();
+</h3></div>
+<div class="declaration-content"><dl><p>Binds the texture.</p>
+</dl>
+</div>
+<hr><div class="row-fluid declaration"><h3>void <span class="symbol-target" id="activate">&nbsp;</span><a class="symbol-link" href="#activate">activate</a>(GLuint <i>unit</i>);
+</h3></div>
+<div class="declaration-content"><dl><p>Activates the texture to <i><i>unit</i></i>, passed to the function. </p>
+</dl>
+</div>
+<hr><div class="row-fluid declaration"><h3>void <span class="symbol-target" id="activate">&nbsp;</span><a class="symbol-link" href="#activate">activate</a>();
+</h3></div>
+<div class="declaration-content"><dl><p>Activates the texture to <b>unit</b>, the struct member.</p>
+</dl>
+</div>
+<hr><div class="row-fluid declaration"><h3>void <span class="symbol-target" id="bind_and_activate">&nbsp;</span><a class="symbol-link" href="#bind_and_activate">bind_and_activate</a>(GLuint <i>unit</i>);
+</h3></div>
+<div class="declaration-content"><dl><p>Binds the texture and activates it to <i><i>unit</i></i>, passed to the function. </p>
+</dl>
+</div>
+<hr><div class="row-fluid declaration"><h3>void <span class="symbol-target" id="bind_and_activate">&nbsp;</span><a class="symbol-link" href="#bind_and_activate">bind_and_activate</a>();
+</h3></div>
+<div class="declaration-content"><dl><p>Binds the texture and activates it to <b>unit</b>, the struct member.</p>
+</dl>
+</div>
+<hr><div class="row-fluid declaration"><h3>void <span class="symbol-target" id="unbind">&nbsp;</span><a class="symbol-link" href="#unbind">unbind</a>();
+</h3></div>
+<div class="declaration-content"><dl><p>Unbinds the texture.</p>
+</dl>
+</div>
+</div>
+</div>
+<hr><div class="row-fluid declaration"><h3>abstract interface <span class="symbol-target" id="ITexture">&nbsp;</span><a class="symbol-link" href="#ITexture">ITexture</a>;
+</h3></div>
+<div class="declaration-content"><dl><p>Interface every Texture implements.</p>
+</dl>
+<div class="offset1 member-list"><hr><div class="row-fluid declaration"><h3>abstract GLuint <span class="symbol-target" id="get_unit">&nbsp;</span><a class="symbol-link" href="#get_unit">get_unit</a>();
+</h3></div>
+<div class="declaration-content"><br><br>
+</div>
+<hr><div class="row-fluid declaration"><h3>abstract void <span class="symbol-target" id="remove">&nbsp;</span><a class="symbol-link" href="#remove">remove</a>();
+</h3></div>
+<div class="declaration-content"><br><br>
+</div>
+<hr><div class="row-fluid declaration"><h3>void <span class="symbol-target" id="set_parameter">&nbsp;</span><a class="symbol-link" href="#set_parameter">set_parameter</a>(T)(GLuint <i>name</i>, T <i>params</i>);
+</h3></div>
+<div class="declaration-content"><br><br>
+</div>
+<hr><div class="row-fluid declaration"><h3>abstract float[] <span class="symbol-target" id="get_parameter">&nbsp;</span><a class="symbol-link" href="#get_parameter">get_parameter</a>(GLuint <i>name</i>);
+</h3></div>
+<div class="declaration-content"><br><br>
+</div>
+<hr><div class="row-fluid declaration"><h3>void <span class="symbol-target" id="set_data">&nbsp;</span><a class="symbol-link" href="#set_data">set_data</a>(T)(T <i>data</i>);
+</h3></div>
+<div class="declaration-content"><br><br>
+</div>
+<hr><div class="row-fluid declaration"><h3>abstract void <span class="symbol-target" id="generate_mipmaps">&nbsp;</span><a class="symbol-link" href="#generate_mipmaps">generate_mipmaps</a>();
+</h3></div>
+<div class="declaration-content"><br><br>
+</div>
+<hr><div class="row-fluid declaration"><h3>abstract void <span class="symbol-target" id="bind">&nbsp;</span><a class="symbol-link" href="#bind">bind</a>();
+</h3></div>
+<div class="declaration-content"><br><br>
+</div>
+<hr><div class="row-fluid declaration"><h3>abstract void <span class="symbol-target" id="activate">&nbsp;</span><a class="symbol-link" href="#activate">activate</a>(GLuint <i>unit</i>);
+</h3></div>
+<div class="declaration-content"><br><br>
+</div>
+<hr><div class="row-fluid declaration"><h3>abstract void <span class="symbol-target" id="activate">&nbsp;</span><a class="symbol-link" href="#activate">activate</a>();
+</h3></div>
+<div class="declaration-content"><br><br>
+</div>
+<hr><div class="row-fluid declaration"><h3>abstract void <span class="symbol-target" id="bind_and_activate">&nbsp;</span><a class="symbol-link" href="#bind_and_activate">bind_and_activate</a>(GLuint <i>unit</i>);
+</h3></div>
+<div class="declaration-content"><br><br>
+</div>
+<hr><div class="row-fluid declaration"><h3>abstract void <span class="symbol-target" id="bind_and_activate">&nbsp;</span><a class="symbol-link" href="#bind_and_activate">bind_and_activate</a>();
+</h3></div>
+<div class="declaration-content"><br><br>
+</div>
+<hr><div class="row-fluid declaration"><h3>abstract void <span class="symbol-target" id="unbind">&nbsp;</span><a class="symbol-link" href="#unbind">unbind</a>();
+</h3></div>
+<div class="declaration-content"><br><br>
+</div>
+</div>
+</div>
+<hr><div class="row-fluid declaration"><h3>class <span class="symbol-target" id="Texture1D">&nbsp;</span><a class="symbol-link" href="#Texture1D">Texture1D</a>: glamour.texture.ITexture;
+</h3></div>
+<div class="declaration-content"><dl><p>Represents an OpenGL 1D texture.
+ The constructor must be used to avoid segmentation faults.</p>
+</dl>
+<div class="offset1 member-list"><hr><div class="row-fluid declaration"><h3>GLuint <span class="symbol-target" id="texture">&nbsp;</span><a class="symbol-link" href="#texture">texture</a>;
+</h3></div>
+<div class="declaration-content"><dl><p>The OpenGL <span class="symbol-target" id="texture">&nbsp;</span><a class="symbol-link" href="#texture">texture</a> name.</p>
+</dl>
+</div>
+<hr><div class="row-fluid declaration"><h3>GLint <span class="symbol-target" id="internal_format">&nbsp;</span><a class="symbol-link" href="#internal_format">internal_format</a>;
+</h3></div>
+<div class="declaration-content"><dl><p>Holds the internal format passed to the constructor.</p>
+</dl>
+</div>
+<hr><div class="row-fluid declaration"><h3>GLenum <span class="symbol-target" id="format">&nbsp;</span><a class="symbol-link" href="#format">format</a>;
+</h3></div>
+<div class="declaration-content"><dl><p>Holds the <span class="symbol-target" id="format">&nbsp;</span><a class="symbol-link" href="#format">format</a> of the pixel data.</p>
+</dl>
+</div>
+<hr><div class="row-fluid declaration"><h3>GLenum <span class="symbol-target" id="type">&nbsp;</span><a class="symbol-link" href="#type">type</a>;
+</h3></div>
+<div class="declaration-content"><dl><p>Holds the OpenGL data <span class="symbol-target" id="type">&nbsp;</span><a class="symbol-link" href="#type">type</a> of the pixel data.</p>
+</dl>
+</div>
+<hr><div class="row-fluid declaration"><h3>GLuint <span class="symbol-target" id="unit">&nbsp;</span><a class="symbol-link" href="#unit">unit</a>;
+</h3></div>
+<div class="declaration-content"><dl><p>Holds the texture <span class="symbol-target" id="unit">&nbsp;</span><a class="symbol-link" href="#unit">unit</a>.</p>
+</dl>
+</div>
+<hr><div class="row-fluid declaration"><h3> this(GLenum <i>unit</i> = GL_TEXTURE0);
+</h3></div>
+<div class="declaration-content"><dl><p>Generates the OpenGL texture and initializes the struct.
+</p>
+<dt>Parameters</dt><dd><table class="table table-condensed table-bordered"><tr><td>unit_</td>
+<td>Specifies the OpenGL texture uinit.</td></tr>
+</table></dd>
+</dl>
+</div>
+<hr><div class="row-fluid declaration"><h3>void <span class="symbol-target" id="set_data">&nbsp;</span><a class="symbol-link" href="#set_data">set_data</a>(T)(T <i>data</i>, GLint <i>internal_format</i>, int <i>width</i>, GLenum <i>format</i>, GLenum <i>type</i>);
+</h3></div>
+<div class="declaration-content"><dl><p>Sets the texture data.
+</p>
+<dt>Parameters</dt><dd><table class="table table-condensed table-bordered"><tr><td>data</td>
+<td>A pointer to the image data or an array of the image data.</td></tr>
+<tr><td>internal_format</td>
+<td>Specifies the number of color components in the texture.</td></tr>
+<tr><td>width</td>
+<td>If data is an array and width is -1, the width will be infered from the array, otherwise it must be valid.</td></tr>
+<tr><td>format</td>
+<td>Specifies the format of the pixel data.</td></tr>
+<tr><td>type</td>
+<td>Specifies the data type of the pixel data.</td></tr>
+</table></dd>
+<dt>See Also</dt><dd>OpenGL, http://www.opengl.org/sdk/docs/man4/xhtml/glTexImage1D.xml</dd>
+</dl>
+</div>
+</div>
+</div>
+<hr><div class="row-fluid declaration"><h3>class <span class="symbol-target" id="Texture2D">&nbsp;</span><a class="symbol-link" href="#Texture2D">Texture2D</a>: glamour.texture.ITexture;
+</h3></div>
+<div class="declaration-content"><dl><p>Represents an OpenGL 2D texture.
+ The constructor must be used to avoid segmentation faults.</p>
+</dl>
+<div class="offset1 member-list"><hr><div class="row-fluid declaration"><h3>GLuint <span class="symbol-target" id="texture">&nbsp;</span><a class="symbol-link" href="#texture">texture</a>;
+</h3></div>
+<div class="declaration-content"><dl><p>The OpenGL <span class="symbol-target" id="texture">&nbsp;</span><a class="symbol-link" href="#texture">texture</a> name.</p>
+</dl>
+</div>
+<hr><div class="row-fluid declaration"><h3>GLint <span class="symbol-target" id="internal_format">&nbsp;</span><a class="symbol-link" href="#internal_format">internal_format</a>;
+</h3></div>
+<div class="declaration-content"><dl><p>Holds the internal format passed to the constructor.</p>
+</dl>
+</div>
+<hr><div class="row-fluid declaration"><h3>GLsizei <span class="symbol-target" id="width">&nbsp;</span><a class="symbol-link" href="#width">width</a>;
+</h3></div>
+<div class="declaration-content"><dl><p>Holds the texture <span class="symbol-target" id="width">&nbsp;</span><a class="symbol-link" href="#width">width</a>.</p>
+</dl>
+</div>
+<hr><div class="row-fluid declaration"><h3>GLsizei <span class="symbol-target" id="height">&nbsp;</span><a class="symbol-link" href="#height">height</a>;
+</h3></div>
+<div class="declaration-content"><dl><p>Holds the texture <span class="symbol-target" id="height">&nbsp;</span><a class="symbol-link" href="#height">height</a>.</p>
+</dl>
+</div>
+<hr><div class="row-fluid declaration"><h3>GLenum <span class="symbol-target" id="format">&nbsp;</span><a class="symbol-link" href="#format">format</a>;
+</h3></div>
+<div class="declaration-content"><dl><p>Holds the <span class="symbol-target" id="format">&nbsp;</span><a class="symbol-link" href="#format">format</a> of the pixel data.</p>
+</dl>
+</div>
+<hr><div class="row-fluid declaration"><h3>GLenum <span class="symbol-target" id="type">&nbsp;</span><a class="symbol-link" href="#type">type</a>;
+</h3></div>
+<div class="declaration-content"><dl><p>Holds the OpenGL data <span class="symbol-target" id="type">&nbsp;</span><a class="symbol-link" href="#type">type</a> of the pixel data.</p>
+</dl>
+</div>
+<hr><div class="row-fluid declaration"><h3>GLenum <span class="symbol-target" id="unit">&nbsp;</span><a class="symbol-link" href="#unit">unit</a>;
+</h3></div>
+<div class="declaration-content"><dl><p>Holds the texture <span class="symbol-target" id="unit">&nbsp;</span><a class="symbol-link" href="#unit">unit</a>.</p>
+</dl>
+</div>
+<hr><div class="row-fluid declaration"><h3>bool <span class="symbol-target" id="mipmaps">&nbsp;</span><a class="symbol-link" href="#mipmaps">mipmaps</a>;
+</h3></div>
+<div class="declaration-content"><dl><p>If <span class="d_keyword">true</span> (default) <span class="symbol-target" id="mipmaps">&nbsp;</span><a class="symbol-link" href="#mipmaps">mipmaps</a> will be generated with glGenerateMipmap.</p>
+</dl>
+</div>
+<hr><div class="row-fluid declaration"><h3> this(GLenum <i>unit</i> = GL_TEXTURE0);
+</h3></div>
+<div class="declaration-content"><dl><p>Generates the OpenGL texture and initializes the struct.
+</p>
+<dt>Parameters</dt><dd><table class="table table-condensed table-bordered"><tr><td>GLenum <i>unit</i></td>
+<td>Specifies the OpenGL texture uinit.</td></tr>
+</table></dd>
+</dl>
+</div>
+<hr><div class="row-fluid declaration"><h3>void <span class="symbol-target" id="set_data">&nbsp;</span><a class="symbol-link" href="#set_data">set_data</a>(T)(T <i>data</i>, GLint <i>internal_format</i>, GLsizei <i>width</i>, GLsizei <i>height</i>, GLenum <i>format</i>, GLenum <i>type</i>, bool <i>mipmaps</i> = true, GLint <i>level</i> = 0);
+</h3></div>
+<div class="declaration-content"><dl><p>Sets the texture data.
+</p>
+<dt>Parameters</dt><dd><table class="table table-condensed table-bordered"><tr><td>data</td>
+<td>A pointer to the image data or an array of the image data.</td></tr>
+<tr><td>internal_format</td>
+<td>Specifies the number of color components in the texture.</td></tr>
+<tr><td>width</td>
+<td>Specifies the width of the texture image.</td></tr>
+<tr><td>height</td>
+<td>Specifies the height of the texture image.</td></tr>
+<tr><td>format</td>
+<td>Specifies the format of the pixel data.</td></tr>
+<tr><td>type</td>
+<td>Specifies the data type of the pixel data.</td></tr>
+<tr><td>mipmaps</td>
+<td>Enables mipmap-generation.</td></tr>
+<tr><td>level</td>
+<td>Specifies the level-of-detail number. Level 0 is the base image level. Level n is the n th mipmap reduction image.</td></tr>
+</table></dd>
+<dt>See Also</dt><dd>OpenGL, http://www.opengl.org/sdk/docs/man4/xhtml/glTexImage2D.xml
+<br><br>
+
+ <font color=red>If mipmaps is <span class="d_keyword">true</span>, the gl extensions must be loaded, otherwise bad things will happen!</font></dd>
+</dl>
+</div>
+<hr><div class="row-fluid declaration"><h3>static Texture2D <span class="symbol-target" id="from_image">&nbsp;</span><a class="symbol-link" href="#from_image">from_image</a>(string <i>filename</i>);
+</h3></div>
+<div class="declaration-content"><dl><p>Loads an image with DevIL and afterwards loads it into a Texture2D struct.
+ 
+ <font color=red>DevIL must be loaded and initialized manually!</font></p>
+</dl>
+</div>
+</div>
+</div>
+<hr><div class="row-fluid declaration"><h3>class <span class="symbol-target" id="Texture3DBase">&nbsp;</span><a class="symbol-link" href="#Texture3DBase">Texture3DBase</a>(GLenum target_): ITexture;
+</h3></div>
+<div class="declaration-content"><dl><p>Base class, which represents an OpenGL 3D or 2D array texture.
+ The constructor must be used to avoid segmentation faults.</p>
+</dl>
+<div class="offset1 member-list"><hr><div class="row-fluid declaration"><h3>GLuint <span class="symbol-target" id="texture">&nbsp;</span><a class="symbol-link" href="#texture">texture</a>;
+</h3></div>
+<div class="declaration-content"><dl><p>The OpenGL <span class="symbol-target" id="texture">&nbsp;</span><a class="symbol-link" href="#texture">texture</a> name.</p>
+</dl>
+</div>
+<hr><div class="row-fluid declaration"><h3>GLint <span class="symbol-target" id="internal_format">&nbsp;</span><a class="symbol-link" href="#internal_format">internal_format</a>;
+</h3></div>
+<div class="declaration-content"><dl><p>Holds the internal format passed to the constructor.</p>
+</dl>
+</div>
+<hr><div class="row-fluid declaration"><h3>GLenum <span class="symbol-target" id="format">&nbsp;</span><a class="symbol-link" href="#format">format</a>;
+</h3></div>
+<div class="declaration-content"><dl><p>Holds the <span class="symbol-target" id="format">&nbsp;</span><a class="symbol-link" href="#format">format</a> of the pixel data.</p>
+</dl>
+</div>
+<hr><div class="row-fluid declaration"><h3>GLenum <span class="symbol-target" id="type">&nbsp;</span><a class="symbol-link" href="#type">type</a>;
+</h3></div>
+<div class="declaration-content"><dl><p>Holds the OpenGL data <span class="symbol-target" id="type">&nbsp;</span><a class="symbol-link" href="#type">type</a> of the pixel data.</p>
+</dl>
+</div>
+<hr><div class="row-fluid declaration"><h3>GLuint <span class="symbol-target" id="unit">&nbsp;</span><a class="symbol-link" href="#unit">unit</a>;
+</h3></div>
+<div class="declaration-content"><dl><p>Holds the texture <span class="symbol-target" id="unit">&nbsp;</span><a class="symbol-link" href="#unit">unit</a>.</p>
+</dl>
+</div>
+<hr><div class="row-fluid declaration"><h3> this(GLenum <i>unit</i> = GL_TEXTURE0);
+</h3></div>
+<div class="declaration-content"><dl><p>Generates the OpenGL texture and initializes the struct.
+</p>
+<dt>Parameters</dt><dd><table class="table table-condensed table-bordered"><tr><td>GLenum <i>unit</i></td>
+<td>Specifies the OpenGL texture uinit.</td></tr>
+</table></dd>
+</dl>
+</div>
+<hr><div class="row-fluid declaration"><h3>void <span class="symbol-target" id="set_data">&nbsp;</span><a class="symbol-link" href="#set_data">set_data</a>(T)(T <i>data</i>, GLint <i>internal_format</i>, GLsizei <i>width</i>, GLsizei <i>height</i>, GLsizei <i>depth</i>, GLenum <i>format</i>, GLenum <i>type</i>, GLint <i>level</i> = 0);
+</h3></div>
+<div class="declaration-content"><dl><p>Sets the texture data.
+</p>
+<dt>Parameters</dt><dd><table class="table table-condensed table-bordered"><tr><td>data</td>
+<td>A pointer to the image data or an array of the image data.</td></tr>
+<tr><td>internal_format</td>
+<td>Specifies the number of color components in the texture.</td></tr>
+<tr><td>width</td>
+<td>Specifies the width of the texture image.</td></tr>
+<tr><td>height</td>
+<td>Specifies the height of the texture image.</td></tr>
+<tr><td>depth</td>
+<td>Specifies the depth of the texture image, or the number of layers in a texture array.</td></tr>
+<tr><td>format</td>
+<td>Specifies the format of the pixel data.</td></tr>
+<tr><td>type</td>
+<td>Specifies the data type of the pixel data.</td></tr>
+</table></dd>
+<dt>See Also</dt><dd></dd>
+<dt>http:</dt><dd>
+//www.opengl.org/sdk/docs/man4/xhtml/glTexImage3D.xml</dd>
+</dl>
+</div>
+</div>
+</div>
+
+
+				</div>
+				
+				<hr>
+				
+				<footer class="pull-left">
+					<p>Page generated with <a href="https://github.com/JakobOvrum/bootDoc">bootDoc</a>.</p>
+				</footer>
+				
+				<footer class="pull-right">
+					<p>&copy; David Herberth 2012-2013</p>
+				</footer>
+			</div>
+		</div>
+	</div><!--/.fluid-container-->
+
+	<!-- Bootstrap javascript
+	================================================== -->
+	<!-- Placed at the end of the document so the pages load faster -->
+	<script src="bootDoc/assets/js/jquery.min.js"></script>
+	<script src="bootDoc/assets/js/bootstrap.min.js"></script>
+	
+	<!-- bootDoc javascript
+	================================================== -->
+	<script src="bootDoc/bootdoc.js"></script>
+	
+	</body>
+</html>

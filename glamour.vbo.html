@@ -1,0 +1,314 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+	<meta charset="utf-8">
+	<title>glamour.vbo - glamour documentation</title>
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<meta name="description" content="">
+	<meta name="author" content="">
+
+	<!-- styles -->
+	<link href="bootDoc/assets/css/bootstrap.css" rel="stylesheet">
+	<style type="text/css">
+		body {
+		padding-top: 60px;
+		padding-bottom: 40px;
+		}
+		.sidebar-nav {
+		padding: 9px 0;
+		}
+	</style>
+	<link href="bootDoc/assets/css/bootstrap-responsive.css" rel="stylesheet">
+	<link href="bootDoc/bootdoc.css" rel="stylesheet">
+
+	<!-- HTML5 shim, for IE6-8 support of HTML5 elements -->
+	<!--[if lt IE 9]>
+		<script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
+	<![endif]-->
+
+	<!-- fav and touch icons -->
+	<link rel="shortcut icon" href="bootDoc/assets/ico/favicon.ico">
+	<link rel="apple-touch-icon-precomposed" sizes="114x114" href="bootDoc/assets/ico/apple-touch-icon-114-precomposed.png">
+	<link rel="apple-touch-icon-precomposed" sizes="72x72" href="bootDoc/assets/ico/apple-touch-icon-72-precomposed.png">
+	<link rel="apple-touch-icon-precomposed" href="bootDoc/assets/ico/apple-touch-icon-57-precomposed.png">
+	
+	<!-- Introduce DDoc settings required by JavaScript -->
+	<script type="text/javascript">
+		var Title = 'glamour.vbo';
+		var SourceRepository = 'https://github.com/Dav1dde/glamour/tree/master/';
+		var PackageSeparator = '.';
+	</script>
+	
+	<style type="text/css">
+		.ddoc-icon-variable { background-image: url('bootDoc/ddoc-icons/var.png'); }
+		.ddoc-icon-function { background-image: url('bootDoc/ddoc-icons/func.png'); }
+		.ddoc-icon-property { background-image: url('bootDoc/ddoc-icons/property.png'); }
+		.ddoc-icon-struct { background-image: url('bootDoc/ddoc-icons/struct.png'); }
+		.ddoc-icon-class { background-image: url('bootDoc/ddoc-icons/class.png'); }
+		.ddoc-icon-enum { background-image: url('bootDoc/ddoc-icons/enum.png'); }
+		.ddoc-icon-template { background-image: url('bootDoc/ddoc-icons/template.png'); }
+	</style>
+	</head>
+
+	<body>
+	<!--
+	JavaScript reaps the module list from this element.
+	This is required for the MODULES macro to be reusable
+	in a noscript element later.
+	-->
+	<ul id="module-list-source" class="hidden">
+		
+    <li class="sidebar-list-entry tree-leaf"><a href="index.html" title="index"><i class="icon-th"></i>index</a></li>
+    <li class="sidebar-list-entry tree-leaf"><a href="glamour.shader.html" title="glamour.shader"><i class="icon-th"></i>glamour.shader</a></li>
+    <li class="sidebar-list-entry tree-leaf"><a href="glamour.texture.html" title="glamour.texture"><i class="icon-th"></i>glamour.texture</a></li>
+    <li class="sidebar-list-entry tree-leaf"><a href="glamour.sampler.html" title="glamour.sampler"><i class="icon-th"></i>glamour.sampler</a></li>
+    <li class="sidebar-list-entry tree-leaf"><a href="glamour.vbo.html" title="glamour.vbo"><i class="icon-th"></i>glamour.vbo</a></li>
+    <li class="sidebar-list-entry tree-leaf"><a href="glamour.vao.html" title="glamour.vao"><i class="icon-th"></i>glamour.vao</a></li>
+    <li class="sidebar-list-entry tree-leaf"><a href="glamour.fbo.html" title="glamour.fbo"><i class="icon-th"></i>glamour.fbo</a></li>
+    <li class="sidebar-list-entry tree-leaf"><a href="glamour.util.html" title="glamour.util"><i class="icon-th"></i>glamour.util</a></li>
+	</ul>
+	
+	<div class="navbar navbar-fixed-top">
+		<div class="navbar-inner">
+			<div class="container-fluid">
+				<a class="btn btn-navbar" data-toggle="collapse" data-target=".nav-collapse">
+					<span class="icon-bar"></span>
+					<span class="icon-bar"></span>
+					<span class="icon-bar"></span>
+				</a>
+				<a class="brand" href="index.html">glamour</a>
+				<div class="nav-collapse">
+					<ul class="nav">
+						<li class="active"><a href="index.html">Reference</a></li>
+					</ul>
+					
+					<form id="gotosymbol" class="navbar-search pull-left hidden">
+						<input type="text" class="search-query" placeholder="Go to symbol in glamour.vbo" data-provide="typeahead" data-items="4">
+					</form>
+					
+					<p class="navbar-text pull-right"><a href="https://github.com/Dav1dde/glamour">Github Page</a></p>
+				</div><!--/.nav-collapse -->
+			</div>
+		</div>
+	</div>
+
+	<div class="container-fluid">
+		<div class="row-fluid">
+			<div class="span2">
+				<div class="well sidebar-nav">
+				<ul class="nav nav-list">
+					<li id="module-list" class="nav-header sidebar-list-entry">Modules<li>
+					<noscript>
+						
+    <li class="sidebar-list-entry tree-leaf"><a href="index.html" title="index"><i class="icon-th"></i>index</a></li>
+    <li class="sidebar-list-entry tree-leaf"><a href="glamour.shader.html" title="glamour.shader"><i class="icon-th"></i>glamour.shader</a></li>
+    <li class="sidebar-list-entry tree-leaf"><a href="glamour.texture.html" title="glamour.texture"><i class="icon-th"></i>glamour.texture</a></li>
+    <li class="sidebar-list-entry tree-leaf"><a href="glamour.sampler.html" title="glamour.sampler"><i class="icon-th"></i>glamour.sampler</a></li>
+    <li class="sidebar-list-entry tree-leaf"><a href="glamour.vbo.html" title="glamour.vbo"><i class="icon-th"></i>glamour.vbo</a></li>
+    <li class="sidebar-list-entry tree-leaf"><a href="glamour.vao.html" title="glamour.vao"><i class="icon-th"></i>glamour.vao</a></li>
+    <li class="sidebar-list-entry tree-leaf"><a href="glamour.fbo.html" title="glamour.fbo"><i class="icon-th"></i>glamour.fbo</a></li>
+    <li class="sidebar-list-entry tree-leaf"><a href="glamour.util.html" title="glamour.util"><i class="icon-th"></i>glamour.util</a></li>
+					</noscript>
+					<li id="symbol-list" class="nav-header sidebar-list-entry hidden">glamour.vbo</li>
+				</ul>
+				</div><!--/.well -->
+			</div><!--/span-->
+			
+			<div class="span10">
+				<div class="row-fluid">
+					<div class="span11">
+						<ul id="module-breadcrumb" class="breadcrumb">
+							<noscript><h1>glamour.vbo</h1></noscript>
+						</ul>
+						
+					</div>
+					<div class="span1 offset11">
+						<a href="index.html"><img src="bootDoc/assets/img/icon-github.png" alt="glamour"/></a>
+					</div>
+				</div>
+				<div id="declaration-list">
+					<!-- Generated by Ddoc from ./glamour/vbo.d -->
+<br><br>
+<hr><div class="row-fluid declaration"><h3>abstract interface <span class="symbol-target" id="IBuffer">&nbsp;</span><a class="symbol-link" href="#IBuffer">IBuffer</a>;
+</h3></div>
+<div class="declaration-content"><dl><p>Interface every buffer implements</p>
+</dl>
+<div class="offset1 member-list"><hr><div class="row-fluid declaration"><h3>abstract void <span class="symbol-target" id="bind">&nbsp;</span><a class="symbol-link" href="#bind">bind</a>();
+</h3></div>
+<div class="declaration-content"><br><br>
+</div>
+<hr><div class="row-fluid declaration"><h3>abstract void <span class="symbol-target" id="unbind">&nbsp;</span><a class="symbol-link" href="#unbind">unbind</a>();
+</h3></div>
+<div class="declaration-content"><br><br>
+</div>
+<hr><div class="row-fluid declaration"><h3>void <span class="symbol-target" id="set_data">&nbsp;</span><a class="symbol-link" href="#set_data">set_data</a>(T)(ref const T <i>data</i>, GLenum <i>hint</i> = GL_STATIC_DRAW);
+</h3></div>
+<div class="declaration-content"><br><br>
+</div>
+</div>
+</div>
+<hr><div class="row-fluid declaration"><h3>class <span class="symbol-target" id="ElementBuffer">&nbsp;</span><a class="symbol-link" href="#ElementBuffer">ElementBuffer</a>: glamour.vbo.IBuffer;
+</h3></div>
+<div class="declaration-content"><dl><p>Represents an OpenGL element buffer.
+ The constructor must be used to avoid segmentation faults.</p>
+</dl>
+<div class="offset1 member-list"><hr><div class="row-fluid declaration"><h3>GLuint <span class="symbol-target" id="buffer">&nbsp;</span><a class="symbol-link" href="#buffer">buffer</a>;
+</h3></div>
+<div class="declaration-content"><dl><p>The OpenGL <span class="symbol-target" id="buffer">&nbsp;</span><a class="symbol-link" href="#buffer">buffer</a> name.</p>
+</dl>
+</div>
+<hr><div class="row-fluid declaration"><h3>GLenum <span class="symbol-target" id="hint">&nbsp;</span><a class="symbol-link" href="#hint">hint</a>;
+</h3></div>
+<div class="declaration-content"><dl><p>Specifies the expected usage pattern of the data store.</p>
+</dl>
+</div>
+<hr><div class="row-fluid declaration"><h3>size_t <span class="symbol-target" id="length">&nbsp;</span><a class="symbol-link" href="#length">length</a>;
+</h3></div>
+<div class="declaration-content"><dl><p>Length of the passed data, note it's the <span class="symbol-target" id="length">&nbsp;</span><a class="symbol-link" href="#length">length</a> of a void[] array.</p>
+</dl>
+</div>
+<hr><div class="row-fluid declaration"><h3> this()();
+</h3></div>
+<div class="declaration-content"><dl><p>Initializes the buffer.</p>
+</dl>
+</div>
+<hr><div class="row-fluid declaration"><h3> this(T)(auto ref const T <i>data</i>, GLenum <i>hint</i> = GL_STATIC_DRAW);
+<br> this(T)(const T <i>ptr</i>, size_t <i>size</i>, GLenum <i>hint</i> = GL_STATIC_DRAW);
+</h3></div>
+<div class="declaration-content"><dl><p>Initualizes the buffer and sets data.</p>
+</dl>
+</div>
+<hr><div class="row-fluid declaration"><h3>void <span class="symbol-target" id="remove">&nbsp;</span><a class="symbol-link" href="#remove">remove</a>();
+</h3></div>
+<div class="declaration-content"><dl><p>Deletes the buffer.</p>
+</dl>
+</div>
+<hr><div class="row-fluid declaration"><h3>void <span class="symbol-target" id="bind">&nbsp;</span><a class="symbol-link" href="#bind">bind</a>();
+</h3></div>
+<div class="declaration-content"><dl><p>Binds the buffer.</p>
+</dl>
+</div>
+<hr><div class="row-fluid declaration"><h3>void <span class="symbol-target" id="unbind">&nbsp;</span><a class="symbol-link" href="#unbind">unbind</a>();
+</h3></div>
+<div class="declaration-content"><dl><p>Unbinds the buffer.</p>
+</dl>
+</div>
+<hr><div class="row-fluid declaration"><h3>void <span class="symbol-target" id="set_data">&nbsp;</span><a class="symbol-link" href="#set_data">set_data</a>(T)(auto ref const T <i>data</i>, GLenum <i>hint</i> = GL_STATIC_DRAW);
+<br>void <span class="symbol-target" id="set_data">&nbsp;</span><a class="symbol-link" href="#set_data">set_data</a>(T)(const T <i>ptr</i>, size_t <i>size</i>, GLenum <i>hint</i> = GL_STATIC_DRAW);
+</h3></div>
+<div class="declaration-content"><dl><p>Uploads data to the GPU.</p>
+</dl>
+</div>
+</div>
+</div>
+<hr><div class="row-fluid declaration"><h3>class <span class="symbol-target" id="Buffer">&nbsp;</span><a class="symbol-link" href="#Buffer">Buffer</a>: glamour.vbo.IBuffer;
+</h3></div>
+<div class="declaration-content"><dl><p>Represents an OpenGL buffer.
+ The constructor must be used to avoid segmentation faults.</p>
+</dl>
+<div class="offset1 member-list"><hr><div class="row-fluid declaration"><h3>GLuint <span class="symbol-target" id="buffer">&nbsp;</span><a class="symbol-link" href="#buffer">buffer</a>;
+</h3></div>
+<div class="declaration-content"><dl><p>The OpenGL <span class="symbol-target" id="buffer">&nbsp;</span><a class="symbol-link" href="#buffer">buffer</a> name.</p>
+</dl>
+</div>
+<hr><div class="row-fluid declaration"><h3>GLenum <span class="symbol-target" id="hint">&nbsp;</span><a class="symbol-link" href="#hint">hint</a>;
+</h3></div>
+<div class="declaration-content"><dl><p>Specifies the expected usage pattern of the data store.</p>
+</dl>
+</div>
+<hr><div class="row-fluid declaration"><h3>size_t <span class="symbol-target" id="length">&nbsp;</span><a class="symbol-link" href="#length">length</a>;
+</h3></div>
+<div class="declaration-content"><dl><p>Length of the passed data, note it's the <span class="symbol-target" id="length">&nbsp;</span><a class="symbol-link" href="#length">length</a> of a void[] array.</p>
+</dl>
+</div>
+<hr><div class="row-fluid declaration"><h3> this(T)(auto ref const T <i>data</i>, GLenum <i>hint</i> = GL_STATIC_DRAW);
+<br> this(T)(const T <i>ptr</i>, size_t <i>size</i>, GLenum <i>hint</i> = GL_STATIC_DRAW);
+</h3></div>
+<div class="declaration-content"><dl><p>Initualizes the buffer and sets data.
+</p>
+<dt>Parameters</dt><dd><table class="table table-condensed table-bordered"><tr><td>data</td>
+<td>any kind of data.</td></tr>
+<tr><td>type</td>
+<td>OpenGL type of the data (e.g. GL_FLOAT)</td></tr>
+<tr><td>hint</td>
+<td>Specifies the expected usage pattern of the data store.</td></tr>
+</table></dd>
+</dl>
+</div>
+<hr><div class="row-fluid declaration"><h3>void <span class="symbol-target" id="remove">&nbsp;</span><a class="symbol-link" href="#remove">remove</a>();
+</h3></div>
+<div class="declaration-content"><dl><p>Deletes the buffer.</p>
+</dl>
+</div>
+<hr><div class="row-fluid declaration"><h3>void <span class="symbol-target" id="bind">&nbsp;</span><a class="symbol-link" href="#bind">bind</a>();
+</h3></div>
+<div class="declaration-content"><dl><p>Binds the buffer.</p>
+</dl>
+</div>
+<hr><div class="row-fluid declaration"><h3>void <span class="symbol-target" id="bind">&nbsp;</span><a class="symbol-link" href="#bind">bind</a>(GLuint <i>attrib_location</i>, GLenum <i>type</i>, GLint <i>size</i>, GLsizei <i>offset</i>, GLsizei <i>stride</i>, GLboolean <i>normalized</i> = GL_FALSE);
+<br>void <span class="symbol-target" id="bind">&nbsp;</span><a class="symbol-link" href="#bind">bind</a>(Shader <i>shader</i>, string <i>location</i>, GLenum <i>type</i>, GLint <i>size</i>, GLsizei <i>offset</i>, GLsizei <i>stride</i>, GLboolean <i>normalized</i> = GL_FALSE);
+</h3></div>
+<div class="declaration-content"><dl><p>Binds the buffer and sets the vertex attrib pointer.
+</p>
+<dt>Parameters</dt><dd><table class="table table-condensed table-bordered"><tr><td>GLenum <i>type</i></td>
+<td>Specifies the data <i>type</i> of each component in the array.</td></tr>
+<tr><td>GLint <i>size</i></td>
+<td>Specifies the number of components per generic vertex attribute.</td></tr>
+<tr><td>GLsizei <i>offset</i></td>
+<td>Specifies a <i>offset</i> of the first component of the first generic vertex attribute in the array in the data store of the buffer.</td></tr>
+<tr><td>GLsizei <i>stride</i></td>
+<td>Specifies the byte <i>offset</i> between consecutive generic vertex attributes.</td></tr>
+<tr><td>GLboolean <i>normalized</i></td>
+<td>Specifies whether fixed-point data values should be <i>normalized</i> (GL_TRUE) or
+                converted directly as fixed-point values (GL_FALSE = default) when they are accessed.</td></tr>
+</table></dd>
+</dl>
+</div>
+<hr><div class="row-fluid declaration"><h3>void <span class="symbol-target" id="unbind">&nbsp;</span><a class="symbol-link" href="#unbind">unbind</a>();
+</h3></div>
+<div class="declaration-content"><dl><p>Unbinds the buffer.</p>
+</dl>
+</div>
+<hr><div class="row-fluid declaration"><h3>void <span class="symbol-target" id="set_data">&nbsp;</span><a class="symbol-link" href="#set_data">set_data</a>(T)(auto ref const T <i>data</i>, GLenum <i>hint</i> = GL_STATIC_DRAW);
+<br>void <span class="symbol-target" id="set_data">&nbsp;</span><a class="symbol-link" href="#set_data">set_data</a>(T)(const T <i>ptr</i>, size_t <i>size</i>, GLenum <i>hint</i> = GL_STATIC_DRAW);
+</h3></div>
+<div class="declaration-content"><dl><p>Uploads data to the GPU.</p>
+</dl>
+</div>
+<hr><div class="row-fluid declaration"><h3>void <span class="symbol-target" id="update">&nbsp;</span><a class="symbol-link" href="#update">update</a>(T)(ref const T <i>data</i>, GLintptr <i>offset</i>);
+<br>void <span class="symbol-target" id="update">&nbsp;</span><a class="symbol-link" href="#update">update</a>(T)(const T <i>ptr</i>, size_t <i>size</i>, GLintptr <i>offset</i>);
+</h3></div>
+<div class="declaration-content"><dl><p>Updates the Buffer, using glBufferSubData.</p>
+</dl>
+</div>
+</div>
+</div>
+
+
+				</div>
+				
+				<hr>
+				
+				<footer class="pull-left">
+					<p>Page generated with <a href="https://github.com/JakobOvrum/bootDoc">bootDoc</a>.</p>
+				</footer>
+				
+				<footer class="pull-right">
+					<p>&copy; David Herberth 2012-2013</p>
+				</footer>
+			</div>
+		</div>
+	</div><!--/.fluid-container-->
+
+	<!-- Bootstrap javascript
+	================================================== -->
+	<!-- Placed at the end of the document so the pages load faster -->
+	<script src="bootDoc/assets/js/jquery.min.js"></script>
+	<script src="bootDoc/assets/js/bootstrap.min.js"></script>
+	
+	<!-- bootDoc javascript
+	================================================== -->
+	<script src="bootDoc/bootdoc.js"></script>
+	
+	</body>
+</html>
