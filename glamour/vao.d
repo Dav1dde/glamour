@@ -13,12 +13,14 @@ private {
     }
 }
 
+///
 interface IVAO {
-    void bind();
-    void unbind();
-    void remove();
+    void bind(); ///
+    void unbind(); ///
+    void remove(); ///
 }
 
+/// Represents an OpenGL VertrexArrayObject
 class VAO : IVAO {
     /// The OpenGL vao name
     GLuint vao;

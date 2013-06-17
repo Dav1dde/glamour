@@ -28,13 +28,18 @@ debug {
 
     private void function(GLenum, string, string) _error_callback;
 
+    ///
     void set_error_callback(void function(GLenum, string, string) cb) {
         _error_callback = cb;
     }
 } else {
+    ///
     void set_error_callback(void function(GLenum, string, string) cb) {}
 }
 
+/// checkgl checks in a debug build after every opengl call glGetError
+/// and calls an error-callback which can be set with set_error_callback
+/// a default is provided
 ReturnType!func checkgl(alias func, Args...)(Args args) {
     debug scope(success) {
         GLenum error_code = glGetError();
@@ -51,6 +56,7 @@ ReturnType!func checkgl(alias func, Args...)(Args args) {
     return func(args);
 }
 
+/// Converts an OpenGL errorenum to a string
 string gl_error_string(GLenum error) {
     final switch(error) {
         case GL_NO_ERROR: return "no error";
@@ -66,6 +72,7 @@ string gl_error_string(GLenum error) {
 }
 
 
+/// D type to OpenGL enum
 template type2glenum(T) {
     static if(is(T == byte)) {
         GLenum type2glenum = GL_BYTE;
@@ -88,6 +95,7 @@ template type2glenum(T) {
     }
 }
 
+/// OpenGL enum to D type
 template glenum2type(GLenum t) {
     static if(t == GL_BYTE) {
         alias byte glenum2type;
@@ -130,6 +138,7 @@ unittest {
     assert(is(double : glenum2type!GL_DOUBLE));
 }
 
+/// OpenGL enum to D type size
 template glenum2sizect(GLenum t) {
     static if(t == GL_BYTE) {
         enum glenum2sizect = byte.sizeof;
@@ -152,6 +161,7 @@ template glenum2sizect(GLenum t) {
     }
 }
 
+/// ditto
 int glenum2size(GLenum t) {
     switch(t) {
         case GL_BYTE: return glenum2sizect!GL_BYTE;
