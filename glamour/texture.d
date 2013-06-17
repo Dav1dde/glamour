@@ -77,6 +77,12 @@ mixin template CommonTextureMethods() {
         return ret;
     }
     
+    /// Generates mipmaps for the textre (also binds it)
+    void generate_mipmaps() {
+        bind();
+        checkgl!glGenerateMipmap(target);
+    }
+
     /// Binds the texture.
     void bind() {
         checkgl!glBindTexture(target, texture);
@@ -116,6 +122,7 @@ interface ITexture {
     void set_parameter(T)(GLuint name, T params); ///
     float[] get_parameter(GLuint name); /// 
     void set_data(T)(T data); /// 
+    void generate_mipmaps(); ///
     void bind(); /// 
     void activate(GLuint unit); /// 
     void activate(); /// 
