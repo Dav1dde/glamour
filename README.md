@@ -5,7 +5,7 @@ glamour
 
 ## Installation ##
 
-*Glamour* supports three `-version` switches:
+*Glamour* supports these `-version` switches:
 
 * `-version=gl3n` – Adds gl3n support to glamour (you can pass gl3n vectors and matrices directly as uniform).
 * `-version=Derelict3` – Uses Derelict3 instead of Derelict2 for `glamour.gl`.
