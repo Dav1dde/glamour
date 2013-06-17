@@ -1,1 +1,9 @@
-MODULES = $(MODULE shader, Wraps OpenGL shaders)$(MODULE texture, Wraps OpenGL textures)$(MODULE sampler, Wraps OpenGL samplers)$(MODULE vbo, Wraps OpenGL buffers)$(MODULE util, useful functions)
+MODULES =
+    $(MODULE index, Index)
+    $(MODULE glamour.shader, Wraps OpenGL shaders)
+    $(MODULE glamour.texture, Wraps OpenGL textures)
+    $(MODULE glamour.sampler, Wraps OpenGL samplers)
+    $(MODULE glamour.vbo, Wraps OpenGL buffers)
+    $(MODULE glamour.vao, Wraps a OpenGL vao)
+    $(MODULE glamour.fbo, Wraps a OpenGL framebuffer and renderbuffer)
+    $(MODULE glamour.util, useful functions)
