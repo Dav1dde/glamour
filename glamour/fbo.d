@@ -59,18 +59,41 @@ class FrameBuffer {
 
     /// Attaches a 1D-texture to the FrameBuffer
     /// Calls validate
-    void attach(Texture1D texture, GLenum attachment_point, GLint mipmap=0) {
+    void attach(Texture1D texture, GLenum attachment_point, GLint level=0) {
         bind();
-        checkgl!glFramebufferTexture1D(target, attachment_point, GL_TEXTURE_1D, texture, mipmap);
+        checkgl!glFramebufferTexture1D(target, attachment_point, GL_TEXTURE_1D, texture, level);
         validate();
+    }
+
+    /// Attaches a new and empty 2D texture to the FrameBuffer
+    /// Calls validate, and binds the returned texture
+    Texture1D attach_new_texture(GLenum attachment_point, GLint internal_format,
+                                 int width, GLenum format, GLenum type) {
+        auto texture = new Texture1D();
+        texture.set_data(cast(void*)null, internal_format, width, format, type);
+        attach(texture, attachment_point);
+
+        return texture;
     }
 
     /// Attaches a 2D-texture to the FrameBuffer
     /// Calls validate
-    void attach(Texture2D texture, GLenum attachment_point, GLint mipmap=0) {
+    void attach(Texture2D texture, GLenum attachment_point, GLint level=0) {
         bind();
-        checkgl!glFramebufferTexture2D(target, attachment_point, GL_TEXTURE_2D, texture, mipmap);
+        checkgl!glFramebufferTexture2D(target, attachment_point, GL_TEXTURE_2D, texture, level);
         validate();
+    }
+
+    /// Attaches a new and empty 2D texture to the FrameBuffer
+    /// Calls validate, and binds the returned texture
+    Texture2D attach_new_texture(GLenum attachment_point, GLint internal_format,
+                                 int width, int height, GLenum format, GLenum type) {
+        auto texture = new Texture2D();
+        texture.set_data(cast(void*)null, internal_format, width, height,
+                        format, type, true, 0);
+        attach(texture, attachment_point);
+
+        return texture;
     }
 
     /// Attaches a RenderBuffer to the FrameBuffer
@@ -79,6 +102,16 @@ class FrameBuffer {
         bind();
         checkgl!glFramebufferRenderbuffer(target, attachment_point, rbuffer.target, rbuffer);
         validate();
+    }
+
+    /// Attaches a new renderbuffer to the FrameBuffer
+    /// Calls validate, also binds the returned RenderBuffer
+    RenderBuffer attach_new_renderbuffer(GLenum attachment_point, GLenum internal_format,
+                                         int width, int height) {
+        auto rb = new RenderBuffer();
+        rb.set_storage(internal_format, width, height);
+        attach(rb, attachment_point);
+        return rb;
     }
 
     /// Calls glCheckFramebufferStatus and throws a FrameBufferException if the return value

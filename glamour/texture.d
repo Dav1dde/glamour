@@ -168,12 +168,13 @@ class Texture1D : ITexture {
     /// Params:
     /// data = A pointer to the image data or an array of the image data.
     /// internal_format = Specifies the number of color components in the texture.
+    /// width = If data is an array and width is -1, the width will be infered from the array, otherwise it must be valid.
     /// format = Specifies the format of the pixel data.
     /// type = Specifies the data type of the pixel data.
     ///
     /// See_Also:
     /// OpenGL, http://www.opengl.org/sdk/docs/man4/xhtml/glTexImage1D.xml
-    void set_data(T)(T data, GLint internal_format, GLenum format, GLenum type) {
+    void set_data(T)(T data, GLint internal_format, int width, GLenum format, GLenum type) {
         bind();
 
         this.internal_format = internal_format;
@@ -184,9 +185,13 @@ class Texture1D : ITexture {
             auto d = data;
         } else {
             auto d = data.ptr;
+
+            if(width == -1) {
+                width = cast(int)data.length;
+            }
         }
-        
-        checkgl!glTexImage1D(GL_TEXTURE_1D, 0, internal_format, cast(int)(data.length), 0, format, type, d);
+
+        checkgl!glTexImage1D(GL_TEXTURE_1D, 0, internal_format, width, 0, format, type, d);
     }
 }
 
