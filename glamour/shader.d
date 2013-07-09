@@ -26,6 +26,7 @@ private {
     import std.string : format, splitLines, toStringz, toLower, strip;
     import std.array : join, split;
     import std.algorithm : startsWith, endsWith;
+    import std.exception : enforceEx;
     import std.typecons : Tuple;
     
     version(gl3n) {
@@ -68,6 +69,10 @@ class ShaderException : Exception {
         infolog ~= "\nFailed to " ~ process_ ~ " shader: " ~ filename_ ~ ". "; 
         
         super(infolog);
+    }
+
+    this(string s, string f=__FILE__, size_t l=__LINE__) {
+        super(s, f, l);
     }
 }
 deprecated alias ShaderException ShaderError;
@@ -235,7 +240,9 @@ class Shader {
             return *loc;
         }
         
-        return attrib_locations[name] = checkgl!glGetAttribLocation(program, toStringz(name));
+        auto loc = checkgl!glGetAttribLocation(program, toStringz(name));
+        enforceEx!ShaderException(loc >= 0, "glGetAttribLocation returned a value < 0 for name: " ~ name);
+        return attrib_locations[name] = loc;
     }
 
     /// Queries an fragment-data location from OpenGL and caches it in $(I frag_locations).
@@ -245,7 +252,9 @@ class Shader {
             return *loc;
         }
 
-        return frag_locations[name] = checkgl!glGetFragDataLocation(program, toStringz(name));
+        auto loc = checkgl!glGetFragDataLocation(program, toStringz(name));
+        enforceEx!ShaderException(loc >= 0, "glGetFragDataLocation returned a value < 0 for name: " ~ name);
+        return frag_locations[name] = loc;
     }
     
     /// Queries an uniform location from OpenGL and caches it in $(I uniform_locations).
@@ -255,7 +264,9 @@ class Shader {
             return *loc;
         }
         
-        return uniform_locations[name] = checkgl!glGetUniformLocation(program, toStringz(name));
+        auto loc = checkgl!glGetUniformLocation(program, toStringz(name));
+        enforceEx!ShaderException(loc >= 0, "glGetUniformLocation returned a value < 0 for name: " ~ name);
+        return uniform_locations[name] = loc;
     }
 
     // gl3n integration
