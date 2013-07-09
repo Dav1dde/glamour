@@ -152,7 +152,7 @@ class Buffer : IBuffer {
     /// stride = Specifies the byte offset between consecutive generic vertex attributes.
     /// normalized = Specifies whether fixed-point data values should be normalized (GL_TRUE) or
     ///                converted directly as fixed-point values (GL_FALSE = default) when they are accessed.
-    void bind(GLuint attrib_location, GLenum type, GLint size, GLsizei offset,
+    void bind(GLint attrib_location, GLenum type, GLint size, GLsizei offset,
               GLsizei stride, GLboolean normalized=GL_FALSE) {
         checkgl!glBindBuffer(GL_ARRAY_BUFFER, buffer);
         checkgl!glEnableVertexAttribArray(attrib_location);
