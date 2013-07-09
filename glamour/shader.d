@@ -70,10 +70,6 @@ class ShaderException : Exception {
         
         super(infolog);
     }
-
-    this(string s, string f=__FILE__, size_t l=__LINE__) {
-        super(s, f, l);
-    }
 }
 deprecated alias ShaderException ShaderError;
 
@@ -235,41 +231,59 @@ class Shader {
     
     /// Queries an attrib location from OpenGL and caches it in $(I attrib_locations).
     /// If the location was already queried the cache is returned.
-    /// This throws a ShaderException if OpenGL returns a value < 0 indicating an Error.
     GLint get_attrib_location(string name) {
         if(auto loc = name in attrib_locations) {
             return *loc;
         }
         
-        auto loc = checkgl!glGetAttribLocation(program, toStringz(name));
-        enforceEx!ShaderException(loc >= 0, "glGetAttribLocation returned a value < 0 for name: " ~ name);
-        return attrib_locations[name] = loc;
+        debug {
+            auto loc = checkgl!glGetAttribLocation(program, toStringz(name));
+            if(loc < 0) {
+                stderr.writefln(`glGetAttribLocation returned a value < 0 for location: "%s"`, name);
+            }
+
+            return attrib_locations[name] = loc;
+        } else {
+            return attrib_locations[name] = checkgl!glGetAttribLocation(program, toStringz(name));
+        }
     }
 
     /// Queries an fragment-data location from OpenGL and caches it in $(I frag_locations).
     /// If the location was already queried the cache is returned.
-    /// This throws a ShaderException if OpenGL returns a value < 0 indicating an Error.
     GLint get_frag_location(string name) {
         if(auto loc = name in frag_locations) {
             return *loc;
         }
 
-        auto loc = checkgl!glGetFragDataLocation(program, toStringz(name));
-        enforceEx!ShaderException(loc >= 0, "glGetFragDataLocation returned a value < 0 for name: " ~ name);
-        return frag_locations[name] = loc;
+        debug {
+            auto loc = checkgl!glGetFragDataLocation(program, toStringz(name));
+            if(loc < 0) {
+                stderr.writefln(`glGetAttribLocation returned a value < 0 for location: "%s"`, name);
+            }
+
+            return frag_locations[name] = loc;
+        } else {
+            return frag_locations[name] = checkgl!glGetFragDataLocation(program, toStringz(name));
+        }
     }
     
     /// Queries an uniform location from OpenGL and caches it in $(I uniform_locations).
     /// If the location was already queried the cache is returned.
-    /// This throws a ShaderException if OpenGL returns a value < 0 indicating an Error.
     GLint get_uniform_location(string name) {
         if(auto loc = name in uniform_locations) {
             return *loc;
         }
         
-        auto loc = checkgl!glGetUniformLocation(program, toStringz(name));
-        enforceEx!ShaderException(loc >= 0, "glGetUniformLocation returned a value < 0 for name: " ~ name);
-        return uniform_locations[name] = loc;
+        debug {
+            auto loc = checkgl!glGetUniformLocation(program, toStringz(name));
+            if(loc < 0) {
+                stderr.writefln(`glGetAttribLocation returned a value < 0 for location: "%s"`, name);
+            }
+
+            return uniform_locations[name] = loc;
+        } else {
+            return uniform_locations[name] = checkgl!glGetUniformLocation(program, toStringz(name));
+        }
     }
 
     // gl3n integration
