@@ -235,6 +235,7 @@ class Shader {
     
     /// Queries an attrib location from OpenGL and caches it in $(I attrib_locations).
     /// If the location was already queried the cache is returned.
+    /// This throws a ShaderException if OpenGL returns a value < 0 indicating an Error.
     GLint get_attrib_location(string name) {
         if(auto loc = name in attrib_locations) {
             return *loc;
@@ -247,6 +248,7 @@ class Shader {
 
     /// Queries an fragment-data location from OpenGL and caches it in $(I frag_locations).
     /// If the location was already queried the cache is returned.
+    /// This throws a ShaderException if OpenGL returns a value < 0 indicating an Error.
     GLint get_frag_location(string name) {
         if(auto loc = name in frag_locations) {
             return *loc;
@@ -259,6 +261,7 @@ class Shader {
     
     /// Queries an uniform location from OpenGL and caches it in $(I uniform_locations).
     /// If the location was already queried the cache is returned.
+    /// This throws a ShaderException if OpenGL returns a value < 0 indicating an Error.
     GLint get_uniform_location(string name) {
         if(auto loc = name in uniform_locations) {
             return *loc;
