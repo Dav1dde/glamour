@@ -257,19 +257,22 @@
 <hr><div class="row-fluid declaration"><h3>GLint <span class="symbol-target" id="get_attrib_location">&nbsp;</span><a class="symbol-link" href="#get_attrib_location">get_attrib_location</a>(string <i>name</i>);
 </h3></div>
 <div class="declaration-content"><dl><p>Queries an attrib location from OpenGL and caches it in <i>attrib_locations</i>.
- If the location was already queried the cache is returned.</p>
+ If the location was already queried the cache is returned.
+ This throws a ShaderException if OpenGL returns a value &lt; 0 indicating an Error.</p>
 </dl>
 </div>
 <hr><div class="row-fluid declaration"><h3>GLint <span class="symbol-target" id="get_frag_location">&nbsp;</span><a class="symbol-link" href="#get_frag_location">get_frag_location</a>(string <i>name</i>);
 </h3></div>
 <div class="declaration-content"><dl><p>Queries an fragment-data location from OpenGL and caches it in <i>frag_locations</i>.
- If the location was already queried the cache is returned.</p>
+ If the location was already queried the cache is returned.
+ This throws a ShaderException if OpenGL returns a value &lt; 0 indicating an Error.</p>
 </dl>
 </div>
 <hr><div class="row-fluid declaration"><h3>GLint <span class="symbol-target" id="get_uniform_location">&nbsp;</span><a class="symbol-link" href="#get_uniform_location">get_uniform_location</a>(string <i>name</i>);
 </h3></div>
 <div class="declaration-content"><dl><p>Queries an uniform location from OpenGL and caches it in <i>uniform_locations</i>.
- If the location was already queried the cache is returned.</p>
+ If the location was already queried the cache is returned.
+ This throws a ShaderException if OpenGL returns a value &lt; 0 indicating an Error.</p>
 </dl>
 </div>
 <hr><div class="row-fluid declaration"><h3>void <span class="symbol-target" id="uniform">&nbsp;</span><a class="symbol-link" href="#uniform">uniform</a>(T)(string <i>name</i>, T <i>value</i>);
@@ -281,18 +284,30 @@
 </dl>
 </div>
 <hr><div class="row-fluid declaration"><h3>void <span class="symbol-target" id="uniform1i">&nbsp;</span><a class="symbol-link" href="#uniform1i">uniform1i</a>(string <i>name</i>, int <i>value</i>);
+<br>void <span class="symbol-target" id="uniform1i">&nbsp;</span><a class="symbol-link" href="#uniform1i">uniform1i</a>(GLint <i>name</i>, int <i>value</i>);
 <br>void <span class="symbol-target" id="uniform1f">&nbsp;</span><a class="symbol-link" href="#uniform1f">uniform1f</a>(string <i>name</i>, float <i>value</i>);
+<br>void <span class="symbol-target" id="uniform1f">&nbsp;</span><a class="symbol-link" href="#uniform1f">uniform1f</a>(GLint <i>name</i>, float <i>value</i>);
 <br>void <span class="symbol-target" id="uniform2f">&nbsp;</span><a class="symbol-link" href="#uniform2f">uniform2f</a>(string <i>name</i>, float <i>value1</i>, float <i>value2</i>);
+<br>void <span class="symbol-target" id="uniform2f">&nbsp;</span><a class="symbol-link" href="#uniform2f">uniform2f</a>(GLint <i>name</i>, float <i>value1</i>, float <i>value2</i>);
 <br>void <span class="symbol-target" id="uniform2fv">&nbsp;</span><a class="symbol-link" href="#uniform2fv">uniform2fv</a>(string <i>name</i>, const float[] <i>value</i>);
+<br>void <span class="symbol-target" id="uniform2fv">&nbsp;</span><a class="symbol-link" href="#uniform2fv">uniform2fv</a>(GLint <i>name</i>, const float[] <i>value</i>);
 <br>void <span class="symbol-target" id="uniform2fv">&nbsp;</span><a class="symbol-link" href="#uniform2fv">uniform2fv</a>(string <i>name</i>, const float[] <i>value</i>, int <i>count</i>);
+<br>void <span class="symbol-target" id="uniform2fv">&nbsp;</span><a class="symbol-link" href="#uniform2fv">uniform2fv</a>(GLint <i>name</i>, const float[] <i>value</i>, int <i>count</i>);
 <br>void <span class="symbol-target" id="uniform3fv">&nbsp;</span><a class="symbol-link" href="#uniform3fv">uniform3fv</a>(string <i>name</i>, const float[] <i>value</i>);
 <br>void <span class="symbol-target" id="uniform3fv">&nbsp;</span><a class="symbol-link" href="#uniform3fv">uniform3fv</a>(string <i>name</i>, const float[] <i>value</i>, int <i>count</i>);
+<br>void <span class="symbol-target" id="uniform3fv">&nbsp;</span><a class="symbol-link" href="#uniform3fv">uniform3fv</a>(GLint <i>name</i>, const float[] <i>value</i>, int <i>count</i>);
 <br>void <span class="symbol-target" id="uniform4fv">&nbsp;</span><a class="symbol-link" href="#uniform4fv">uniform4fv</a>(string <i>name</i>, const float[] <i>value</i>);
+<br>void <span class="symbol-target" id="uniform4fv">&nbsp;</span><a class="symbol-link" href="#uniform4fv">uniform4fv</a>(GLint <i>name</i>, const float[] <i>value</i>);
 <br>void <span class="symbol-target" id="uniform4fv">&nbsp;</span><a class="symbol-link" href="#uniform4fv">uniform4fv</a>(string <i>name</i>, const float[] <i>value</i>, int <i>count</i>);
+<br>void <span class="symbol-target" id="uniform4fv">&nbsp;</span><a class="symbol-link" href="#uniform4fv">uniform4fv</a>(GLint <i>name</i>, const float[] <i>value</i>, int <i>count</i>);
 <br>void <span class="symbol-target" id="uniform_matrix3fv">&nbsp;</span><a class="symbol-link" href="#uniform_matrix3fv">uniform_matrix3fv</a>(string <i>name</i>, const float[] <i>value</i>, GLboolean <i>transpose</i> = GL_TRUE);
+<br>void <span class="symbol-target" id="uniform_matrix3fv">&nbsp;</span><a class="symbol-link" href="#uniform_matrix3fv">uniform_matrix3fv</a>(GLint <i>name</i>, const float[] <i>value</i>, GLboolean <i>transpose</i> = GL_TRUE);
 <br>void <span class="symbol-target" id="uniform_matrix3fv">&nbsp;</span><a class="symbol-link" href="#uniform_matrix3fv">uniform_matrix3fv</a>(string <i>name</i>, const float[] <i>value</i>, GLboolean <i>transpose</i> = GL_TRUE, int <i>count</i> = 1);
+<br>void <span class="symbol-target" id="uniform_matrix3fv">&nbsp;</span><a class="symbol-link" href="#uniform_matrix3fv">uniform_matrix3fv</a>(GLint <i>name</i>, const float[] <i>value</i>, GLboolean <i>transpose</i> = GL_TRUE, int <i>count</i> = 1);
 <br>void <span class="symbol-target" id="uniform_matrix4fv">&nbsp;</span><a class="symbol-link" href="#uniform_matrix4fv">uniform_matrix4fv</a>(string <i>name</i>, const float[] <i>value</i>, GLboolean <i>transpose</i> = GL_TRUE);
+<br>void <span class="symbol-target" id="uniform_matrix4fv">&nbsp;</span><a class="symbol-link" href="#uniform_matrix4fv">uniform_matrix4fv</a>(GLint <i>name</i>, const float[] <i>value</i>, GLboolean <i>transpose</i> = GL_TRUE);
 <br>void <span class="symbol-target" id="uniform_matrix4fv">&nbsp;</span><a class="symbol-link" href="#uniform_matrix4fv">uniform_matrix4fv</a>(string <i>name</i>, const float[] <i>value</i>, GLboolean <i>transpose</i> = GL_TRUE, int <i>count</i> = 1);
+<br>void <span class="symbol-target" id="uniform_matrix4fv">&nbsp;</span><a class="symbol-link" href="#uniform_matrix4fv">uniform_matrix4fv</a>(GLint <i>name</i>, const float[] <i>value</i>, GLboolean <i>transpose</i> = GL_TRUE, int <i>count</i> = 1);
 </h3></div>
 <div class="declaration-content"><dl><p>Sets a shader uniform. Consider the corresponding OpenGL for more information.</p>
 </dl>
