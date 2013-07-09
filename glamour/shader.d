@@ -330,15 +330,30 @@ class Shader {
     void uniform1i(string name, int value) {
         checkgl!glUniform1i(get_uniform_location(name), value);
     }
+
+    /// ditto
+    void uniform1i(GLint name, int value) {
+        checkgl!glUniform1i(name, value);
+    }
     
     /// ditto
     void uniform1f(string name, float value) {
         checkgl!glUniform1f(get_uniform_location(name), value);
     }
-    
+
+    /// ditto
+    void uniform1f(GLint name, float value) {
+        checkgl!glUniform1f(name, value);
+    }
+
     /// ditto
     void uniform2f(string name, float value1, float value2) {
         checkgl!glUniform2f(get_uniform_location(name), value1, value2);
+    }
+
+    /// ditto
+    void uniform2f(GLint name, float value1, float value2) {
+        checkgl!glUniform2f(name, value1, value2);
     }
 
     /// ditto
@@ -347,10 +362,20 @@ class Shader {
     }
 
     /// ditto
+    void uniform2fv(GLint name, const float[] value) {
+        checkgl!glUniform2fv(name, cast(int)(value.length/2), value.ptr);
+    }
+
+    /// ditto
     void uniform2fv(string name, const float[] value, int count) {
         checkgl!glUniform2fv(get_uniform_location(name), count, value.ptr);
     }
     
+    /// ditto
+    void uniform2fv(GLint name, const float[] value, int count) {
+        checkgl!glUniform2fv(name, count, value.ptr);
+    }
+
     /// ditto
     void uniform3fv(string name, const float[] value) {
         checkgl!glUniform3fv(get_uniform_location(name), cast(int)(value.length/3), value.ptr);
@@ -362,8 +387,18 @@ class Shader {
     }
 
     /// ditto
+    void uniform3fv(GLint name, const float[] value, int count) {
+        checkgl!glUniform3fv(name, count, value.ptr);
+    }
+
+    /// ditto
     void uniform4fv(string name, const float[] value) {
         checkgl!glUniform4fv(get_uniform_location(name), cast(int)(value.length/4), value.ptr);
+    }
+
+    /// ditto
+    void uniform4fv(GLint name, const float[] value) {
+        checkgl!glUniform4fv(name, cast(int)(value.length/4), value.ptr);
     }
     
     /// ditto
@@ -372,13 +407,28 @@ class Shader {
     }
 
     /// ditto
+    void uniform4fv(GLint name, const float[] value, int count) {
+        checkgl!glUniform4fv(name, count, value.ptr);
+    }
+
+    /// ditto
     void uniform_matrix3fv(string name, const float[] value, GLboolean transpose=GL_TRUE) {
         checkgl!glUniformMatrix3fv(get_uniform_location(name), cast(int)(value.length/9), transpose, value.ptr);
+    }
+
+    /// ditto
+    void uniform_matrix3fv(GLint name, const float[] value, GLboolean transpose=GL_TRUE) {
+        checkgl!glUniformMatrix3fv(name, cast(int)(value.length/9), transpose, value.ptr);
     }
     
     /// ditto
     void uniform_matrix3fv(string name, const float[] value, GLboolean transpose=GL_TRUE, int count=1) {
         checkgl!glUniformMatrix3fv(get_uniform_location(name), count, transpose, value.ptr);
+    }
+
+    /// ditto
+    void uniform_matrix3fv(GLint name, const float[] value, GLboolean transpose=GL_TRUE, int count=1) {
+        checkgl!glUniformMatrix3fv(name, count, transpose, value.ptr);
     }
     
     /// ditto
@@ -387,8 +437,17 @@ class Shader {
     }
 
     /// ditto
+    void uniform_matrix4fv(GLint name, const float[] value, GLboolean transpose=GL_TRUE) {
+        checkgl!glUniformMatrix4fv(name, cast(int)(value.length/16), transpose, value.ptr);
+    }
+
+    /// ditto
     void uniform_matrix4fv(string name, const float[] value, GLboolean transpose=GL_TRUE, int count=1) {
         checkgl!glUniformMatrix4fv(get_uniform_location(name), count, transpose, value.ptr);
     }
     
+    /// ditto
+    void uniform_matrix4fv(GLint name, const float[] value, GLboolean transpose=GL_TRUE, int count=1) {
+        checkgl!glUniformMatrix4fv(name, count, transpose, value.ptr);
+    }
 }
