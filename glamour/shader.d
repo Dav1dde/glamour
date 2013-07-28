@@ -258,7 +258,7 @@ class Shader {
         debug {
             auto loc = checkgl!glGetFragDataLocation(program, toStringz(name));
             if(loc < 0) {
-                stderr.writefln(`glGetAttribLocation returned a value < 0 for location: "%s"`, name);
+                stderr.writefln(`glGetFragDataLocation returned a value < 0 for location: "%s"`, name);
             }
 
             return frag_locations[name] = loc;
@@ -277,7 +277,7 @@ class Shader {
         debug {
             auto loc = checkgl!glGetUniformLocation(program, toStringz(name));
             if(loc < 0) {
-                stderr.writefln(`glGetAttribLocation returned a value < 0 for location: "%s"`, name);
+                stderr.writefln(`glGetUniformLocation returned a value < 0 for location: "%s"`, name);
             }
 
             return uniform_locations[name] = loc;
