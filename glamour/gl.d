@@ -8,6 +8,8 @@ module glamour.gl;
 
 version(Derelict3) {
     public import derelict.opengl3.gl3;
+} else version(glad) {
+    public import glad.gl;
 } else {
     public import derelict.opengl.gl;
     public import derelict.opengl.glext;
