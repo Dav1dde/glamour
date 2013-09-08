@@ -1,0 +1,39 @@
+{
+	"description": "Glamour is an OpenGL wrapper for the D programming language.",
+	"targetName": "glamour",
+	"authors": [
+		"David Herberth"
+	],
+	"version": "~master",
+	"homepage": "https://github.com/Dav1dde/glamour",
+	"name": "glamour",
+	"copyright": "Copyright © 2011-2013, David Herberth",
+	"targetType": "staticLibrary",
+	"sourcePaths": [
+		"glamour"
+	],
+	"configurations": [
+		{
+			"name": "Derelict3-gl3n-SDLImage",
+			"versions": [
+				"Derelict3",
+				"gl3n",
+				"SDLImage"
+			],
+			"dependencies": {
+				"gl3n": "~master",
+				"derelict": "~master"
+			},
+		},
+		{
+			"name": "Derelict3-SDLImage",
+			"versions": [
+				"Derelict3",
+				"SDLImage"
+			],
+			"dependencies": {
+				"derelict": "~master"
+			},
+		}
+	]
+}
