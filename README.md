@@ -22,7 +22,14 @@ make DCFLAGS+="-version=Derelict3 -version=stb -version=gl3n `pkg-config --libs 
 # installing
 make install
 ```
+## Example ##
 
+Simple example is available now in example directory. The simplest way to try it is using 
+dub package manager. Go to directory where glamour is installed and use the following:
+```
+dub run --config=example
+```
+This command installs all dependencies, builds the example and runs it. 
 
 ## Documentation ##
 
