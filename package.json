@@ -42,6 +42,27 @@
 			"sourcePaths": [
 				"example"
 			],
+			"excludedSourceFiles": [
+				"example/example_texture.d"
+			],
+			"versions": [
+				"Derelict3",
+				"SDLImage"
+			],
+			"dependencies": {
+				"derelict": "~master"
+			}
+		},
+		{
+			"name": "example_texture",
+			"targetType": "executable",
+			"targetName": "example_texture-app",
+			"sourcePaths": [
+				"example"
+			],
+			"excludedSourceFiles": [
+				"example/example.d"
+			],
 			"versions": [
 				"Derelict3",
 				"SDLImage"
