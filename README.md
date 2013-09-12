@@ -24,10 +24,11 @@ make install
 ```
 ## Example ##
 
-Simple example is available now in example directory. The simplest way to try it is using 
-dub package manager. Go to directory where glamour is installed and use the following:
+Simple examples are available now in example directory. The simplest way to try them, is to use the dub package manager.
+Go to directory where glamour is installed and use the following:
 ```
 dub run --config=example
+dub run --config=example_texture
 ```
 This command installs all dependencies, builds the example and runs it. 
 
