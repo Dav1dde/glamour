@@ -21,6 +21,8 @@ interface IBuffer {
     void bind(); ///
     void unbind(); ///
     void set_data(T)(const ref T data, GLenum hint = GL_STATIC_DRAW); ///
+    void update(T)(const T data, GLintptr offset); ///
+    void update(T)(const T ptr, size_t size, GLintptr offset); /// should the interface have this overload member? set_date() have no overload version.
 }
 
 /// Represents an OpenGL element buffer.
@@ -91,6 +93,20 @@ class ElementBuffer : IBuffer {
 
         length = size;
         this.hint = hint;
+    }
+
+    /// Updates the Buffer, using glBufferSubData.
+    void update(T)(const T data, GLintptr offset) if(isArray!T) {
+        checkgl!glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, buffer);
+        checkgl!glBufferSubData(GL_ELEMENT_ARRAY_BUFFER, offset, data.length*(ElementType!T).sizeof, data.ptr);
+        checkgl!glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
+    }
+
+    /// ditto
+    void update(T)(const T ptr, size_t size, GLintptr offset) if(isPointer!T) {
+        checkgl!glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, buffer);
+        checkgl!glBufferSubData(GL_ELEMENT_ARRAY_BUFFER, offset, size, ptr);
+        checkgl!glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
     }
 }
 
