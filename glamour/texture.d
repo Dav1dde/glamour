@@ -27,8 +27,9 @@ private {
     
     import glamour.util : glenum2size, checkgl;
     import std.traits : isPointer;
-    import std.string : toStringz, text;
+    import std.string : toStringz;
     import std.exception : enforce;
+    import std.conv : to;
 
     debug import std.stdio : stderr;
 }
@@ -323,7 +324,7 @@ class Texture2D : ITexture {
             
             auto surface = IMG_Load(filename.toStringz());
             
-            enforce(surface, new TextureException("Error loading image " ~ filename ~ ": " ~ SDL_GetError().text));
+            enforce(surface, new TextureException("Error loading image " ~ filename ~ ": " ~ to!string(SDL_GetError())));
             scope(exit) SDL_FreeSurface(surface);
             
             enforce(surface.format.BytesPerPixel == 3 || surface.format.BytesPerPixel == 4, "With SDLImage Glamour supports loading images only with 3 or 4 bytes per pixel format.");
