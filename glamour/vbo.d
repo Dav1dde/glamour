@@ -52,7 +52,7 @@ class ElementBuffer : IBuffer {
     /// ditto
     this(T)(const T ptr, size_t size, GLenum hint = GL_STATIC_DRAW) if(isPointer!T) {
         checkgl!glGenBuffers(1, &buffer);
-        set_data(data, size, hint);
+        set_data(ptr, size, hint);
     }
 
     ~this() {
