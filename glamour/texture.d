@@ -11,18 +11,12 @@ private {
     
     version(stb) {
         import stb_image : stbi_load, stbi_image_free;
+    } else version(SDLImage2) {
+        import derelict.sdl2.sdl;
+        import derelict.sdl2.image;
     } else version(SDLImage) {
-        version (Derelict3) {
-            import derelict.sdl2.sdl;
-            import derelict.sdl2.image;
-        } else {
-            import derelict.sdl.sdl;
-            import derelict.sdl.image;
-        }
-    } else {
-        import derelict.devil.il : ILuint, ilGenImages, ilBindImage, ilLoadImage, ilConvertImage,
-                                   ilGetData, ilGetInteger, IL_RGB, IL_UNSIGNED_BYTE,
-                                   IL_IMAGE_FORMAT, IL_IMAGE_TYPE, IL_IMAGE_WIDTH, IL_IMAGE_HEIGHT;
+        import derelict.sdl.sdl;
+        import derelict.sdl.image;
     }
     
     import glamour.util : glenum2size, checkgl;
@@ -272,15 +266,15 @@ class Texture2D : ITexture {
         }
     }
     
-    /// Loads an image and afterwards loads it into a Texture2D struct.
-    /// Image can be loaded by means of DevIL, stb and SDLImage. To select
-    /// specific way use versions stb and SDLImage. DevIL is used by default.
-    ///
-    /// $(RED DevIL/SDLImage must be loaded and initialized manually!)
-    static Texture2D from_image(string filename) {
-        auto tex = new Texture2D();
+    version(stb) {
+        /// Loads an image and afterwards loads it into a Texture2D struct.
+        /// Image can be loaded by stb and SDLImage. To select
+        /// specific way use versions stb, SDLImage2 (SDL2) or SDLImage (SDL1).
+        ///
+        /// $(RED SDLImage must be loaded and initialized manually!)
+        static Texture2D from_image(string filename) {
+            auto tex = new Texture2D();
 
-        version(stb) {        
             int x;
             int y;
             int comp;
@@ -299,60 +293,53 @@ class Texture2D : ITexture {
             }
 
             tex.set_data(data, image_format, x, y, image_format, GL_UNSIGNED_BYTE);
-        } else version (SDLImage) {
+
+            return tex;
+        }
+    } else version (SDLImage) {
+        static Texture2D from_image(string filename) {
+            auto tex = new Texture2D();
+
             // make sure the texture has the right side up
-            //thanks to tito http://stackoverflow.com/questions/5862097/sdl-opengl-screenshot-is-black 
-            SDL_Surface* flip(SDL_Surface* surface) { 
-                SDL_Surface* result = SDL_CreateRGBSurface(surface.flags, surface.w, surface.h, 
-                                                           surface.format.BytesPerPixel * 8, surface.format.Rmask, surface.format.Gmask, 
-                                                           surface.format.Bmask, surface.format.Amask); 
-              
-                ubyte* pixels = cast(ubyte*) surface.pixels; 
-                ubyte* rpixels = cast(ubyte*) result.pixels; 
+            //thanks to tito http://stackoverflow.com/questions/5862097/sdl-opengl-screenshot-is-black
+            SDL_Surface* flip(SDL_Surface* surface) {
+                SDL_Surface* result = SDL_CreateRGBSurface(surface.flags, surface.w, surface.h,
+                                                        surface.format.BytesPerPixel * 8, surface.format.Rmask, surface.format.Gmask,
+                                                        surface.format.Bmask, surface.format.Amask);
+
+                ubyte* pixels = cast(ubyte*) surface.pixels;
+                ubyte* rpixels = cast(ubyte*) result.pixels;
                 uint pitch = surface.pitch;
-                uint pxlength = pitch * surface.h; 
-              
-                assert(result != null); 
+                uint pxlength = pitch * surface.h;
 
-                for(uint line = 0; line < surface.h; ++line) {  
-                    uint pos = line * pitch; 
-                    rpixels[pos..pos+pitch] = pixels[(pxlength-pos)-pitch..pxlength-pos]; 
-                } 
+                assert(result != null);
 
-                return result; 
+                for(uint line = 0; line < surface.h; ++line) {
+                    uint pos = line * pitch;
+                    rpixels[pos..pos+pitch] = pixels[(pxlength-pos)-pitch..pxlength-pos];
+                }
+
+                return result;
             }
-            
+
             auto surface = IMG_Load(filename.toStringz());
-            
+
             enforce(surface, new TextureException("Error loading image " ~ filename ~ ": " ~ to!string(SDL_GetError())));
             scope(exit) SDL_FreeSurface(surface);
-            
+
             enforce(surface.format.BytesPerPixel == 3 || surface.format.BytesPerPixel == 4, "With SDLImage Glamour supports loading images only with 3 or 4 bytes per pixel format.");
             auto image_format = GL_RGB;
-            
+
             if (surface.format.BytesPerPixel == 4) {
-              image_format = GL_RGBA;
+            image_format = GL_RGBA;
             }
-            
+
             auto flipped = flip(surface);
             tex.set_data(flipped.pixels, image_format, surface.w, surface.h, image_format, GL_UNSIGNED_BYTE);
             SDL_FreeSurface(flipped);
-        } else {
-            /// DevIl is default choice
-            ILuint id;
-            ilGenImages(1, &id);
-            scope(exit) ilDeleteImage(1, id);
-            
-            if(!ilLoadImage(toStringz(filename))) {
-                throw new TextureException("Unable to load image: " ~ filename);
-            }
-            
-            tex.set_data(ilGetData(), ilGetInteger(IL_IMAGE_FORMAT),
-                                      ilGetInteger(IL_IMAGE_WIDTH), ilGetInteger(IL_IMAGE_HEIGHT),
-                                      ilGetInteger(IL_IMAGE_FORMAT), ilGetInteger(IL_IMAGE_TYPE));
-        }
 
-        return tex;
+            return tex;
+        }
     }
 }
 

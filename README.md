@@ -8,16 +8,19 @@ glamour
 *Glamour* supports these `-version` switches:
 
 * `-version=gl3n` – Adds gl3n support to glamour (you can pass gl3n vectors and matrices directly as uniform).
-* `-version=Derelict3` – Uses Derelict3 instead of Derelict2 for `glamour.gl`.
+* `-version=glad` – Uses [glad](https://github.com/Dav1dde/glad) for `glamour.gl`.
+* `-version=Derelict2` – Uses Derelict2 for `glamour.gl`.
+* `-version=Derelict3` – Uses Derelict3 for `glamour.gl`.
 * `-version=stb` – Uses `stb_image` to load textures from images.
-* `-version=SDLImage` - Uses the `SDL` to load textures from images, this requires `Derelict2` or `Derelict3`.
+* `-version=SDLImage2` - Uses the `SDL` to load textures from images, this requires `DerelictSDL2`.
+* `-version=SDLImage` - Uses the `SDL` to load textures from images, this requires `DerelictSDL`.1
 
 To build glamour I recommend you to use the `Makefile`:
 
 ```
 # to build with stb_image
 wget -O stb_image.d https://bitbucket.org/dav1d/gl-utils/raw/tip/stb_image/stb_image.d
-make DCFLAGS+="-version=Derelict3 -version=stb -version=gl3n `pkg-config --libs --cflags gl3n`"
+make DCFLAGS+="-version=glad -version=stb -version=gl3n `pkg-config --libs --cflags gl3n`"
 
 # installing
 make install
