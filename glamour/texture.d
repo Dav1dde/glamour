@@ -14,9 +14,11 @@ private {
     } else version(SDLImage2) {
         import derelict.sdl2.sdl;
         import derelict.sdl2.image;
+        version = _glad_sdl;
     } else version(SDLImage) {
         import derelict.sdl.sdl;
         import derelict.sdl.image;
+        version = _glad_sdl;
     }
     
     import glamour.util : glenum2size, checkgl;
@@ -296,7 +298,7 @@ class Texture2D : ITexture {
 
             return tex;
         }
-    } else version (SDLImage) {
+    } else version (_glad_sdl) {
         static Texture2D from_image(string filename) {
             auto tex = new Texture2D();
 
