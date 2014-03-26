@@ -14,25 +14,27 @@
 	],
 	"configurations": [
 		{
-			"name": "Derelict3-gl3n-SDLImage",
+			"name": "Derelict3-gl3n-SDLImage2",
 			"versions": [
 				"Derelict3",
 				"gl3n",
-				"SDLImage"
+				"SDLImage2"
 			],
 			"dependencies": {
 				"gl3n": "~master",
-				"derelict": "~master"
+				"derelict-gl3": "~master",
+				"derelict-sdl2": "~master"
 			},
 		},
 		{
-			"name": "Derelict3-SDLImage",
+			"name": "Derelict3-SDLImage2",
 			"versions": [
 				"Derelict3",
-				"SDLImage"
+				"SDLImage2"
 			],
 			"dependencies": {
-				"derelict": "~master"
+				"derelict-gl3": "~master",
+				"derelict-sdl2": "~master"
 			},
 		},
 		{
@@ -47,10 +49,11 @@
 			],
 			"versions": [
 				"Derelict3",
-				"SDLImage"
+				"SDLImage2"
 			],
 			"dependencies": {
-				"derelict": "~master"
+				"derelict-gl3": "~master",
+				"derelict-sdl2": "~master"
 			}
 		},
 		{
@@ -65,10 +68,11 @@
 			],
 			"versions": [
 				"Derelict3",
-				"SDLImage"
+				"SDLImage2"
 			],
 			"dependencies": {
-				"derelict": "~master"
+				"derelict-gl3": "~master",
+				"derelict-sdl2": "~master"
 			}
 		}
 	]
