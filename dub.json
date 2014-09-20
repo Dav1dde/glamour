@@ -24,7 +24,7 @@
 				"SDLImage2"
 			],
 			"dependencies": {
-				"gl3n": "~master",
+				"gl3n": ">=1.0.0",
 				"derelict-gl3": ">=1.0.6",
 				"derelict-sdl2": ">=1.2.6"
 			},
