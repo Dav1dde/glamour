@@ -4,10 +4,10 @@
 	"authors": [
 		"David Herberth"
 	],
-	"version": "~master",
 	"homepage": "https://github.com/Dav1dde/glamour",
 	"name": "glamour",
-	"copyright": "Copyright © 2011-2013, David Herberth",
+	"license": "MIT",
+	"copyright": "Copyright © 2011-2014, David Herberth",
 	"targetType": "staticLibrary",
 	"sourcePaths": [
 		"glamour"
