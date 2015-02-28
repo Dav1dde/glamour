@@ -413,4 +413,4 @@ class Texture3DBase(GLenum target_) : ITexture {
 }
 
 alias Texture3DBase!(GL_TEXTURE_3D) Texture3D;
-alias Texture3DBase!(GL_PROXY_TEXTURE_2D_ARRAY) Texture2DArray;
+alias Texture3DBase!(GL_TEXTURE_2D_ARRAY) Texture2DArray;
