@@ -18,7 +18,7 @@ private {
 }
 
 
-debug { 
+debug {
     static this() {
         _error_callback = function void(GLenum error_code, string function_name, string args) {
             stderr.writefln(`OpenGL function "%s(%s)" failed: "%s."`,
@@ -45,13 +45,17 @@ debug {
 template checkgl(alias func)
 {
     debug ReturnType!func checkgl(Args...)(Args args) {
+        if (glGetError is null) {
+            throw new Error("glGetError is null! OpenGL loaded?");
+        }
+
         //get and clear previous error, if any.
         GLenum error_code = glGetError();
 
         if(error_code != GL_NO_ERROR) {
             _error_callback(error_code, "<unknown>", "<unknown>");
         }
-    
+
         scope(success) {
             error_code = glGetError();
 
@@ -63,7 +67,7 @@ template checkgl(alias func)
         if(func is null) {
             throw new Error("%s is null! OpenGL loaded? Required OpenGL version not supported?".format(func.stringof));
         }
-        
+
         return func(args);
     } else {
         alias checkgl = func;
