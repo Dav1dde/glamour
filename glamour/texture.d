@@ -3,7 +3,7 @@ module glamour.texture;
 private {
     import glamour.gl : GLenum, GLuint, GLint, GLsizei, GL_UNSIGNED_BYTE,
                         glGenTextures, glBindTexture, glActiveTexture,
-                        glTexImage1D, glTexImage2D, glTexParameteri, glTexParameterf,
+                        glTexImage1D, glTexImage2D, glTexImage3D, glTexParameteri, glTexParameterf,
                         glGetTexParameterfv, glDeleteTextures, GL_TEXTURE0,
                         GL_TEXTURE_1D, GL_TEXTURE_2D, GL_TEXTURE_2D_ARRAY, GL_PROXY_TEXTURE_2D_ARRAY,
                         GL_PROXY_TEXTURE_3D, GL_TEXTURE_3D, GL_TEXTURE_BORDER_COLOR,
@@ -360,6 +360,12 @@ class Texture3DBase(GLenum target_) : ITexture {
 
     /// Holds the internal format passed to the constructor.
     GLint internal_format;
+    /// Holds the texture width.
+    GLsizei width;
+    /// Holds the texture height.
+    GLsizei height;
+    /// Holds the texture depth or texture array length.
+    GLsizei depth;
     /// Holds the format of the pixel data.
     GLenum format;
     /// Holds the OpenGL data type of the pixel data.
